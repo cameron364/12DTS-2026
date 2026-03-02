@@ -5,11 +5,11 @@ import time
 # Variables
 wild_pokemon = [
     {"Name": "Charizard", "Type": "Fire", "Level": random.randint(1,3), "Health": random.randint(15,25), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]},
-    {"Name": "Venasuar", "Type": "Grass", "Level": random.randint(1,3), "Health": random.randint(18,22)},
-    {"Name": "Blastoise", "Type": "Water", "Level": random.randint(1,3), "Health": random.randint(12,30)},
-    {"Name": "Raichu", "Type": "Electric", "Level": random.randint(1,3), "Health": random.randint(10,20)},
-    {"Name": "Mr Mime", "Type": "Psychic", "Level": random.randint(1,3), "Health": random.randint(11,21)},
-    {"Name": "Jigglypuff", "Type": "Fiary", "Level": random.randint(1,3), "Health": random.randint(12,22)}
+    {"Name": "Venasuar", "Type": "Grass", "Level": random.randint(1,3), "Health": random.randint(18,22), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]},
+    {"Name": "Blastoise", "Type": "Water", "Level": random.randint(1,3), "Health": random.randint(12,30), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]},
+    {"Name": "Raichu", "Type": "Electric", "Level": random.randint(1,3), "Health": random.randint(10,20), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]},
+    {"Name": "Mr Mime", "Type": "Psychic", "Level": random.randint(1,3), "Health": random.randint(11,21), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]},
+    {"Name": "Jigglypuff", "Type": "Fiary", "Level": random.randint(1,3), "Health": random.randint(12,22), "Attack": ["Blaze", random.randrange(4,7), "Solar Beam", random.randrange(7,9)]}
 ]
 # Functions
 own_pokemon = [
@@ -65,16 +65,56 @@ def battle():
 
     while True:
         # AI attack code
-        enemy_attack_randomiser = random.randint(0,len(wild_pokemon[pokemon-1]),2)
-        print("Random ")
+        randomnum = random.randrange(0,3,2)
+        enemy_attack_randomiser_name = pokemon["Attack"][randomnum]
+        enemy_attack_randomiser_damage = pokemon["Attack"][randomnum+1]
+        print()
+        print(pokemon["Name"],"used",enemy_attack_randomiser_name,"it did",enemy_attack_randomiser_damage,"damage")
 
-    while pokemon["Health"] > 0:
-        print("Your turn")
-        print("Which move")
-        for i in range(len(player_pokemon["Attack"])):
-            print("Type",i ,"for", player_pokemon["Attack"][i])
+        player_pokemon_hp = player_pokemon_hp - enemy_attack_randomiser_damage
+        print()
+        print(player_pokemon["Name"],"is at",player_pokemon_hp,"health")
 
-        choose_move = int(input(": "))
+        if pokemon["Health"] > 0:
+            print()
+            print("Your turn")
+            print("Which move")
+
+            for i in range(0,len(player_pokemon["Attack"]),2):
+                if i == 0:
+                    print("Type 1 for", player_pokemon["Attack"][i])
+                if i == 2:
+                    print("Type 2 for", player_pokemon["Attack"][i])
+                if i == 4:
+                    print("Type 3 for", player_pokemon["Attack"][i])
+                if i == 6:
+                    print("Type 4 for", player_pokemon["Attack"][i])
+
+
+            while True:
+                try:
+                    choose_move = int(input(": "))
+                    if choose_move <= len(player_pokemon["Attack"])/2 and choose_move > 0:
+                        break
+                    else:
+                        print("Not an option")
+                except ValueError:
+                    print("Error")
+
+            print()
+            choose_move = choose_move*2-2
+            player_pokemon_move_name = player_pokemon["Attack"][choose_move]
+            player_pokemon_move_damage = player_pokemon["Attack"][choose_move+1]
+
+
+            print("You chose", player_pokemon_move_name, "does",player_pokemon_move_damage,"damage")
+            print()
+            asd = input() # stops the loop --- remove this
+
+
+
+
+
 
 
 
