@@ -1,18 +1,21 @@
-# DTS assignment ----- 10/3/26
+# DTS assignment ----- 10/3/26 ----- Cameron Chrisite
 
-# Import
-
-
-
-
-# Variables
+# ----------------------- Library -----------------------
+import time
+import random
 
 
 
-
-# Functions
+# ----------------------- Variables -----------------------
 
 
 
 
-# Main code
+
+# ----------------------- Functions -----------------------
+
+
+
+
+
+# ----------------------- Main code -----------------------
