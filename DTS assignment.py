@@ -1,4 +1,4 @@
-# DTS assignment ----- 10/3/26 ----- Cameron Chrisite
+# DTS assignment ----- 10/3/26 ----- Cameron Christie
 
 # ----------------------- Library -----------------------
 import time
