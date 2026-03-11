@@ -12,8 +12,19 @@ import random
 player_stats = {}
 
 player_equipment = {
-    "Weapon",
-    "Armour"
+    "Weapon": {
+        "Name": "Wooden Sword",
+        "Info": [
+            {"Move name": "Move 1", "Base damage": 2, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+            {"Move name": "Move 2", "Base damage": 1, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+            {"Move name": "Move 3", "Base damage": 4, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+        ]
+    },
+
+    "Armour": {
+        "Name": "Wooden Armour",
+        "Defense": 2,
+        "Weakness": "Both"}
 }
 
 inventory = []
@@ -27,16 +38,20 @@ POSSIBLE_CLASSES = [
 POSSIBLE_WEAPONS = [
     {
         "Name": "Sword",
-        "Move 1": {"Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-        "Move 2": {"Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-        "Move 3": {"Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+        "Info": [
+            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+            {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+            {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+        ]
     },
     {
         "Name": "Bow",
-        "Move 1": {"Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
-        "Move 2": {"Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
-        "Move 3": {"Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}
-    }
+        "Info": [
+            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
+            {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
+            {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}
+        ]
+    },
 ]
 
 POSSIBLE_ARMOUR = [
@@ -55,12 +70,12 @@ POSSIBLE_ARMOUR = [
 POSSIBLE_ENEMIES = {
     "tutorial": [
         {"Name": "test1",
-        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee"},
+        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Both"},
         "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
         "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
         "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
         {"Name": "test2",
-        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged"},
+        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Both"},
         "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
         "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
         "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
@@ -87,10 +102,15 @@ player_area = "tutorial"
 
 # ----------------------- Functions -----------------------
 def enter_to_continue():
+    print()
     input("Enter to continue: ")
     print()
 
 def battle(area):
+
+    # set up battle
+    enter_to_continue()
+
     # random enemy generation
     num_enemy = random.randint(1, 3)
     enemies = []
@@ -99,6 +119,51 @@ def battle(area):
     for i in range(0, num_enemy):
         enemies.append(POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)])
         print("A", enemies[i]["Name"], "appeared")
+
+    enter_to_continue()
+
+    while True:
+        while player_stats["Health"] > 0:
+            # Your turn
+            print("Your turn")
+            print()
+
+
+            print("Enemy info")
+
+            for i in range(0, num_enemy):
+                print("---------------")
+                print("Name: ", enemies[i]["Name"])
+                print("Health: ", enemies[i]["Stats"]["Health"])
+            print("---------------")
+
+            print()
+            print("Your stats: ")
+            print("Health: ", player_stats["Health"])
+            print("Stamina: ", player_stats["Stamina"])
+            print()
+
+            print("Your moves: ")
+            # move selection
+            for i in range(0, 3):
+                weapon_info = player_equipment["Weapon"]["Info"][i]
+                print("Type", i+1, "for")
+                print(weapon_info["Move name"], "| Damage -", weapon_info["Base damage"], "| Hit multiple enemies -", weapon_info["Hit multi enemy"], "| Stamina cost -", weapon_info["Stamina use"])
+                print()
+            choose_move = input("Choose move: ")
+            choose_move = choose_move - 1
+            choose_move = player_equipment["Weapon"]["Info"][choose_move]
+
+            if choose_move["Hit multi enemy"] == False:
+                # enemy selections
+            else:
+                # select all targets
+
+            # damage calc
+
+            break
+        break
+
 
 
 
