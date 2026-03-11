@@ -1,4 +1,4 @@
-# DTS assignment ----- 10/3/26 ----- Cameron Christie
+# DTS assignment ----- 11/3/26 ----- Cameron Christie
 
 # ----------------------- Library -----------------------
 import time
@@ -9,13 +9,7 @@ import random
 # ----------------------- Variables -----------------------
 
 # Dictionaries and lists
-player_stats = {
-    "Health",
-    "Damage",
-    "Defense",
-    "Strength",
-    "Stamina"
-}
+player_stats = {}
 
 player_equipment = {
     "Weapon",
@@ -30,67 +24,84 @@ POSSIBLE_CLASSES = [
     {"Name": "test3", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5}
 ]
 
-POSSIBLE_WEAPONS = {
-    "Sword": {
-        "Type": "i dont know",
+POSSIBLE_WEAPONS = [
+    {
+        "Name": "Sword",
         "Move 1": {"Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
         "Move 2": {"Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
         "Move 3": {"Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
     },
-    "Bow": {
-        "Type": "i dont know",
+    {
+        "Name": "Bow",
         "Move 1": {"Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
         "Move 2": {"Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
         "Move 3": {"Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}
     }
-}
+]
 
-POSSIBLE_ARMOUR = {
-    "Chainmail": {
+POSSIBLE_ARMOUR = [
+    {
+        "Name": "Chainmail",
         "Defense": 5,
         "Weakness": "Range"
     },
-    "Knights armour": {
+    {
+        "Name": "Knights Armour",
         "Defense": 10,
         "Weakness": "Melee"
     }
-}
+]
 
 POSSIBLE_ENEMIES = {
-    "test1" : {
-        "Stats" : {"Name": "test1", "Health": 10, "Stamina" : 5, "Weakness": "Melee"},
+    "tutorial": [
+        {"Name": "test1",
+        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee"},
         "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
         "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
-        "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}
-    },
-    "test2" : {
-        "Stats" : {"Name": "test2", "Health": 20, "Stamina" : 10, "Weakness": "Ranged"},
+        "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
+        {"Name": "test2",
+        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged"},
         "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
         "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
-        "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}
-    }
+        "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
+    ],
+    "Area test 1": [
+        {"Name": "test3",
+        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee"},
+        "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
+        "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
+        "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
+        {"Name": "test4",
+        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged"},
+        "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
+        "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
+        "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
+    ]
 }
 
-
-
 # variables
+player_area = "tutorial"
+
+
 
 
 # ----------------------- Functions -----------------------
-def create_player_stats(player_class):
-    global player_stats
-    if player_class == POSSIBLE_CLASSES["test1"]:
-        player_stats = POSSIBLE_CLASSES["test1"]
-
-    elif player_class == POSSIBLE_CLASSES["test2"]:
-        player_stats = POSSIBLE_CLASSES["test2"]
-
-    elif player_class == POSSIBLE_CLASSES["test2"]:
-        player_stats = POSSIBLE_CLASSES["test2"]
-
 def enter_to_continue():
     input("Enter to continue: ")
     print()
+
+def battle(area):
+    # random enemy generation
+    num_enemy = random.randint(1, 3)
+    enemies = []
+
+    # adds the enemies to a list and prints out the names
+    for i in range(0, num_enemy):
+        enemies.append(POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)])
+        print("A", enemies[i]["Name"], "appeared")
+
+
+
 
 
 
@@ -98,6 +109,7 @@ def enter_to_continue():
 
 print("Start game")
 
+# while loop that checks if you want to play the game. Possible answers are yes or no, if input something else the loop will ask you to try again
 while True:
     try:
         start_choice = str(input("yes/no: "))
@@ -113,6 +125,7 @@ while True:
     except ValueError:
         print("Not a valid input")
 
+# Code for quiting the game. Checks if the answer is no then runs the quit function
 if start_choice == "no":
     print("Quitting game")
     time.sleep(1)
@@ -124,6 +137,7 @@ enter_to_continue()
 print("Choose class")
 print()
 
+# for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
     print("Class", i+1, ":", POSSIBLE_CLASSES[i]["Name"])
     print("Stats: ")
@@ -138,11 +152,15 @@ print()
 for i in range(len(POSSIBLE_CLASSES)):
     print("Type", i+1, "for", POSSIBLE_CLASSES[i]["Name"])
 
+# another while loop with try and except. Asks for a which class using 1,2,3 etc.
+# If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
 while True:
     try:
         player_class_choice = int(input("Choose a class: "))
         if player_class_choice >= 1 and player_class_choice <= len(POSSIBLE_CLASSES):
             player_class_choice = player_class_choice - 1
+            print("You choose: ", POSSIBLE_CLASSES[player_class_choice]["Name"])
+            player_stats = POSSIBLE_CLASSES[player_class_choice]
             break
         else:
             print("Not a valid input")
@@ -150,3 +168,6 @@ while True:
     except ValueError:
         print("Not a valid input")
 
+print("print narrative and stuff here")
+
+battle(player_area)
