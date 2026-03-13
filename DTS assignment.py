@@ -144,20 +144,64 @@ def battle(area):
             print()
 
             print("Your moves: ")
-            # move selection
-            for i in range(0, 3):
-                weapon_info = player_equipment["Weapon"]["Info"][i]
-                print("Type", i+1, "for")
-                print(weapon_info["Move name"], "| Damage -", weapon_info["Base damage"], "| Hit multiple enemies -", weapon_info["Hit multi enemy"], "| Stamina cost -", weapon_info["Stamina use"])
-                print()
-            choose_move = input("Choose move: ")
-            choose_move = choose_move - 1
-            choose_move = player_equipment["Weapon"]["Info"][choose_move]
 
-            if choose_move["Hit multi enemy"] == False:
-                # enemy selections
+            weapon_info = player_equipment["Weapon"]["Info"]
+            print(len(weapon_info))
+            # move selection
+            for i in range(0, len(weapon_info)):
+                print("Type", i+1, "for")
+                print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"], "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -", weapon_info[i]["Stamina use"])
+                print()
+
+            while True:
+                try:
+                    choose_move = int(input("Choose move: "))
+                    if choose_move >= 1 and choose_move <= len(weapon_info):
+                        choose_move = choose_move - 1
+                        choose_move = player_equipment["Weapon"]["Info"][choose_move]
+                        break
+                    else:
+                        print("Not a valid move")
+                except ValueError:
+                    print("Not a valid input")
+
+            # enemy selection
+
+            for i in range(0,len(weapon_info)):
+                pass
+
+            target = 0
+
+            if choose_move["Hit multi enemy"] == False and num_enemy > 1:
+                for i in range(0, num_enemy):
+                    print("Type",i+1 , "to attack", enemies[i]["Name"])
+
+                while True:
+                    try:
+                        choose_target = int(input("Choose enemy: "))
+                        if choose_target >= 1 and choose_target <= num_enemy:
+                            target = choose_target - 1
+                            break
+                        else:
+                            print("Not a valid enemy")
+                    except ValueError:
+                        print("Not a valid input")
+
+            elif choose_move["Hit multi enemy"] == True and num_enemy == 1:
+                target = 1
+
+            elif choose_move["Hit multi enemy"] == True and num_enemy >= 2:
+                target == "all enemies"
+
+            if target == "all enemies":
+                for i in range(0,num_enemy):
+                    print(enemies[i]["Name"])
             else:
-                # select all targets
+                print(enemies[target]["Name"])
+
+
+
+
 
             # damage calc
 
