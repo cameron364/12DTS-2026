@@ -170,7 +170,7 @@ def battle(area):
             for i in range(0,len(weapon_info)):
                 pass
 
-            target = 0
+            target = []
 
             if choose_move["Hit multi enemy"] == False and num_enemy > 1:
                 for i in range(0, num_enemy):
@@ -180,24 +180,25 @@ def battle(area):
                     try:
                         choose_target = int(input("Choose enemy: "))
                         if choose_target >= 1 and choose_target <= num_enemy:
-                            target = choose_target - 1
+                            target = [enemies[choose_target - 1]]
                             break
                         else:
                             print("Not a valid enemy")
                     except ValueError:
                         print("Not a valid input")
 
-            elif choose_move["Hit multi enemy"] == True and num_enemy == 1:
-                target = 1
+            elif num_enemy == 1:
+                target = [enemies[0]]
 
             elif choose_move["Hit multi enemy"] == True and num_enemy >= 2:
-                target == "all enemies"
-
-            if target == "all enemies":
                 for i in range(0,num_enemy):
-                    print(enemies[i]["Name"])
+                    target.append([enemies[i]])
+
+            if len(target) > 1:
+                for i in range(0,len(target)):
+                    print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
             else:
-                print(enemies[target]["Name"])
+                print("You are attacking", target[0]["Name"], "with", choose_move["Move name"])
 
 
 
