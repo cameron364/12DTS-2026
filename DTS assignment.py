@@ -29,10 +29,12 @@ player_equipment = {
 
 inventory = []
 
+DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
+
 POSSIBLE_CLASSES = [
-    {"Name": "test1", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5},
-    {"Name": "test2", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5},
-    {"Name": "test3", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5}
+    {"Name": "test1", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
+    {"Name": "test2", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
+    {"Name": "test3", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -70,24 +72,24 @@ POSSIBLE_ARMOUR = [
 POSSIBLE_ENEMIES = {
     "tutorial": [
         {"Name": "test1",
-        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Both"},
+        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee", "Strong against": "Ranged"},
         "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
         "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
         "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
         {"Name": "test2",
-        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Both"},
+        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Melee", "Strong against": "Ranged"},
         "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
         "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
         "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
     ],
     "Area test 1": [
         {"Name": "test3",
-        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee"},
+        "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee", "Strong against": "Melee"},
         "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
         "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
         "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
         {"Name": "test4",
-        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged"},
+        "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged", "Strong against": "Melee"},
         "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
         "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
         "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
@@ -150,7 +152,9 @@ def battle(area):
             # move selection
             for i in range(0, len(weapon_info)):
                 print("Type", i+1, "for")
-                print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"], "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -", weapon_info[i]["Stamina use"])
+                print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"],
+                      "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -",
+                      weapon_info[i]["Stamina use"])
                 print()
 
             while True:
@@ -180,7 +184,7 @@ def battle(area):
                     try:
                         choose_target = int(input("Choose enemy: "))
                         if choose_target >= 1 and choose_target <= num_enemy:
-                            target = [enemies[choose_target - 1]]
+                            target.append([enemies[choose_target - 1]])
                             break
                         else:
                             print("Not a valid enemy")
@@ -188,23 +192,59 @@ def battle(area):
                         print("Not a valid input")
 
             elif num_enemy == 1:
-                target = [enemies[0]]
+                target.append([enemies[0]])
 
             elif choose_move["Hit multi enemy"] == True and num_enemy >= 2:
                 for i in range(0,num_enemy):
                     target.append([enemies[i]])
 
-            if len(target) > 1:
-                for i in range(0,len(target)):
-                    print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
-            else:
-                print("You are attacking", target[0]["Name"], "with", choose_move["Move name"])
+            print()
+            print(choose_move["Move name"], "used", choose_move["Stamina use"], "stamina")
+            player_stats["Stamina"] = player_stats["Stamina"] - choose_move["Stamina use"]
+            print("You are at", player_stats["Stamina"], "stamina")
 
-
-
+            enter_to_continue()
 
 
             # damage calc
+
+            # check weakness
+            # add to damage multiplier
+
+            # change enemy health
+            # print enemy health
+
+            # end player turn
+
+            # damage calc. Runs the code for every enemy in the target list
+            # print out all the information need
+            # based on the strength and weakness and typing it will get a multiplier
+            # will remove the health off the enemy
+
+            damage_multiplier = []
+            damage = 0
+
+            for i in range(0,len(target)):
+                print("---------------------")
+                print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
+                if choose_move["Type"] == target[i][0]["Stats"]["Weakness"]:
+                    print("Super effective")
+                    damage_multiplier.append(DAMAGE_VALUES["Strong"])
+                elif choose_move["Type"] == target[i][0]["Stats"]["Strong against"]:
+                    damage_multiplier.append(DAMAGE_VALUES["Weak"])
+                    print("Not effective")
+                else:
+                    damage_multiplier.append(DAMAGE_VALUES["Normal"])
+
+                damage = player_stats["Strength"] * choose_move["Base damage"] * damage_multiplier[i]
+
+                print(choose_move["Move name"], "did", damage, "damage to", target[i][0]["Name"])
+
+                target[i][0]["Stats"]["Health"] = target[i][0]["Stats"]["Health"] - damage
+
+                print(target[i][0]["Name"], "is at", target[i][0]["Stats"]["Health"], "health")
+                print("---------------------")
+                enter_to_continue()
 
             break
         break
@@ -253,7 +293,8 @@ for i in range(len(POSSIBLE_CLASSES)):
     print("Stats: ")
     print("| Health:", POSSIBLE_CLASSES[i]["Health"], "| Damage:", POSSIBLE_CLASSES[i]["Damage"],
           "| Defense:", POSSIBLE_CLASSES[i]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Strength"],
-          "| Stamina:", POSSIBLE_CLASSES[i]["Stamina"], " |"
+          "| Stamina:", POSSIBLE_CLASSES[i]["Stamina"], "| Weakness:", POSSIBLE_CLASSES[i]["Weakness"],
+          "| Strong against:", POSSIBLE_CLASSES[i]["Strong against"], "|"
           )
     print()
 
