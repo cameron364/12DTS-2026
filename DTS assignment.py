@@ -32,9 +32,9 @@ inventory = []
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
-    {"Name": "test1", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
-    {"Name": "test2", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
-    {"Name": "test3", "Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}
+    {"Name": "test1", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test2", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test3", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -152,7 +152,7 @@ def battle(area):
     enter_to_continue()
 
     while True:
-        if player_stats["Health"] > 0:
+        if player_stats["Stats"]["Health"] > 0:
             # Your turn
             print("Your turn")
             print()
@@ -168,14 +168,14 @@ def battle(area):
 
             print()
             print("Your stats: ")
-            print("Health: ", player_stats["Health"])
-            print("Stamina: ", player_stats["Stamina"])
+            print("Health: ", player_stats["Stats"]["Health"])
+            print("Stamina: ", player_stats["Stats"]["Stamina"])
             print()
 
             print("Your moves: ")
+            print()
 
             weapon_info = player_equipment["Weapon"]["Info"]
-            print(len(weapon_info))
             # move selection
             for i in range(0, len(weapon_info)):
                 print("Type", i+1, "for")
@@ -224,8 +224,8 @@ def battle(area):
 
             print()
             print(choose_move["Move name"], "used", choose_move["Stamina use"], "stamina")
-            player_stats["Stamina"] = player_stats["Stamina"] - choose_move["Stamina use"]
-            print("You are at", player_stats["Stamina"], "stamina")
+            player_stats["Stats"]["Stamina"] = player_stats["Stats"]["Stamina"] - choose_move["Stamina use"]
+            print("You are at", player_stats["Stats"]["Stamina"], "stamina")
 
             enter_to_continue()
 
@@ -253,7 +253,7 @@ def battle(area):
                 print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
 
                 damage_multiplier.append(check_effectiveness(target[i][0], choose_move))
-                damage = player_stats["Strength"] * choose_move["Base damage"] * damage_multiplier[i]
+                damage = player_stats["Stats"]["Strength"] * choose_move["Base damage"] * damage_multiplier[i]
 
                 print(choose_move["Move name"], "did", damage, "damage to", target[i][0]["Name"])
 
@@ -266,7 +266,6 @@ def battle(area):
 
 
         # enemy ai
-
         for i in range(0,num_enemy):
 
             # enemy ai for 1 enemy
@@ -277,17 +276,30 @@ def battle(area):
 
             enemy = enemies[i]
             random_move_num = random.randint(0,3)
-            print(random_move_num)
+            enemy_move = {}
+            enemy_damage_mulitplier = 0
 
 
 
-            # do effectiveness check
+            if enemy["Moves"][random_move_num]["Stamina use"] <= enemy["Stats"]["Stamina"]:
+                enemy_move = enemy["Moves"][random_move_num]
+            else:
+                enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
 
-            # do damage
+            print(enemy["Name"], "attacks you with", enemy_move["Move name"])
 
+            enemy_damage_multiplier = check_effectiveness(player_stats, enemy_move)
+            damage = enemy_move["Base damage"] * enemy_damage_multiplier
 
+            print(enemy_move["Move name"], "did", damage, "damage to", player_stats["Name"])
 
-        break
+            enemy["Stats"]["Stamina"] = enemy["Stats"]["Stamina"] - enemy_move["Stamina use"]
+
+            player_stats["Stats"]["Health"] = player_stats["Stats"]["Health"] - damage
+            print("You are at", player_stats["Stats"]["Health"], "health")
+
+            enter_to_continue()
+
 
 
 
@@ -327,10 +339,10 @@ print()
 for i in range(len(POSSIBLE_CLASSES)):
     print("Class", i+1, ":", POSSIBLE_CLASSES[i]["Name"])
     print("Stats: ")
-    print("| Health:", POSSIBLE_CLASSES[i]["Health"], "| Damage:", POSSIBLE_CLASSES[i]["Damage"],
-          "| Defense:", POSSIBLE_CLASSES[i]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Strength"],
-          "| Stamina:", POSSIBLE_CLASSES[i]["Stamina"], "| Weakness:", POSSIBLE_CLASSES[i]["Weakness"],
-          "| Strong against:", POSSIBLE_CLASSES[i]["Strong against"], "|"
+    print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Damage:", POSSIBLE_CLASSES[i]["Stats"]["Damage"],
+          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Stats"]["Strength"],
+          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"], "| Weakness:", POSSIBLE_CLASSES[i]["Stats"]["Weakness"],
+          "| Strong against:", POSSIBLE_CLASSES[i]["Stats"]["Strong against"], "|"
           )
     print()
 
@@ -355,6 +367,6 @@ while True:
     except ValueError:
         print("Not a valid input")
 
-print("print narrative and stuff here")
+print("asdasdasdasdasdasdasd")
 
 battle(player_area)
