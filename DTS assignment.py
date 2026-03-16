@@ -73,26 +73,38 @@ POSSIBLE_ENEMIES = {
     "tutorial": [
         {"Name": "test1",
         "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee", "Strong against": "Ranged"},
-        "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
-        "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
-        "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
+         "Moves": [
+        {"Move name": "Move 1", "Base damage": 3, "Type" : "Melee", "Stamina use": 0},
+        {"Move name": "Move 2", "Base damage": 6, "Type" : "Melee", "Stamina use": 1},
+        {"Move name": "Move 3", "Base damage": 9, "Type" : "Melee", "Stamina use": 2}
+         ]
+         },
         {"Name": "test2",
         "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Melee", "Strong against": "Ranged"},
-        "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
-        "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
-        "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
+        "Moves": [
+        {"Move name": "Move 1", "Base damage": 3, "Type" : "Ranged", "Stamina use": 0},
+        {"Move name": "Move 2", "Base damage": 6, "Type" : "Ranged", "Stamina use": 1},
+        {"Move name": "Move 3", "Base damage": 9, "Type" : "Ranged", "Stamina use": 2}
+         ]
+         },
     ],
     "Area test 1": [
         {"Name": "test3",
         "Stats" : {"Health": 10, "Stamina" : 5, "Weakness": "Melee", "Strong against": "Melee"},
-        "Move 1": {"Base damage": 3, "Type" : "Melee", "Stamina use": 0},
-        "Move 2": {"Base damage": 6, "Type" : "Melee", "Stamina use": 1},
-        "Move 3": {"Base damage": 9, "Type" : "Melee", "Stamina use": 2}},
+         "Moves": [
+        {"Move name": "Move 1", "Base damage": 6, "Type" : "Melee", "Stamina use": 0},
+        {"Move name": "Move 2", "Base damage": 9, "Type" : "Melee", "Stamina use": 1},
+        {"Move name": "Move 3", "Base damage": 12, "Type" : "Melee", "Stamina use": 2}
+         ]
+         },
         {"Name": "test4",
         "Stats" : {"Health": 20, "Stamina" : 10, "Weakness": "Ranged", "Strong against": "Melee"},
-        "Move 1": {"Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
-        "Move 2": {"Base damage": 9, "Type" : "Ranged", "Stamina use": 2},
-        "Move 3": {"Base damage": 12, "Type" : "Ranged", "Stamina use": 4}}
+        "Moves": [
+        {"Move name": "Move 1", "Base damage": 6, "Type" : "Ranged", "Stamina use": 0},
+        {"Move name": "Move 2", "Base damage": 9, "Type" : "Ranged", "Stamina use": 1},
+        {"Move name": "Move 3", "Base damage": 12, "Type" : "Ranged", "Stamina use": 2}
+         ]
+         },
     ]
 }
 
@@ -107,6 +119,21 @@ def enter_to_continue():
     print()
     input("Enter to continue: ")
     print()
+
+
+def check_effectiveness(target, move):
+    damage_multiplier = 0
+
+    if move["Type"] == target["Stats"]["Weakness"]:
+        print("Super effective")
+        damage_multiplier = DAMAGE_VALUES["Strong"]
+    elif move["Type"] == target["Stats"]["Strong against"]:
+        damage_multiplier = DAMAGE_VALUES["Weak"]
+        print("Not effective")
+    else:
+        damage_multiplier = DAMAGE_VALUES["Normal"]
+    return damage_multiplier
+
 
 def battle(area):
 
@@ -125,7 +152,7 @@ def battle(area):
     enter_to_continue()
 
     while True:
-        while player_stats["Health"] > 0:
+        if player_stats["Health"] > 0:
             # Your turn
             print("Your turn")
             print()
@@ -171,9 +198,6 @@ def battle(area):
 
             # enemy selection
 
-            for i in range(0,len(weapon_info)):
-                pass
-
             target = []
 
             if choose_move["Hit multi enemy"] == False and num_enemy > 1:
@@ -205,7 +229,6 @@ def battle(area):
 
             enter_to_continue()
 
-
             # damage calc
 
             # check weakness
@@ -222,20 +245,14 @@ def battle(area):
             # will remove the health off the enemy
 
             damage_multiplier = []
-            damage = 0
-
             for i in range(0,len(target)):
+
+
+
                 print("---------------------")
                 print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
-                if choose_move["Type"] == target[i][0]["Stats"]["Weakness"]:
-                    print("Super effective")
-                    damage_multiplier.append(DAMAGE_VALUES["Strong"])
-                elif choose_move["Type"] == target[i][0]["Stats"]["Strong against"]:
-                    damage_multiplier.append(DAMAGE_VALUES["Weak"])
-                    print("Not effective")
-                else:
-                    damage_multiplier.append(DAMAGE_VALUES["Normal"])
 
+                damage_multiplier.append(check_effectiveness(target[i][0], choose_move))
                 damage = player_stats["Strength"] * choose_move["Base damage"] * damage_multiplier[i]
 
                 print(choose_move["Move name"], "did", damage, "damage to", target[i][0]["Name"])
@@ -244,14 +261,33 @@ def battle(area):
 
                 print(target[i][0]["Name"], "is at", target[i][0]["Stats"]["Health"], "health")
                 print("---------------------")
+
                 enter_to_continue()
 
-            break
+
+        # enemy ai
+
+        for i in range(0,num_enemy):
+
+            # enemy ai for 1 enemy
+
+
+
+            # check stamina and choose a move
+
+            enemy = enemies[i]
+            random_move_num = random.randint(0,3)
+            print(random_move_num)
+
+
+
+            # do effectiveness check
+
+            # do damage
+
+
+
         break
-
-
-
-
 
 
 
