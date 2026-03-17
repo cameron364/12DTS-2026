@@ -15,9 +15,9 @@ player_equipment = {
     "Weapon": {
         "Name": "Wooden Sword",
         "Info": [
-            {"Move name": "Move 1", "Base damage": 2, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-            {"Move name": "Move 2", "Base damage": 1, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-            {"Move name": "Move 3", "Base damage": 4, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+            {"Move name": "Move 2", "Base damage": 5, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+            {"Move name": "Move 3", "Base damage": 10, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
         ]
     },
 
@@ -32,9 +32,9 @@ inventory = []
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
-    {"Name": "test1", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test2", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test3", "Stats": {"Health": 5, "Damage": 5, "Defense":0.5, "Strength":0.5, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
+    {"Name": "test1", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test2", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test3", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -122,8 +122,6 @@ def enter_to_continue():
 
 
 def check_effectiveness(target, move):
-    damage_multiplier = 0
-
     if move["Type"] == target["Stats"]["Weakness"]:
         print("Super effective")
         damage_multiplier = DAMAGE_VALUES["Strong"]
@@ -146,6 +144,7 @@ def battle(area):
 
     # adds the enemies to a list and prints out the names
     for i in range(0, num_enemy):
+        print((POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)]))
         enemies.append(POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)])
         print("A", enemies[i]["Name"], "appeared")
 
@@ -244,16 +243,20 @@ def battle(area):
             # based on the strength and weakness and typing it will get a multiplier
             # will remove the health off the enemy
 
-            damage_multiplier = []
+
+
             for i in range(0,len(target)):
+                damage_multiplier = 0
+                damage = 0
 
-
-
+                print(i)
+                print(target[i][0])
+                print(target[i][0]["Stats"]["Health"])
                 print("---------------------")
                 print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
 
-                damage_multiplier.append(check_effectiveness(target[i][0], choose_move))
-                damage = player_stats["Stats"]["Strength"] * choose_move["Base damage"] * damage_multiplier[i]
+                damage_multiplier = check_effectiveness(target[i][0], choose_move)
+                damage = player_stats["Stats"]["Strength"] * choose_move["Base damage"] * damage_multiplier
 
                 print(choose_move["Move name"], "did", damage, "damage to", target[i][0]["Name"])
 
@@ -270,35 +273,42 @@ def battle(area):
 
             # enemy ai for 1 enemy
 
-
-
-            # check stamina and choose a move
+            # check if enemy is alive
 
             enemy = enemies[i]
-            random_move_num = random.randint(0,3)
-            enemy_move = {}
-            enemy_damage_mulitplier = 0
+
+            if enemy["Stats"]["Health"] > 0:
+                random_move_num = random.randint(0,3)
 
 
+                # check stamina and choose a move
 
-            if enemy["Moves"][random_move_num]["Stamina use"] <= enemy["Stats"]["Stamina"]:
-                enemy_move = enemy["Moves"][random_move_num]
-            else:
-                enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
+                if enemy["Moves"][random_move_num]["Stamina use"] <= enemy["Stats"]["Stamina"]:
+                    enemy_move = enemy["Moves"][random_move_num]
+                else:
+                    enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
 
-            print(enemy["Name"], "attacks you with", enemy_move["Move name"])
+                print(enemy["Name"], "attacks you with", enemy_move["Move name"])
 
-            enemy_damage_multiplier = check_effectiveness(player_stats, enemy_move)
-            damage = enemy_move["Base damage"] * enemy_damage_multiplier
+                enemy_damage_multiplier = check_effectiveness(player_stats, enemy_move)
+                damage = (enemy_move["Base damage"] * enemy_damage_multiplier)/player_stats["Stats"]["Defense"]
 
-            print(enemy_move["Move name"], "did", damage, "damage to", player_stats["Name"])
+                print(enemy_move["Move name"], "did", damage, "damage to", player_stats["Name"])
 
-            enemy["Stats"]["Stamina"] = enemy["Stats"]["Stamina"] - enemy_move["Stamina use"]
+                enemy["Stats"]["Stamina"] = enemy["Stats"]["Stamina"] - enemy_move["Stamina use"]
 
-            player_stats["Stats"]["Health"] = player_stats["Stats"]["Health"] - damage
-            print("You are at", player_stats["Stats"]["Health"], "health")
+                player_stats["Stats"]["Health"] = player_stats["Stats"]["Health"] - damage
+                print("You are at", player_stats["Stats"]["Health"], "health")
 
-            enter_to_continue()
+                enter_to_continue()
+
+        # enemy check health and if below zero removes from choices
+        # updates num of enemy to correct enemies
+        for i in range(0,num_enemy):
+
+            enemy = enemies[i]
+            if enemy["Stats"]["Health"] <= 0:
+                enemies.remove(enemy)
 
 
 
