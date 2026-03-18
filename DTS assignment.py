@@ -3,6 +3,7 @@
 # ----------------------- Library -----------------------
 import time
 import random
+import copy
 
 
 
@@ -144,8 +145,7 @@ def battle(area):
 
     # adds the enemies to a list and prints out the names
     for i in range(0, num_enemy):
-        print((POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)]))
-        enemies.append(POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)])
+        enemies.append(copy.deepcopy(POSSIBLE_ENEMIES[area][random.randint(0,len(POSSIBLE_ENEMIES[area])-1)]))
         print("A", enemies[i]["Name"], "appeared")
 
     enter_to_continue()
@@ -159,7 +159,7 @@ def battle(area):
 
             print("Enemy info")
 
-            for i in range(0, num_enemy):
+            for i in range(0, len(enemies)):
                 print("---------------")
                 print("Name: ", enemies[i]["Name"])
                 print("Health: ", enemies[i]["Stats"]["Health"])
@@ -268,8 +268,10 @@ def battle(area):
                 enter_to_continue()
 
 
+
+
         # enemy ai
-        for i in range(0,num_enemy):
+        for i in range(0,len(enemies)):
 
             # enemy ai for 1 enemy
 
@@ -278,8 +280,8 @@ def battle(area):
             enemy = enemies[i]
 
             if enemy["Stats"]["Health"] > 0:
-                random_move_num = random.randint(0,3)
-
+                random_move_num = random.randint(0,2)
+                print(random_move_num)
 
                 # check stamina and choose a move
 
@@ -304,7 +306,7 @@ def battle(area):
 
         # enemy check health and if below zero removes from choices
         # updates num of enemy to correct enemies
-        for i in range(0,num_enemy):
+        for i in range(0,len(enemies)):
 
             enemy = enemies[i]
             if enemy["Stats"]["Health"] <= 0:
