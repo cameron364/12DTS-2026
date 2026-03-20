@@ -33,9 +33,9 @@ inventory = []
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
-    {"Name": "test1", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test2", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test3", "Stats": {"Health": 5, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
+    {"Name": "test1", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test2", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "test3", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -118,7 +118,7 @@ player_area = "tutorial"
 # ----------------------- Functions -----------------------
 def enter_to_continue():
     print()
-    input("Enter to continue: ")
+    input("Press enter to continue: ")
     print()
 
 
@@ -199,14 +199,14 @@ def battle(area):
 
             target = []
 
-            if choose_move["Hit multi enemy"] == False and num_enemy > 1:
-                for i in range(0, num_enemy):
+            if choose_move["Hit multi enemy"] == False and len(enemies) > 1:
+                for i in range(0, len(enemies)):
                     print("Type",i+1 , "to attack", enemies[i]["Name"])
 
                 while True:
                     try:
                         choose_target = int(input("Choose enemy: "))
-                        if choose_target >= 1 and choose_target <= num_enemy:
+                        if choose_target >= 1 and choose_target <= len(enemies):
                             target.append([enemies[choose_target - 1]])
                             break
                         else:
@@ -214,11 +214,11 @@ def battle(area):
                     except ValueError:
                         print("Not a valid input")
 
-            elif num_enemy == 1:
+            elif len(enemies) == 1:
                 target.append([enemies[0]])
 
-            elif choose_move["Hit multi enemy"] == True and num_enemy >= 2:
-                for i in range(0,num_enemy):
+            elif choose_move["Hit multi enemy"] == True and len(enemies) >= 2:
+                for i in range(0,len(enemies)):
                     target.append([enemies[i]])
 
             print()
@@ -270,6 +270,25 @@ def battle(area):
 
 
 
+
+        # enemy check health and if below zero removes from choices
+        # updates num of enemy to correct enemies
+
+        for i in range(0, len(enemies)):
+
+            enemy = enemies[i]
+            if enemy["Stats"]["Health"] <= 0:
+                enemies.remove(enemy)
+
+        if len(enemies) == 0:
+            print("Battle win")
+            enter_to_continue()
+            break
+
+        print("Enemies turn")
+        enter_to_continue()
+
+
         # enemy ai
         for i in range(0,len(enemies)):
 
@@ -281,14 +300,14 @@ def battle(area):
 
             if enemy["Stats"]["Health"] > 0:
                 random_move_num = random.randint(0,2)
-                print(random_move_num)
 
                 # check stamina and choose a move
-
                 if enemy["Moves"][random_move_num]["Stamina use"] <= enemy["Stats"]["Stamina"]:
                     enemy_move = enemy["Moves"][random_move_num]
                 else:
                     enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
+
+                print("---------------------")
 
                 print(enemy["Name"], "attacks you with", enemy_move["Move name"])
 
@@ -302,15 +321,22 @@ def battle(area):
                 player_stats["Stats"]["Health"] = player_stats["Stats"]["Health"] - damage
                 print("You are at", player_stats["Stats"]["Health"], "health")
 
+                print("---------------------")
+
                 enter_to_continue()
 
-        # enemy check health and if below zero removes from choices
-        # updates num of enemy to correct enemies
-        for i in range(0,len(enemies)):
 
-            enemy = enemies[i]
-            if enemy["Stats"]["Health"] <= 0:
-                enemies.remove(enemy)
+        # check if player is dead and if so breaks the function
+        if player_stats["Stats"]["Health"] <= 0:
+            print("You lose")
+            enter_to_continue()
+            break
+
+
+
+
+
+
 
 
 
