@@ -133,6 +133,35 @@ def check_effectiveness(target, move):
         damage_multiplier = DAMAGE_VALUES["Normal"]
     return damage_multiplier
 
+def damage_calculate(thing, move, turn):
+    print("---------------------")
+    print("You are attacking", thing["Name"], "with", move["Move name"])
+
+    if move["Type"] == thing["Stats"]["Weakness"]:
+        print("Super effective")
+        damage_multiplier = DAMAGE_VALUES["Strong"]
+    elif move["Type"] == thing["Stats"]["Strong against"]:
+        damage_multiplier = DAMAGE_VALUES["Weak"]
+        print("Not effective")
+    else:
+        damage_multiplier = DAMAGE_VALUES["Normal"]
+
+    print(thing["Name"])
+    print(player_stats["Name"])
+
+    if turn == "Player":
+        damage = player_stats["Stats"]["Strength"] * move["Base damage"] * damage_multiplier
+    else:
+        damage = (move["Base damage"] * damage_multiplier) / thing["Stats"]["Defense"]
+
+    print(move["Move name"], "did", damage, "damage to", thing["Name"])
+
+    thing["Stats"]["Health"] = thing["Stats"]["Health"] - damage
+
+    print(thing["Name"], "is at", thing["Stats"]["Health"], "health")
+    print("---------------------")
+
+    enter_to_continue()
 
 def battle(area):
 
@@ -246,26 +275,7 @@ def battle(area):
 
 
             for i in range(0,len(target)):
-                damage_multiplier = 0
-                damage = 0
-
-                print(i)
-                print(target[i][0])
-                print(target[i][0]["Stats"]["Health"])
-                print("---------------------")
-                print("You are attacking", target[i][0]["Name"], "with", choose_move["Move name"])
-
-                damage_multiplier = check_effectiveness(target[i][0], choose_move)
-                damage = player_stats["Stats"]["Strength"] * choose_move["Base damage"] * damage_multiplier
-
-                print(choose_move["Move name"], "did", damage, "damage to", target[i][0]["Name"])
-
-                target[i][0]["Stats"]["Health"] = target[i][0]["Stats"]["Health"] - damage
-
-                print(target[i][0]["Name"], "is at", target[i][0]["Stats"]["Health"], "health")
-                print("---------------------")
-
-                enter_to_continue()
+                damage_calculate(target[i][0], choose_move, "Player")
 
 
 
@@ -307,23 +317,9 @@ def battle(area):
                 else:
                     enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
 
-                print("---------------------")
-
-                print(enemy["Name"], "attacks you with", enemy_move["Move name"])
-
-                enemy_damage_multiplier = check_effectiveness(player_stats, enemy_move)
-                damage = (enemy_move["Base damage"] * enemy_damage_multiplier)/player_stats["Stats"]["Defense"]
-
-                print(enemy_move["Move name"], "did", damage, "damage to", player_stats["Name"])
-
                 enemy["Stats"]["Stamina"] = enemy["Stats"]["Stamina"] - enemy_move["Stamina use"]
 
-                player_stats["Stats"]["Health"] = player_stats["Stats"]["Health"] - damage
-                print("You are at", player_stats["Stats"]["Health"], "health")
-
-                print("---------------------")
-
-                enter_to_continue()
+                damage_calculate(player_stats, enemy_move, "Enemy")
 
 
         # check if player is dead and if so breaks the function
