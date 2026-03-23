@@ -33,9 +33,9 @@ inventory = []
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
-    {"Name": "test1", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test2", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "test3", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
+    {"Name": "player test1", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "player test2", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "player test3", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -121,20 +121,12 @@ def enter_to_continue():
     input("Press enter to continue: ")
     print()
 
-
-def check_effectiveness(target, move):
-    if move["Type"] == target["Stats"]["Weakness"]:
-        print("Super effective")
-        damage_multiplier = DAMAGE_VALUES["Strong"]
-    elif move["Type"] == target["Stats"]["Strong against"]:
-        damage_multiplier = DAMAGE_VALUES["Weak"]
-        print("Not effective")
-    else:
-        damage_multiplier = DAMAGE_VALUES["Normal"]
-    return damage_multiplier
-
 def damage_calculate(thing, move, turn):
-    print("---------------------")
+    if turn == "Player":
+        print("---------------------")
+    else:
+        print("~~~~~~~~~~~~~~~~~~~~~")
+
     print("You are attacking", thing["Name"], "with", move["Move name"])
 
     if move["Type"] == thing["Stats"]["Weakness"]:
@@ -146,9 +138,6 @@ def damage_calculate(thing, move, turn):
     else:
         damage_multiplier = DAMAGE_VALUES["Normal"]
 
-    print(thing["Name"])
-    print(player_stats["Name"])
-
     if turn == "Player":
         damage = player_stats["Stats"]["Strength"] * move["Base damage"] * damage_multiplier
     else:
@@ -159,7 +148,10 @@ def damage_calculate(thing, move, turn):
     thing["Stats"]["Health"] = thing["Stats"]["Health"] - damage
 
     print(thing["Name"], "is at", thing["Stats"]["Health"], "health")
-    print("---------------------")
+    if turn == "Player":
+        print("---------------------")
+    else:
+        print("~~~~~~~~~~~~~~~~~~~~~")
 
     enter_to_continue()
 
@@ -210,72 +202,96 @@ def battle(area):
                 print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"],
                       "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -",
                       weapon_info[i]["Stamina use"])
+                if i == len(weapon_info)-1:
+                    print()
+                    print("Type", i+2, "for")
+                    print("Rest and gain 5 stamina")
                 print()
+
+
 
             while True:
                 try:
                     choose_move = int(input("Choose move: "))
-                    if choose_move >= 1 and choose_move <= len(weapon_info):
+                    if choose_move >= 1 and choose_move <= len(weapon_info)+1:
                         choose_move = choose_move - 1
-                        choose_move = player_equipment["Weapon"]["Info"][choose_move]
-                        break
+
+                        if choose_move > len(weapon_info)-1:
+                            choose_move = "Rest"
+                            break
+                        else:
+                            choose_move = player_equipment["Weapon"]["Info"][choose_move]
+                            if (player_stats["Stats"]["Stamina"] - choose_move["Stamina use"]) >= 0:
+                                break
+                            else:
+                                print("Not enough stamina to use this move")
                     else:
                         print("Not a valid move")
                 except ValueError:
                     print("Not a valid input")
 
-            # enemy selection
+            # gain stamina or enemy selection
 
-            target = []
+            if choose_move == "Rest":
+                print("You rested")
+                print("You gained 5 stamina")
+                player_stats["Stats"]["Stamina"] += 5
+                print("You are at", player_stats["Stats"]["Stamina"], "stamina")
+                print()
+            else:
 
-            if choose_move["Hit multi enemy"] == False and len(enemies) > 1:
-                for i in range(0, len(enemies)):
-                    print("Type",i+1 , "to attack", enemies[i]["Name"])
+                # enemy selection
 
-                while True:
-                    try:
-                        choose_target = int(input("Choose enemy: "))
-                        if choose_target >= 1 and choose_target <= len(enemies):
-                            target.append([enemies[choose_target - 1]])
-                            break
-                        else:
-                            print("Not a valid enemy")
-                    except ValueError:
-                        print("Not a valid input")
+                target = []
 
-            elif len(enemies) == 1:
-                target.append([enemies[0]])
+                if choose_move["Hit multi enemy"] == False and len(enemies) > 1:
+                    for i in range(0, len(enemies)):
+                        print("Type",i+1 , "to attack", enemies[i]["Name"])
 
-            elif choose_move["Hit multi enemy"] == True and len(enemies) >= 2:
-                for i in range(0,len(enemies)):
-                    target.append([enemies[i]])
+                    while True:
+                        try:
+                            choose_target = int(input("Choose enemy: "))
+                            if choose_target >= 1 and choose_target <= len(enemies):
+                                target.append([enemies[choose_target - 1]])
+                                break
+                            else:
+                                print("Not a valid enemy")
+                        except ValueError:
+                            print("Not a valid input")
 
-            print()
-            print(choose_move["Move name"], "used", choose_move["Stamina use"], "stamina")
-            player_stats["Stats"]["Stamina"] = player_stats["Stats"]["Stamina"] - choose_move["Stamina use"]
-            print("You are at", player_stats["Stats"]["Stamina"], "stamina")
+                elif len(enemies) == 1:
+                    target.append([enemies[0]])
 
-            enter_to_continue()
+                elif choose_move["Hit multi enemy"] == True and len(enemies) >= 2:
+                    for i in range(0,len(enemies)):
+                        target.append([enemies[i]])
 
-            # damage calc
+                print()
+                print(choose_move["Move name"], "used", choose_move["Stamina use"], "stamina")
+                player_stats["Stats"]["Stamina"] = player_stats["Stats"]["Stamina"] - choose_move["Stamina use"]
+                print("You are at", player_stats["Stats"]["Stamina"], "stamina")
 
-            # check weakness
-            # add to damage multiplier
+                enter_to_continue()
 
-            # change enemy health
-            # print enemy health
+                # damage calc
 
-            # end player turn
+                # check weakness
+                # add to damage multiplier
 
-            # damage calc. Runs the code for every enemy in the target list
-            # print out all the information need
-            # based on the strength and weakness and typing it will get a multiplier
-            # will remove the health off the enemy
+                # change enemy health
+                # print enemy health
+
+                # end player turn
+
+                # damage calc. Runs the code for every enemy in the target list
+                # print out all the information need
+                # based on the strength and weakness and typing it will get a multiplier
+                # will remove the health off the enemy
 
 
 
-            for i in range(0,len(target)):
-                damage_calculate(target[i][0], choose_move, "Player")
+                for i in range(0,len(target)):
+                    damage_calculate(target[i][0], choose_move, "Player")
 
 
 
@@ -283,10 +299,8 @@ def battle(area):
 
         # enemy check health and if below zero removes from choices
         # updates num of enemy to correct enemies
-
         for i in range(0, len(enemies)):
-
-            enemy = enemies[i]
+            enemy = enemies[len(enemies)-1-i]
             if enemy["Stats"]["Health"] <= 0:
                 enemies.remove(enemy)
 
