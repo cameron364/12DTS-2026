@@ -124,9 +124,17 @@ player_area = "tutorial"
 
 
 # ----------------------- Functions -----------------------
+def quit_game():
+    print("Quitting game")
+    time.sleep(1)
+    quit()
+
 def enter_to_continue():
     print()
-    input("Press enter to continue: ")
+    choice = input("Press enter to continue: ")
+    choice.lower()
+    if choice == "quit":
+        quit()
     print()
 
 def damage_calculate(thing, move, turn):
@@ -230,8 +238,9 @@ def battle(area):
 
 
             while True:
+                choose_move = input("Choose move: ")
                 try:
-                    choose_move = int(input("Choose move: "))
+                    choose_move = int(choose_move)
                     if choose_move >= 1 and choose_move <= len(weapon_info)+1:
                         choose_move = choose_move - 1
 
@@ -247,7 +256,10 @@ def battle(area):
                     else:
                         print("Not a valid move")
                 except ValueError:
-                    print("Not a valid input")
+                    if choose_move.lower() == "quit":
+                        quit_game()
+                    else:
+                        print("Not a number")
 
             # gain stamina or enemy selection
 
@@ -268,15 +280,19 @@ def battle(area):
                         print("Type",i+1 , "to attack", enemies[i]["Name"])
 
                     while True:
+                        choose_target = input("Choose enemy: ")
                         try:
-                            choose_target = int(input("Choose enemy: "))
+                            choose_target = int(choose_target)
                             if choose_target >= 1 and choose_target <= len(enemies):
                                 target.append([enemies[choose_target - 1]])
                                 break
                             else:
                                 print("Not a valid enemy")
                         except ValueError:
-                            print("Not a valid input")
+                            if choose_target.lower() == "quit":
+                                quit_game()
+                            else:
+                                print("Not a valid input")
 
                 elif len(enemies) == 1:
                     target.append([enemies[0]])
@@ -356,8 +372,18 @@ def battle(area):
             enter_to_continue()
             break
 
+# answers is a list
+def int_error_detection(question, answers):
+    while True:
+        try:
+            player_input = int(input(question))
+            for i in range(0, len(answers)):
+                current_answer = answers[i]
+                if player_input == current_answer:
+                    
 
-
+        except ValueError:
+            print("Not an number")
 
 
 
@@ -386,19 +412,26 @@ while True:
 
 # Code for quiting the game. Checks if the answer is no then runs the quit function
 if start_choice == "no":
-    print("Quitting game")
-    time.sleep(1)
-    quit()
+    quit_game()
+
 
 print("Welcome")
+print()
+print("You can type quit at any of the inputs to quit the program")
 enter_to_continue()
 
-print("Choose class")
+
+print("You are on a quest to destroy a ring")
+print("You must venture to Mount Dooom where you can destroy the ring")
+
+enter_to_continue()
+
+print("Choose your character")
 print()
 
 # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
-    print("Class", i+1, ":", POSSIBLE_CLASSES[i]["Name"])
+    print("Character", i+1, ":", POSSIBLE_CLASSES[i]["Name"])
     print("Stats: ")
     print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Damage:", POSSIBLE_CLASSES[i]["Stats"]["Damage"],
           "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Stats"]["Strength"],
@@ -415,8 +448,9 @@ for i in range(len(POSSIBLE_CLASSES)):
 # another while loop with try and except. Asks for a which class using 1,2,3 etc.
 # If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
 while True:
+    player_class_choice = input("Choose a character: ")
     try:
-        player_class_choice = int(input("Choose a class: "))
+        player_class_choice = int(player_class_choice)
         if player_class_choice >= 1 and player_class_choice <= len(POSSIBLE_CLASSES):
             player_class_choice = player_class_choice - 1
             print("You choose: ", POSSIBLE_CLASSES[player_class_choice]["Name"])
@@ -424,12 +458,21 @@ while True:
             break
         else:
             print("Not a valid input")
-
     except ValueError:
-        print("Not a valid input")
+        if player_class_choice.lower() == "quit":
+            quit_game()
+        else:
+            print("Not an number")
 
-print("story uisuibsdfaufiubfuibdsfiubdfibdfibdbifiibfibfdib")
 
-battle(player_area)
+enter_to_continue()
+
+print("You are at Hobbitown")
+print("Which way do you want to go")
+print("1 - follow the main road, 2 - go through the forest")
+
+
+battle("Area test 1")
+
 
 
