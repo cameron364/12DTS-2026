@@ -22,21 +22,21 @@ player_equipment = {
 
     "Armour": {
         "Name": "Wooden Armour",
-        "Defense": 2,
-        "Weakness": "Both"}
+        "Weakness": ["None"],
+        "Strong against": ["None"]}
 }
 
-inventory = []
+item_inventory = []
 
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
     {"Name": "Knight",
-     "Stats": {"Health": 20, "Bonus damage": 5, "Defense": 2, "Strength": 1, "Stamina": 8, "Weakness": "Melee", "Strong against": "Ranged"}},
+     "Stats": {"Health": 20, "Bonus damage": 5, "Defense": 2, "Strength": 1, "Stamina": 8}},
     {"Name": "Wizard",
-     "Stats": {"Health": 15, "Bonus damage": 10, "Defense": 1, "Strength": 0.5, "Stamina": 20, "Weakness": "Melee", "Strong against": "Ranged"}},
+     "Stats": {"Health": 15, "Bonus damage": 10, "Defense": 1, "Strength": 0.5, "Stamina": 20}},
     {"Name": "Warrior",
-     "Stats": {"Health": 30, "Bonus damage": 0, "Defense": 1, "Strength": 3, "Stamina": 10, "Weakness": "Melee", "Strong against": "Ranged"}}
+     "Stats": {"Health": 30, "Bonus damage": 0, "Defense": 1, "Strength": 3, "Stamina": 10}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -61,18 +61,18 @@ POSSIBLE_WEAPONS = [
 POSSIBLE_ARMOUR = [
     {
         "Name": "Chainmail",
-        "Defense": 5,
-        "Weakness": "Range"
+        "Weakness": ["Magic"],
+        "Strong against": ["Melee","Ranged"]
     },
     {
         "Name": "Knights Armour",
-        "Defense": 10,
-        "Weakness": "Melee"
+        "Weakness": ["Magic"],
+        "Strong against": ["Melee","Ranged"]
     }
 ]
 
 POSSIBLE_ENEMIES = {
-    "tutorial": {"Num of enemies": 1, "Enemies": [
+    "tutorial": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
         {"Name": "rogue sheep",
          "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "None"},
          "Moves": [
@@ -80,7 +80,7 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "main road": {"Num of enemies": 2, "Enemies": [
+    "main road 1": {"Max num of enemies": 2, "Min num of enemies": 2, "Enemies": [
         {"Name": "goblin with a sword",
          "Stats": {"Health": 15, "Stamina": 5, "Weakness": "Ranged", "Strong against": "None"},
          "Moves": [
@@ -98,7 +98,7 @@ POSSIBLE_ENEMIES = {
          ]
          },
     ]},
-    "forest": {"Num of enemies": 3, "Enemies": [
+    "forest 1": {"Max num of enemies": 3, "Min num of enemies": 3, "Enemies": [
         {"Name": "wolf",
          "Stats": {"Health": 8, "Stamina": 4, "Weakness": "Ranged", "Strong against": "None"},
          "Moves": [
@@ -108,7 +108,7 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "Area test 1": {"Num of enemies": 3, "Enemies": [
+    "Area test 1": {"Max num of enemies": 3, "Enemies": [
         {"Name": "test1",
          "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
          "Moves": [
@@ -126,7 +126,7 @@ POSSIBLE_ENEMIES = {
          ]
          },
     ]},
-    "Area test 2": {"Num of enemies": 3, "Enemies": [
+    "Area test 2": {"Max num of enemies": 3, "Enemies": [
         {"Name": "test3",
          "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "Melee"},
          "Moves": [
@@ -149,6 +149,9 @@ POSSIBLE_ENEMIES = {
 # variables
 player_area = "tutorial"
 
+player_money = 0
+
+player_level = 1
 
 # ----------------------- Functions -----------------------
 def quit_game():
@@ -169,33 +172,50 @@ def enter_to_continue():
 def damage_calculate(thing, move, turn):
     if turn == "Player":
         print("---------------------")
+        print("You are attacking", thing["Name"], "with", move["Move name"])
     else:
         print("~~~~~~~~~~~~~~~~~~~~~")
+        print("The enemy is attacking with", move["Move name"])
 
-    print("You are attacking", thing["Name"], "with", move["Move name"])
 
-    if move["Type"] == thing["Stats"]["Weakness"]:
-        print("Super effective")
-        damage_multiplier = DAMAGE_VALUES["Strong"]
-    elif move["Type"] == thing["Stats"]["Strong against"]:
-        damage_multiplier = DAMAGE_VALUES["Weak"]
-        print("Not effective")
+
+
+    if turn == "Player":
+        if move["Type"] == thing["Stats"]["Weakness"]:
+            print("Super effective")
+            damage_multiplier = DAMAGE_VALUES["Strong"]
+        elif move["Type"] == thing["Stats"]["Strong against"]:
+            damage_multiplier = DAMAGE_VALUES["Weak"]
+            print("Not effective")
+        else:
+            damage_multiplier = DAMAGE_VALUES["Normal"]
     else:
-        damage_multiplier = DAMAGE_VALUES["Normal"]
+        if move["Type"] in player_equipment["Armour"]["Weakness"]:
+            print("Super effective")
+            damage_multiplier = DAMAGE_VALUES["Strong"]
+        elif move["Type"] in player_equipment["Armour"]["Strong against"]:
+            damage_multiplier = DAMAGE_VALUES["Weak"]
+            print("Not effective")
+        else:
+            damage_multiplier = DAMAGE_VALUES["Normal"]
 
     if turn == "Player":
         damage = (player_stats["Stats"]["Strength"] * move["Base damage"] * damage_multiplier) + player_stats["Stats"]["Bonus damage"]
+        print(move["Move name"], "did", damage, "damage to the enemy")
     else:
         damage = (move["Base damage"] * damage_multiplier) / thing["Stats"]["Defense"]
+        print(move["Move name"], "did", damage, "damage to you")
 
-    print(move["Move name"], "did", damage, "damage to", thing["Name"])
+
 
     thing["Stats"]["Health"] = thing["Stats"]["Health"] - damage
 
-    print(thing["Name"], "is at", thing["Stats"]["Health"], "health")
+
     if turn == "Player":
+        print("Enemy is at", thing["Stats"]["Health"], "health")
         print("---------------------")
     else:
+        print("You are at", thing["Stats"]["Health"], "health")
         print("~~~~~~~~~~~~~~~~~~~~~")
 
     enter_to_continue()
@@ -215,7 +235,7 @@ def battle(area):
     enter_to_continue()
 
     # random enemy generation
-    num_enemy = random.randint(1, POSSIBLE_ENEMIES[area]["Num of enemies"])
+    num_enemy = random.randint(POSSIBLE_ENEMIES[area]["Min num of enemies"], POSSIBLE_ENEMIES[area]["Max num of enemies"])
     enemies = []
 
     # adds the enemies to a list and prints out the names
@@ -355,12 +375,10 @@ def battle(area):
                 for i in range(0, len(target)):
                     damage_calculate(target[i][0], choose_move, "Player")
 
-        # enemy check health and if below zero removes from choices
-        # updates num of enemy to correct enemies
-        for i in range(0, len(enemies)):
-            enemy = enemies[len(enemies) - 1 - i]
-            if enemy["Stats"]["Health"] <= 0:
-                enemies.remove(enemy)
+                    # after damage calculation it checks if it is dead and if it is it will remove it from the enemies list
+                    if target[i][0]["Stats"]["Health"] <= 0:
+                        print(i)
+                        enemies.pop(i)
 
         if len(enemies) == 0:
             print("Battle win")
@@ -397,22 +415,16 @@ def battle(area):
             enter_to_continue()
             break
 
-
 # answers is a list
 def int_error_detection(question, answers):
-    correct = False
     while True:
         try:
             player_input = int(input(question))
-            for i in range(0, len(answers)):
-                current_answer = answers[i]
-                if player_input == current_answer:
-                    correct = True
 
-            if correct == False:
-                print("Not a choice")
-            else:
+            if player_input in answers:
                 return player_input
+            else:
+                print("Not a choice")
 
         except ValueError:
             print("Not an integer")
@@ -443,7 +455,7 @@ if start_choice == "no":
     quit_game()
 
 print("Welcome")
-print()
+print("Infomation")
 print("You can type quit at any of the inputs to quit the program")
 enter_to_continue()
 
@@ -460,12 +472,8 @@ for i in range(len(POSSIBLE_CLASSES)):
     print("Character", i + 1, ":", POSSIBLE_CLASSES[i]["Name"])
     print("Stats: ")
     print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Base damage:", POSSIBLE_CLASSES[i]["Stats"]["Bonus damage"],
-          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:",
-          POSSIBLE_CLASSES[i]["Stats"]["Strength"],
-          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"], "| Weakness:",
-          POSSIBLE_CLASSES[i]["Stats"]["Weakness"],
-          "| Strong against:", POSSIBLE_CLASSES[i]["Stats"]["Strong against"], "|"
-          )
+          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Stats"]["Strength"],
+          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"])
     print()
 
 print()
@@ -494,22 +502,22 @@ while True:
 
 enter_to_continue()
 
-print("You are at Hobbitown")
+print("You are currently at Hobbitown")
 print("You travel down the road until a rogue sheep is blocking the way")
 
 enter_to_continue()
 battle(player_area)
 
 print("Which way do you want to go")
-print("Type 1 to follow the main road, type 2 to go through the forest")
+print("Type 1 to follow the main road , type 2 to go through the forest")
 
-answer = int_error_detection(": ", [1,2])
-if answer == 1:
+one_use_answer = int_error_detection(": ", [1,2])
+if one_use_answer == 1:
     print("You chose to follow the main road")
-    player_area = "main road"
-elif answer == 2:
+    player_area = "main road 1"
+elif one_use_answer == 2:
     print("You decided to go through the forest")
-    player_area = "forest"
+    player_area = "forest 1"
 else:
     print("error")
 
