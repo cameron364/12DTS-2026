@@ -11,14 +11,7 @@ import copy
 player_stats = {}
 
 player_equipment = {
-    "Weapon": {
-        "Name": "Wooden Sword",
-        "Info": [
-            {"Move name": "Cut", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-            {"Move name": "Slash", "Base damage": 5, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-            {"Move name": "Jab", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}
-        ]
-    },
+    "Weapon": {},
 
     "Armour": {
         "Name": "Wooden Armour",
@@ -39,24 +32,37 @@ POSSIBLE_CLASSES = [
      "Stats": {"Health": 30, "Bonus damage": 0, "Defense": 1, "Strength": 3, "Stamina": 10}}
 ]
 
-POSSIBLE_WEAPONS = [
-    {
-        "Name": "Sword",
-        "Info": [
-            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-            {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-            {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
-        ]
-    },
-    {
-        "Name": "Bow",
-        "Info": [
-            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
-            {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
-            {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}
-        ]
-    },
-]
+POSSIBLE_WEAPONS = {
+    "tutorial": [
+        {"Name": "Starter Sword",
+            "Info": [
+                {"Move name": "Stab", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Slash", "Base damage": 3, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+                {"Move name": "Jab", "Base damage": 4, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]},
+        {"Name": "Starter Wand",
+            "Info": [
+                {"Move name": "Zap", "Base damage": 6, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Fireball", "Base damage": 5, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3},
+                {"Move name": "Poke", "Base damage": 2, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1}]},
+        {"Name": "Starter Axe",
+            "Info": [
+                {"Move name": "Cut", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2},
+                {"Move name": "Throw axe", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]}
+    ],
+    "Shop 1": [
+        {"Name": "Sword",
+            "Info": [
+                {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+                {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+            ]},
+        {"Name": "Bow",
+            "Info": [
+                {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
+                {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
+                {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}]}
+    ]
+}
 
 POSSIBLE_ARMOUR = [
     {
@@ -378,7 +384,8 @@ def battle(area):
 
                     # after damage calculation it checks if it is dead and if it is it will remove it from the enemies list
                     if target[i][0]["Stats"]["Health"] <= 0:
-                        enemies.pop(i)
+                        print("sahdvhudsbidsabidsi") # delete this
+                        enemies.pop(i) # this is broken fix it
 
         if len(enemies) == 0:
             print("Battle win")
@@ -505,6 +512,37 @@ while True:
             print("Not an number")
 
 enter_to_continue()
+
+for x in range(0,len(POSSIBLE_WEAPONS[player_area])):
+    print("Weapon", x + 1, ":", POSSIBLE_WEAPONS[player_area][x]["Name"])
+    print("Moves: ")
+    for y in range(0, len(POSSIBLE_WEAPONS[player_area][x]["Info"])):
+        weapon_info = POSSIBLE_WEAPONS[player_area][x]["Info"][y]
+        print(weapon_info["Move name"], "| Damage -", weapon_info["Base damage"],
+              "| Hit multiple enemies -", weapon_info["Hit multi enemy"], "| Stamina cost -",
+              weapon_info["Stamina use"], "| Move type -", weapon_info["Type"])
+    print()
+print()
+
+for i in range(0,len(POSSIBLE_WEAPONS[player_area])):
+    print("Type", i+1, "for", POSSIBLE_WEAPONS[player_area][i]["Name"])
+
+while True:
+    player_weapon_choice = input("Choose a weapon: ")
+    try:
+        player_weapon_choice = int(player_weapon_choice)
+        if player_weapon_choice >= 1 and player_weapon_choice <= 3:
+            player_weapon_choice = player_weapon_choice - 1
+            print("You choose: ", POSSIBLE_WEAPONS[player_area][i]["Name"])
+            player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][player_weapon_choice]
+            break
+        else:
+            print("Not a valid input")
+    except ValueError:
+        if player_weapon_choice.lower() == "quit":
+            quit_game()
+        else:
+            print("Not an number")
 
 print("You are currently at Hobbitown")
 print("You travel down the road until a rogue sheep is blocking the way")
