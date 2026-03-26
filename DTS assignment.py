@@ -5,8 +5,6 @@ import time
 import random
 import copy
 
-
-
 # ----------------------- Variables -----------------------
 
 # Dictionaries and lists
@@ -16,9 +14,9 @@ player_equipment = {
     "Weapon": {
         "Name": "Wooden Sword",
         "Info": [
-            {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-            {"Move name": "Move 2", "Base damage": 5, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-            {"Move name": "Move 3", "Base damage": 10, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+            {"Move name": "Cut", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+            {"Move name": "Slash", "Base damage": 5, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+            {"Move name": "Jab", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}
         ]
     },
 
@@ -33,9 +31,12 @@ inventory = []
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_CLASSES = [
-    {"Name": "player test1", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "player test2", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}},
-    {"Name": "player test3", "Stats": {"Health": 20, "Damage": 5, "Defense": 1, "Strength": 1, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"}}
+    {"Name": "Knight",
+     "Stats": {"Health": 20, "Bonus damage": 5, "Defense": 2, "Strength": 1, "Stamina": 8, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "Wizard",
+     "Stats": {"Health": 15, "Bonus damage": 10, "Defense": 1, "Strength": 0.5, "Stamina": 20, "Weakness": "Melee", "Strong against": "Ranged"}},
+    {"Name": "Warrior",
+     "Stats": {"Health": 30, "Bonus damage": 0, "Defense": 1, "Strength": 3, "Stamina": 10, "Weakness": "Melee", "Strong against": "Ranged"}}
 ]
 
 POSSIBLE_WEAPONS = [
@@ -72,12 +73,40 @@ POSSIBLE_ARMOUR = [
 
 POSSIBLE_ENEMIES = {
     "tutorial": {"Num of enemies": 1, "Enemies": [
-            {"Name": "sheep",
-                "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "None"},
-                 "Moves": [
-                    {"Move name": "Move 1", "Base damage": 2, "Type": "None", "Stamina use": 0},
-                ]
-            }
+        {"Name": "rogue sheep",
+         "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Bash", "Base damage": 2, "Type": "None", "Stamina use": 0},
+         ]
+         }
+    ]},
+    "main road": {"Num of enemies": 2, "Enemies": [
+        {"Name": "goblin with a sword",
+         "Stats": {"Health": 15, "Stamina": 5, "Weakness": "Ranged", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Weak cut", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Cut", "Base damage": 4, "Type": "Melee", "Stamina use": 1},
+             {"Move name": "Throw sword", "Base damage": 2, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+        {"Name": "goblin with a bow",
+         "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Shoot an arrow", "Base damage": 2, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Shoot 2 arrows", "Base damage": 4, "Type": "Ranged", "Stamina use": 1},
+             {"Move name": "Shoot 3 arrows", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+    ]},
+    "forest": {"Num of enemies": 3, "Enemies": [
+        {"Name": "wolf",
+         "Stats": {"Health": 8, "Stamina": 4, "Weakness": "Ranged", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Scratch", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Bite", "Base damage": 4, "Type": "Melee", "Stamina use": 1},
+             {"Move name": "Gnaw", "Base damage": 6, "Type": "Melee", "Stamina use": 2}
+         ]
+         }
     ]},
     "Area test 1": {"Num of enemies": 3, "Enemies": [
         {"Name": "test1",
@@ -98,29 +127,27 @@ POSSIBLE_ENEMIES = {
          },
     ]},
     "Area test 2": {"Num of enemies": 3, "Enemies": [
-            {"Name": "test3",
-                "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "Melee"},
-                "Moves": [
-                    {"Move name": "Move 1", "Base damage": 6, "Type": "Melee", "Stamina use": 0},
-                    {"Move name": "Move 2", "Base damage": 9, "Type": "Melee", "Stamina use": 1},
-                    {"Move name": "Move 3", "Base damage": 12, "Type": "Melee", "Stamina use": 2}
-                ]
-            },
-            {"Name": "test4",
-                "Stats": {"Health": 20, "Stamina": 10, "Weakness": "Ranged", "Strong against": "Melee"},
-                "Moves": [
-                    {"Move name": "Move 1", "Base damage": 6, "Type": "Ranged", "Stamina use": 0},
-                    {"Move name": "Move 2", "Base damage": 9, "Type": "Ranged", "Stamina use": 1},
-                    {"Move name": "Move 3", "Base damage": 12, "Type": "Ranged", "Stamina use": 2}
-                 ]
-            },
+        {"Name": "test3",
+         "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "Melee"},
+         "Moves": [
+             {"Move name": "Move 1", "Base damage": 6, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Move 2", "Base damage": 9, "Type": "Melee", "Stamina use": 1},
+             {"Move name": "Move 3", "Base damage": 12, "Type": "Melee", "Stamina use": 2}
+         ]
+         },
+        {"Name": "test4",
+         "Stats": {"Health": 20, "Stamina": 10, "Weakness": "Ranged", "Strong against": "Melee"},
+         "Moves": [
+             {"Move name": "Move 1", "Base damage": 6, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Move 2", "Base damage": 9, "Type": "Ranged", "Stamina use": 1},
+             {"Move name": "Move 3", "Base damage": 12, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
     ]}
 }
 
 # variables
 player_area = "tutorial"
-
-
 
 
 # ----------------------- Functions -----------------------
@@ -129,6 +156,7 @@ def quit_game():
     time.sleep(1)
     quit()
 
+
 def enter_to_continue():
     print()
     choice = input("Press enter to continue: ")
@@ -136,6 +164,7 @@ def enter_to_continue():
     if choice == "quit":
         quit()
     print()
+
 
 def damage_calculate(thing, move, turn):
     if turn == "Player":
@@ -155,7 +184,7 @@ def damage_calculate(thing, move, turn):
         damage_multiplier = DAMAGE_VALUES["Normal"]
 
     if turn == "Player":
-        damage = player_stats["Stats"]["Strength"] * move["Base damage"] * damage_multiplier
+        damage = (player_stats["Stats"]["Strength"] * move["Base damage"] * damage_multiplier) + player_stats["Stats"]["Bonus damage"]
     else:
         damage = (move["Base damage"] * damage_multiplier) / thing["Stats"]["Defense"]
 
@@ -171,8 +200,9 @@ def damage_calculate(thing, move, turn):
 
     enter_to_continue()
 
+
 def battle(area):
-    for i in range(0,20):
+    for i in range(0, 20):
         print()
 
     print("You are in a battle")
@@ -190,7 +220,8 @@ def battle(area):
 
     # adds the enemies to a list and prints out the names
     for i in range(0, num_enemy):
-        enemies.append(copy.deepcopy(POSSIBLE_ENEMIES[area]["Enemies"][random.randint(0,len(POSSIBLE_ENEMIES[area]["Enemies"])-1)]))
+        enemies.append(copy.deepcopy(
+            POSSIBLE_ENEMIES[area]["Enemies"][random.randint(0, len(POSSIBLE_ENEMIES[area]["Enemies"]) - 1)]))
         print("A", enemies[i]["Name"], "appeared")
 
     enter_to_continue()
@@ -201,7 +232,6 @@ def battle(area):
             print("Your turn")
             print("----------")
             print()
-
 
             print("Enemy info")
 
@@ -225,26 +255,25 @@ def battle(area):
             weapon_info = player_equipment["Weapon"]["Info"]
             # move selection
             for i in range(0, len(weapon_info)):
-                print("Type", i+1, "for")
+                print("Type", i + 1, "for")
                 print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"],
                       "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -",
-                      weapon_info[i]["Stamina use"])
-                if i == len(weapon_info)-1:
+                      weapon_info[i]["Stamina use"], "| Move type -", weapon_info[i]["Type"])
+
+                if i == len(weapon_info) - 1:
                     print()
-                    print("Type", i+2, "for")
+                    print("Type", i + 2, "for")
                     print("Rest and gain 5 stamina")
                 print()
-
-
 
             while True:
                 choose_move = input("Choose move: ")
                 try:
                     choose_move = int(choose_move)
-                    if choose_move >= 1 and choose_move <= len(weapon_info)+1:
+                    if choose_move >= 1 and choose_move <= len(weapon_info) + 1:
                         choose_move = choose_move - 1
 
-                        if choose_move > len(weapon_info)-1:
+                        if choose_move > len(weapon_info) - 1:
                             choose_move = "Rest"
                             break
                         else:
@@ -277,7 +306,7 @@ def battle(area):
 
                 if choose_move["Hit multi enemy"] == False and len(enemies) > 1:
                     for i in range(0, len(enemies)):
-                        print("Type",i+1 , "to attack", enemies[i]["Name"])
+                        print("Type", i + 1, "to attack", enemies[i]["Name"])
 
                     while True:
                         choose_target = input("Choose enemy: ")
@@ -298,7 +327,7 @@ def battle(area):
                     target.append([enemies[0]])
 
                 elif choose_move["Hit multi enemy"] == True and len(enemies) >= 2:
-                    for i in range(0,len(enemies)):
+                    for i in range(0, len(enemies)):
                         target.append([enemies[i]])
 
                 print()
@@ -323,15 +352,13 @@ def battle(area):
                 # based on the strength and weakness and typing it will get a multiplier
                 # will remove the health off the enemy
 
-
-
-                for i in range(0,len(target)):
+                for i in range(0, len(target)):
                     damage_calculate(target[i][0], choose_move, "Player")
 
         # enemy check health and if below zero removes from choices
         # updates num of enemy to correct enemies
         for i in range(0, len(enemies)):
-            enemy = enemies[len(enemies)-1-i]
+            enemy = enemies[len(enemies) - 1 - i]
             if enemy["Stats"]["Health"] <= 0:
                 enemies.remove(enemy)
 
@@ -343,9 +370,8 @@ def battle(area):
         print("Enemies turn")
         enter_to_continue()
 
-
         # enemy ai
-        for i in range(0,len(enemies)):
+        for i in range(0, len(enemies)):
 
             # enemy ai for 1 enemy
 
@@ -353,18 +379,17 @@ def battle(area):
 
             enemy = enemies[i]
             if enemy["Stats"]["Health"] > 0:
-                random_move_num = random.randint(0,len(enemy["Moves"])-1)
+                random_move_num = random.randint(0, len(enemy["Moves"]) - 1)
 
                 # check stamina and choose a move
                 if enemy["Moves"][random_move_num]["Stamina use"] <= enemy["Stats"]["Stamina"]:
                     enemy_move = enemy["Moves"][random_move_num]
                 else:
-                    enemy_move = enemy["Moves"][0] # move 1 or 0 stamina use is always at 0
+                    enemy_move = enemy["Moves"][0]  # move 1 or 0 stamina use is always at 0
 
                 enemy["Stats"]["Stamina"] = enemy["Stats"]["Stamina"] - enemy_move["Stamina use"]
 
                 damage_calculate(player, enemy_move, "Enemy")
-
 
         # check if player is dead and if so breaks the function
         if player["Stats"]["Health"] <= 0:
@@ -372,22 +397,25 @@ def battle(area):
             enter_to_continue()
             break
 
+
 # answers is a list
 def int_error_detection(question, answers):
+    correct = False
     while True:
         try:
             player_input = int(input(question))
             for i in range(0, len(answers)):
                 current_answer = answers[i]
                 if player_input == current_answer:
-                    
+                    correct = True
+
+            if correct == False:
+                print("Not a choice")
+            else:
+                return player_input
 
         except ValueError:
-            print("Not an number")
-
-
-
-
+            print("Not an integer")
 
 
 # ----------------------- Main code -----------------------
@@ -414,12 +442,10 @@ while True:
 if start_choice == "no":
     quit_game()
 
-
 print("Welcome")
 print()
 print("You can type quit at any of the inputs to quit the program")
 enter_to_continue()
-
 
 print("You are on a quest to destroy a ring")
 print("You must venture to Mount Dooom where you can destroy the ring")
@@ -431,11 +457,13 @@ print()
 
 # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
-    print("Character", i+1, ":", POSSIBLE_CLASSES[i]["Name"])
+    print("Character", i + 1, ":", POSSIBLE_CLASSES[i]["Name"])
     print("Stats: ")
-    print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Damage:", POSSIBLE_CLASSES[i]["Stats"]["Damage"],
-          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Stats"]["Strength"],
-          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"], "| Weakness:", POSSIBLE_CLASSES[i]["Stats"]["Weakness"],
+    print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Base damage:", POSSIBLE_CLASSES[i]["Stats"]["Bonus damage"],
+          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:",
+          POSSIBLE_CLASSES[i]["Stats"]["Strength"],
+          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"], "| Weakness:",
+          POSSIBLE_CLASSES[i]["Stats"]["Weakness"],
           "| Strong against:", POSSIBLE_CLASSES[i]["Stats"]["Strong against"], "|"
           )
     print()
@@ -443,7 +471,7 @@ for i in range(len(POSSIBLE_CLASSES)):
 print()
 
 for i in range(len(POSSIBLE_CLASSES)):
-    print("Type", i+1, "for", POSSIBLE_CLASSES[i]["Name"])
+    print("Type", i + 1, "for", POSSIBLE_CLASSES[i]["Name"])
 
 # another while loop with try and except. Asks for a which class using 1,2,3 etc.
 # If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
@@ -464,15 +492,26 @@ while True:
         else:
             print("Not an number")
 
-
 enter_to_continue()
 
 print("You are at Hobbitown")
+print("You travel down the road until a rogue sheep is blocking the way")
+
+enter_to_continue()
+battle(player_area)
+
 print("Which way do you want to go")
-print("1 - follow the main road, 2 - go through the forest")
+print("Type 1 to follow the main road, type 2 to go through the forest")
 
+answer = int_error_detection(": ", [1,2])
+if answer == 1:
+    print("You chose to follow the main road")
+    player_area = "main road"
+elif answer == 2:
+    print("You decided to go through the forest")
+    player_area = "forest"
+else:
+    print("error")
 
-battle("Area test 1")
-
-
-
+enter_to_continue()
+battle(player_area)
