@@ -222,8 +222,7 @@ def damage_calculate(thing, move, turn):
 
 
 def battle(area):
-    for i in range(0, 20):
-        print()
+    print()
 
     print("You are in a battle")
 
@@ -251,7 +250,7 @@ def battle(area):
             # Your turn
             print("Your turn")
             print("----------")
-            print()
+            enter_to_continue()
 
             print("Enemy info")
 
@@ -263,14 +262,15 @@ def battle(area):
 
             print()
             print("Your stats: ")
+            print("---------------")
             print("Health: ", player["Stats"]["Health"])
             print("Stamina: ", player["Stats"]["Stamina"])
-            print()
+            print("---------------")
 
             enter_to_continue()
 
             print("Your moves: ")
-            print()
+            print("---------------")
 
             weapon_info = player_equipment["Weapon"]["Info"]
             # move selection
@@ -284,6 +284,7 @@ def battle(area):
                     print()
                     print("Type", i + 2, "for")
                     print("Rest and gain 5 stamina")
+                    print("---------------")
                 print()
 
             while True:
@@ -377,7 +378,6 @@ def battle(area):
 
                     # after damage calculation it checks if it is dead and if it is it will remove it from the enemies list
                     if target[i][0]["Stats"]["Health"] <= 0:
-                        print(i)
                         enemies.pop(i)
 
         if len(enemies) == 0:
@@ -418,8 +418,9 @@ def battle(area):
 # answers is a list
 def int_error_detection(question, answers):
     while True:
+        player_input = input(question)
         try:
-            player_input = int(input(question))
+            player_input = int(player_input)
 
             if player_input in answers:
                 return player_input
@@ -427,7 +428,10 @@ def int_error_detection(question, answers):
                 print("Not a choice")
 
         except ValueError:
-            print("Not an integer")
+            if player_input.lower() == "quit":
+                quit_game()
+            else:
+                print("Not an integer")
 
 
 # ----------------------- Main code -----------------------
@@ -505,6 +509,7 @@ enter_to_continue()
 print("You are currently at Hobbitown")
 print("You travel down the road until a rogue sheep is blocking the way")
 
+
 enter_to_continue()
 battle(player_area)
 
@@ -523,3 +528,7 @@ else:
 
 enter_to_continue()
 battle(player_area)
+
+if player_area == "forest 1":
+    print("You decided to go back on the road")
+    player_area = "main road"
