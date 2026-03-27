@@ -549,7 +549,7 @@ enter_to_continue()
 battle(player_area)
 
 print("Which way do you want to go")
-print("Type 1 to follow the main road , type 2 to go through the forest")
+print("Type 1 to follow the main road and fight the group of goblins, type 2 to go around them through the forest")
 
 one_use_answer = int_error_detection(": ", [1,2])
 if one_use_answer == 1:
