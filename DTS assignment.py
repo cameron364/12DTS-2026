@@ -114,6 +114,34 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
+    "main road": {"Max num of enemies": 5, "Min num of enemies": 3, "Enemies": [
+        {"Name": "goblin with a sword",
+         "Stats": {"Health": 15, "Stamina": 5, "Weakness": "Ranged", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Weak cut", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Cut", "Base damage": 4, "Type": "Melee", "Stamina use": 1},
+             {"Move name": "Throw sword", "Base damage": 2, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+        {"Name": "goblin with a bow",
+         "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "None"},
+         "Moves": [
+             {"Move name": "Shoot an arrow", "Base damage": 2, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Shoot 2 arrows", "Base damage": 4, "Type": "Ranged", "Stamina use": 1},
+             {"Move name": "Shoot 3 arrows", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+    ]},
+    "main road final": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Goblin Giant",
+         "Stats": {"Health": 50, "Stamina": 8, "Weakness": "Magic", "Strong against": "Melee"},
+         "Moves": [
+             {"Move name": "Punch", "Base damage": 3, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Smash", "Base damage": 6, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Kick", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
+         ]
+         }
+    ]},
     "Area test 1": {"Max num of enemies": 3, "Enemies": [
         {"Name": "test1",
          "Stats": {"Health": 10, "Stamina": 5, "Weakness": "Melee", "Strong against": "Ranged"},
@@ -467,7 +495,7 @@ print("Infomation")
 print("You can type quit at any of the inputs to quit the program")
 enter_to_continue()
 
-print("You are on a quest to destroy a ring")
+print("You are on a quest to destroy a ring and save middle earth from Saron")
 print("You must venture to Mount Dooom where you can destroy the ring")
 
 enter_to_continue()
@@ -530,7 +558,7 @@ while True:
         player_weapon_choice = int(player_weapon_choice)
         if player_weapon_choice >= 1 and player_weapon_choice <= 3:
             player_weapon_choice = player_weapon_choice - 1
-            print("You choose: ", POSSIBLE_WEAPONS[player_area][i]["Name"])
+            print("You choose: ", POSSIBLE_WEAPONS[player_area][player_weapon_choice]["Name"])
             player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][player_weapon_choice]
             break
         else:
@@ -567,3 +595,29 @@ battle(player_area)
 if player_area == "forest 1":
     print("You decided to go back on the road")
     player_area = "main road"
+if player_area == "main road 1":
+    print("You decided to continue following the main road")
+    player_area = "main road"
+
+enter_to_continue()
+print("You are attacked by a goblin gang")
+enter_to_continue()
+
+battle(player_area)
+player_area = "main road final"
+
+print("There seems to be a goblin giant blocking the way")
+print("There is no way around")
+
+while True:
+    one_time_input = input("Are you ready to fight it (yes/no): ")
+    one_time_input = one_time_input.lower()
+    if one_time_input == "yes":
+        break
+    elif one_time_input == "no":
+        print("You waited around")
+        time.sleep(3)
+    else:
+        print("Not an option")
+
+battle(player_area)
