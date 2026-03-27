@@ -19,9 +19,16 @@ player_equipment = {
         "Strong against": ["None"]}
 }
 
-item_inventory = []
+item_inventory = [{"Name": "Apple", "Healing amount": 5, "Cost": 5}]
 
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
+
+POSSIBLE_ITEMS = {
+    "Shop 1": [
+        {"Name": "Apple", "Healing amount": 5, "Cost": 5},
+        {"Name": "Banana", "Healing amount": 7, "Cost": 7},
+    ]
+}
 
 POSSIBLE_CLASSES = [
     {"Name": "Knight",
@@ -34,29 +41,29 @@ POSSIBLE_CLASSES = [
 
 POSSIBLE_WEAPONS = {
     "tutorial": [
-        {"Name": "Starter Sword",
+        {"Name": "Starter Sword", "Cost": 5,
             "Info": [
                 {"Move name": "Stab", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
                 {"Move name": "Slash", "Base damage": 3, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
                 {"Move name": "Jab", "Base damage": 4, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]},
-        {"Name": "Starter Wand",
+        {"Name": "Starter Wand", "Cost": 5,
             "Info": [
                 {"Move name": "Zap", "Base damage": 6, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
                 {"Move name": "Fireball", "Base damage": 5, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3},
                 {"Move name": "Poke", "Base damage": 2, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1}]},
-        {"Name": "Starter Axe",
+        {"Name": "Starter Axe", "Cost": 5,
             "Info": [
                 {"Move name": "Cut", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2},
                 {"Move name": "Throw axe", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]}
     ],
     "Shop 1": [
-        {"Name": "Sword",
+        {"Name": "Sword", "Cost": 10,
             "Info": [
                 {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
                 {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
                 {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
             ]},
-        {"Name": "Bow",
+        {"Name": "Bow", "Cost": 10,
             "Info": [
                 {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
                 {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
@@ -254,6 +261,24 @@ def damage_calculate(thing, move, turn):
 
     enter_to_continue()
 
+def show_moves(weapon_info):
+    for i in range(0, len(weapon_info)):
+        print("Type", i + 1, "for")
+        print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"],
+              "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -",
+              weapon_info[i]["Stamina use"], "| Move type -", weapon_info[i]["Type"])
+
+        if i == len(weapon_info) - 1:
+            print()
+            print("Type", i + 2, "for")
+            print("Rest and gain 5 stamina")
+
+            if len(item_inventory) > 0:
+                print()
+                print("Type", i + 3, "to")
+                print("Use inventory")
+            print("---------------")
+        print()
 
 def battle(area):
     print()
@@ -307,30 +332,73 @@ def battle(area):
 
             weapon_info = player_equipment["Weapon"]["Info"]
             # move selection
-            for i in range(0, len(weapon_info)):
-                print("Type", i + 1, "for")
-                print(weapon_info[i]["Move name"], "| Damage -", weapon_info[i]["Base damage"],
-                      "| Hit multiple enemies -", weapon_info[i]["Hit multi enemy"], "| Stamina cost -",
-                      weapon_info[i]["Stamina use"], "| Move type -", weapon_info[i]["Type"])
+            show_moves(weapon_info)
 
-                if i == len(weapon_info) - 1:
-                    print()
-                    print("Type", i + 2, "for")
-                    print("Rest and gain 5 stamina")
-                    print("---------------")
-                print()
+            item_use = 0
+            move_selection_max_length = 0
+            if len(item_inventory) > 0:
+                move_selection_max_length = 2
+            else:
+                move_selection_max_length = 1
 
             while True:
                 choose_move = input("Choose move: ")
                 try:
                     choose_move = int(choose_move)
-                    if choose_move >= 1 and choose_move <= len(weapon_info) + 1:
-                        choose_move = choose_move - 1
+                    if choose_move >= 1 and choose_move <= len(weapon_info) + move_selection_max_length:
 
-                        if choose_move > len(weapon_info) - 1:
+                        if choose_move == len(weapon_info) + 1:
                             choose_move = "Rest"
                             break
+                        elif choose_move == len(weapon_info) + 2:
+
+                            # inventory use or not or use item check
+                            # so that it can go back to move selection
+                            for i in range(0, len(item_inventory)):
+                                print("Type", i + 1, "to use", item_inventory[i]["Name"], "| Healing -", item_inventory[i]["Healing amount"], "health |")
+                                print()
+                            print("Type [back] to go back to move selection")
+                            print()
+
+                            while True:
+                                player_item_input = input("Choose item:")
+
+                                try:
+                                    player_item_input = int(player_item_input)
+                                    if player_item_input >= 1 and player_item_input <= len(item_inventory):
+                                        choose_move = "Inventory"
+                                        player_item_input = player_item_input - 1
+                                        item_use = item_inventory[player_item_input]
+                                        item_inventory.pop(player_item_input)
+                                        print("You are using", item_use["Name"])
+                                        enter_to_continue()
+                                        break
+                                    else:
+                                        print("Not an option")
+                                except ValueError:
+                                    if player_item_input.lower() == "back":
+                                        print("Going back to move selection")
+                                        time.sleep(1.5)
+                                        show_moves(weapon_info)
+                                        break
+                                    elif player_item_input.lower() == "quit":
+                                        quit_game()
+                                    else:
+                                        print("Not an option")
+
+                            # this checks if you used an item
+                            # it will break out of the move selection loop
+                            # this is here to stop going back to move selection breaking the game
+                            if item_use != 0:
+                                break
+
+
+                        # if you choose a move
+                        # it will check if you have enough stamina to use it
+                        # if so it will break out of the loop
+                        # if not it will ask you to input again
                         else:
+                            choose_move = choose_move - 1
                             choose_move = player_equipment["Weapon"]["Info"][choose_move]
                             if (player["Stats"]["Stamina"] - choose_move["Stamina use"]) >= 0:
                                 break
@@ -338,6 +406,9 @@ def battle(area):
                                 print("Not enough stamina to use this move")
                     else:
                         print("Not a valid move")
+
+
+                # error detection and checking if player wants to quit
                 except ValueError:
                     if choose_move.lower() == "quit":
                         quit_game()
@@ -352,6 +423,13 @@ def battle(area):
                 player["Stats"]["Stamina"] += 5
                 print("You are at", player["Stats"]["Stamina"], "stamina")
                 print()
+            elif choose_move == "Inventory":
+                print("You ate", item_use["Name"])
+                print("It healed", item_use["Healing amount"], "health")
+
+                player["Stats"]["Health"] += item_use["Healing amount"]
+                print("You are now at", player["Stats"]["Health"], "health")
+
             else:
 
                 # enemy selection
