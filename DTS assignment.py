@@ -19,7 +19,9 @@ player_equipment = {
         "Strong against": ["None"]}
 }
 
-item_inventory = [{"Name": "Apple", "Healing amount": 5, "Cost": 5}]
+player_drop_inventory = []
+
+item_inventory = []
 
 DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
@@ -192,14 +194,11 @@ player_area = "tutorial"
 
 player_money = 0
 
-player_level = 1
-
 # ----------------------- Functions -----------------------
 def quit_game():
     print("Quitting game")
     time.sleep(1)
     quit()
-
 
 def enter_to_continue():
     print()
@@ -208,7 +207,6 @@ def enter_to_continue():
     if choice == "quit":
         quit()
     print()
-
 
 def damage_calculate(thing, move, turn):
     if turn == "Player":
@@ -543,7 +541,8 @@ def int_error_detection(question, answers):
             else:
                 print("Not an integer")
 
-
+def enter_shop(shop_area):
+    pass
 # ----------------------- Main code -----------------------
 
 print("Start game")
@@ -671,9 +670,15 @@ enter_to_continue()
 battle(player_area)
 
 if player_area == "forest 1":
+    player_drop_inventory.append({"Name": "Wolf skin", "Cost": 5})
+    print("You got wolf skin from defeating the pack of wolves")
+    enter_to_continue()
     print("You decided to go back on the road")
     player_area = "main road"
 if player_area == "main road 1":
+    player_money += 2
+    print("You got 2 dollars from defeating the goblins")
+    enter_to_continue()
     print("You decided to continue following the main road")
     player_area = "main road"
 
@@ -682,6 +687,10 @@ print("You are attacked by a goblin gang")
 enter_to_continue()
 
 battle(player_area)
+player_money += 7
+print("You got 7 dollars from defeating the goblin gang")
+
+
 player_area = "main road final"
 
 print("There seems to be a goblin giant blocking the way")
@@ -695,7 +704,28 @@ while True:
     elif one_time_input == "no":
         print("You waited around")
         time.sleep(3)
+    elif one_time_input == "quit":
+        quit_game()
     else:
         print("Not an option")
 
 battle(player_area)
+print("You defeated the goblin giant")
+player_money += 10
+print("The goblin giant dropped 10 dollars")
+
+enter_to_continue()
+
+print("You arrived at a _________ town")
+print("There seems to be a shop that you can sell items and purchase equipment")
+enter_to_continue()
+
+print("Type 1 to go the shop, Type 2 to continue the quest")
+one_use_answer = int_error_detection(": ", [1,2])
+
+if one_use_answer == 1:
+    enter_shop("shop 1")
+elif one_use_answer == 2:
+    print('You continue on with the quest')
+else:
+    print("Error herererere")
