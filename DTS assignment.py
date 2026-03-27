@@ -245,8 +245,7 @@ def battle(area):
 
     # adds the enemies to a list and prints out the names
     for i in range(0, num_enemy):
-        enemies.append(copy.deepcopy(
-            POSSIBLE_ENEMIES[area]["Enemies"][random.randint(0, len(POSSIBLE_ENEMIES[area]["Enemies"]) - 1)]))
+        enemies.append(copy.deepcopy(POSSIBLE_ENEMIES[area]["Enemies"][random.randint(0, len(POSSIBLE_ENEMIES[area]["Enemies"]) - 1)]))
         print("A", enemies[i]["Name"], "appeared")
 
     enter_to_continue()
@@ -381,11 +380,9 @@ def battle(area):
 
                 for i in range(0, len(target)):
                     damage_calculate(target[i][0], choose_move, "Player")
-
                     # after damage calculation it checks if it is dead and if it is it will remove it from the enemies list
                     if target[i][0]["Stats"]["Health"] <= 0:
-                        print("sahdvhudsbidsabidsi") # delete this
-                        enemies.pop(i) # this is broken fix it
+                        enemies.remove(target[i][0])
 
         if len(enemies) == 0:
             print("Battle win")
