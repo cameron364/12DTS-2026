@@ -19,6 +19,11 @@ player_equipment = {
         "Strong against": ["None"]}
 }
 
+player_spare_equipment = {
+    "Weapons": [],
+    "Armour": []
+}
+
 player_drop_inventory = []
 
 item_inventory = []
@@ -73,18 +78,21 @@ POSSIBLE_WEAPONS = {
     ]
 }
 
-POSSIBLE_ARMOUR = [
+POSSIBLE_ARMOUR = {
+    "Shop 1": [
     {
         "Name": "Chainmail",
-        "Weakness": ["Magic"],
+        "Cost": 5,
+        "Weakness": ["None"],
         "Strong against": ["Melee","Ranged"]
     },
     {
         "Name": "Knights Armour",
+        "Cost": 5,
         "Weakness": ["Magic"],
         "Strong against": ["Melee","Ranged"]
     }
-]
+]}
 
 POSSIBLE_ENEMIES = {
     "tutorial": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
@@ -192,7 +200,7 @@ POSSIBLE_ENEMIES = {
 # variables
 player_area = "tutorial"
 
-player_money = 0
+player_money = 99999
 
 # ----------------------- Functions -----------------------
 def quit_game():
@@ -562,7 +570,165 @@ def int_error_detection(question, answers):
                 print("Not an integer")
 
 def enter_shop(shop_area):
-    pass
+    global player_money
+    print("You entered", shop_area)
+
+    time.sleep(1)
+
+    while True:
+
+        # choose what to do
+        print("Type 1 to equip armour and weapons")
+        print("Type 2 to purchase armour and weapons")
+        print("Type 3 to sell armour and weapons")
+        print("Type 4 to purchase items")
+        print("Type 5 to sell items")
+        player_input = int_error_detection(": ", [1,2,3,4,5])
+
+        # equiping armour/weapons
+        if player_input == 1 and (len(player_spare_equipment["Armour"]) > 0 or len(player_spare_equipment["Weapons"]) > 0):
+            print("----------------------------------------")
+            print("Current equipment")
+            print()
+            print("Weapon:", player_equipment["Weapon"]["Name"])
+            print_weapon_stats(player_equipment["Weapon"])
+            print("Armour:", player_equipment["Armour"]["Name"])
+            print_armour_stats(player_equipment["Armour"])
+            print("----------------------------------------")
+            print("Spare equipment")
+            print()
+
+            if len(player_spare_equipment["Weapons"]) > 0:
+                for i in range(0,len(player_spare_equipment["Weapons"])):
+                    print(player_spare_equipment["Weapons"][i]["Name"])
+                    print_weapon_stats(player_spare_equipment["Weapons"][i])
+            if len(player_spare_equipment["Armour"]) > 0:
+                for i in range(0,len(player_spare_equipment["Armour"])):
+                    print(player_spare_equipment["Armour"][i]["Name"])
+                    print_armour_stats(player_spare_equipment["Armour"][i])
+
+            print("----------------------------------------")
+
+            # need to do equipment code here
+
+        # buying armour / weapons
+        if player_input == 2:
+
+            # prints out information
+            print("========================================")
+            print("Weapons for sale")
+
+            for i in range(0,len(POSSIBLE_WEAPONS[shop_area])):
+                print()
+                print(POSSIBLE_WEAPONS[shop_area][i]["Name"], "costs", POSSIBLE_WEAPONS[shop_area][i]["Cost"], "dollars | info below")
+                print_weapon_stats(POSSIBLE_WEAPONS[shop_area][i])
+            print("========================================")
+            print("Armour for sale")
+
+            for i in range(0, len(POSSIBLE_ARMOUR[shop_area])):
+                print()
+                print(POSSIBLE_ARMOUR[shop_area][i]["Name"], "costs", POSSIBLE_ARMOUR[shop_area][i]["Cost"], "dollars")
+                print_armour_stats(POSSIBLE_ARMOUR[shop_area][i])
+            print("========================================")
+
+            # purchasing code
+            while True:
+                print()
+                possible_purchases = []
+                for i in range(0, len(POSSIBLE_WEAPONS[shop_area])):
+                    print("Type", i + 1, "to purchase", POSSIBLE_WEAPONS[shop_area][i]["Name"])
+                    possible_purchases.append((i + 1))
+
+                last_number = possible_purchases[-1]
+
+                for i in range(0, len(POSSIBLE_ARMOUR[shop_area])):
+                    print("Type", last_number + i + 1, "to purchase", POSSIBLE_ARMOUR[shop_area][i]["Name"])
+                    possible_purchases.append(last_number + (i + 1))
+
+                possible_purchases.append(possible_purchases[-1] + 1)
+                print("Type", possible_purchases[-1], "to not buy anything")
+
+                last_number = possible_purchases[-1]
+
+                one_time_input = int_error_detection(": ", possible_purchases)
+
+
+
+                if one_time_input == last_number:
+                    print("You did not buy anything")
+                    time.sleep(2)
+                    break
+                elif one_time_input <= len(POSSIBLE_WEAPONS[shop_area]):
+                    if POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"] <= player_money:
+                        print("You spent", POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"], "dollars")
+                        player_money -= POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"]
+                        print("You have", player_money, "dollars")
+                        time.sleep(1)
+
+                        print("You purchased", POSSIBLE_WEAPONS[shop_area][one_time_input]["Name"])
+                        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS[shop_area][one_time_input])
+                        print("You put your weapon into your spare equipment")
+                        print("To equip it go to the equipment page in the shop")
+                        time.sleep(2)
+                        break
+                    else:
+                        print("You do not have enough money to purchase this armour")
+                        time.sleep(1)
+                        print("You have", player_money, "dollars")
+                        print("You need", POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"], "dollars to purchase", POSSIBLE_WEAPONS[shop_area][one_time_input]["Name"])
+                elif one_time_input > len(POSSIBLE_WEAPONS[shop_area]):
+                    one_time_input = one_time_input - len(POSSIBLE_WEAPONS[shop_area]) - 1
+                    if POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"] <= player_money:
+                        print("You spent", POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"], "dollars")
+                        player_money -= POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"]
+                        print("You have", player_money, "dollars")
+                        time.sleep(1)
+
+                        player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR[shop_area][one_time_input])
+                        print("You purchased", POSSIBLE_ARMOUR[shop_area][one_time_input]["Name"])
+                        print("You put your armour into your spare equipment")
+                        print("To equip it go to the equipment page in the shop")
+                        time.sleep(2)
+                        break
+                    else:
+                        print("You do not have enough money to purchase this armour")
+                        time.sleep(1)
+                        print("You have", player_money, "dollars")
+                        print("You need", POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"], "dollars to purchase", POSSIBLE_ARMOUR[shop_area][one_time_input]["Name"])
+
+
+
+
+
+
+        # continue shopping or leave shop
+        print("Type 1 to continue shopping")
+        print("Type 2 to leave the shope")
+        player_input = int_error_detection(": ", [1,2])
+
+        if player_input == 2:
+            break
+        else:
+            print("You continued shopping")
+            time.sleep(1)
+
+def print_weapon_stats(weapon):
+    for y in range(0, len(weapon["Info"])):
+        weapon_info = weapon["Info"][y]
+        print(weapon_info["Move name"], "| Damage -", weapon_info["Base damage"],
+              "| Hit multiple enemies -", weapon_info["Hit multi enemy"], "| Stamina cost -",
+              weapon_info["Stamina use"], "| Move type -", weapon_info["Type"])
+    print()
+
+def print_armour_stats(armour):
+    print("Weakness: ", end='')
+    for i in range(0,len(armour["Weakness"])):
+        print(armour["Weakness"][i], "", end='')
+    print()
+    print("Strong against: ", end='')
+    for i in range(0,len(armour["Strong against"])):
+        print(armour["Strong against"][i], "", end='')
+    print()
 # ----------------------- Main code -----------------------
 
 print("Start game")
@@ -646,16 +812,10 @@ print("-------------------------------")
 
 enter_to_continue()
 
-for x in range(0,len(POSSIBLE_WEAPONS[player_area])):
-    print("Weapon", x + 1, ":", POSSIBLE_WEAPONS[player_area][x]["Name"])
-    print("Moves: ")
-    for y in range(0, len(POSSIBLE_WEAPONS[player_area][x]["Info"])):
-        weapon_info = POSSIBLE_WEAPONS[player_area][x]["Info"][y]
-        print(weapon_info["Move name"], "| Damage -", weapon_info["Base damage"],
-              "| Hit multiple enemies -", weapon_info["Hit multi enemy"], "| Stamina cost -",
-              weapon_info["Stamina use"], "| Move type -", weapon_info["Type"])
-    print()
-print()
+for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
+    print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
+    print("Info: ")
+    print_weapon_stats(POSSIBLE_WEAPONS["tutorial"][x])
 
 for i in range(0,len(POSSIBLE_WEAPONS[player_area])):
     print("Type", i+1, "for", POSSIBLE_WEAPONS[player_area][i]["Name"])
@@ -676,6 +836,20 @@ while True:
             quit_game()
         else:
             print("Not an number")
+
+# this is debugging stuff
+# remember to change player money to 0 instead of 99999
+# -----------------------------------------------------
+# -----------------------------------------------------
+# -----------------------------------------------------
+# -----------------------------------------------------
+enter_shop("Shop 1")
+# delete to here
+# -----------------------------------------------------
+# -----------------------------------------------------
+# -----------------------------------------------------
+# -----------------------------------------------------
+# -----------------------------------------------------
 
 enter_to_continue()
 
@@ -777,7 +951,7 @@ print("Type 1 to go the shop, Type 2 to continue the quest")
 one_use_answer = int_error_detection(": ", [1,2])
 
 if one_use_answer == 1:
-    enter_shop("shop 1")
+    enter_shop("Shop 1")
 elif one_use_answer == 2:
     print('You continue on with the quest')
 else:
