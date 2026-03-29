@@ -880,6 +880,64 @@ def enter_shop(shop_area):
                     print("You need", POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"], "dollars to purchase this")
                     time.sleep(1)
 
+        # selling items
+        if player_input == 5:
+            if len(player_drop_inventory) > 0 or len(item_inventory) > 0:
+                while True:
+
+                    if len(player_drop_inventory) == 0 and len(item_inventory) == 0:
+                        print("You do not have any items to sell")
+                        time.sleep(1)
+                        break
+
+                    possible_item_sell = []
+                    for i in range(0, len(item_inventory)):
+                        print("Type", i+ 1, item_inventory[i]["Name"], "sells for", item_inventory[i]["Cost"], "dollars")
+                        possible_item_sell.append(i+1)
+
+                    try:
+                        last_number = possible_item_sell[-1]
+                    except IndexError:
+                        last_number = 0
+
+                    for i in range(0, len(player_drop_inventory)):
+                        print("Type", i+1, player_drop_inventory[i]["Name"], "sells for", player_drop_inventory[i]["Cost"], "dollars")
+                        possible_item_sell.append(i+1)
+
+                    print("Type", possible_item_sell[-1] + 1, "to not sell anything and leave this menu")
+                    possible_item_sell.append((possible_item_sell[-1] + 1))
+
+                    last_number = possible_item_sell[-1]
+
+                    one_time_input = int_error_detection(": ", possible_item_sell)
+
+                    if one_time_input == last_number:
+                        print("You did not sell anything")
+                        time.sleep(1)
+                        break
+
+                    elif one_time_input <= len(item_inventory):
+                        # puts variable into index form
+                        one_time_input -= 1
+
+                        print("You sold", item_inventory[one_time_input]["Name"], "for", item_inventory[one_time_input]["Cost"], "dollars")
+                        player_money += item_inventory[one_time_input]["Cost"]
+                        item_inventory.pop(one_time_input)
+
+                        print("You now have", player_money, "dollars")
+
+                    elif one_time_input > len(item_inventory):
+                        # puts variable into index form
+                        one_time_input = one_time_input - len(item_inventory) - 1
+                        print("You sold", player_drop_inventory[one_time_input]["Name"], "for", player_drop_inventory[one_time_input]["Cost"], "dollars")
+
+                        player_money += player_drop_inventory[one_time_input]["Cost"]
+                        player_drop_inventory.pop(one_time_input)
+
+                        print("You now have", player_money, "dollars")
+            else:
+                print("You do not have any items to sell")
+                time.sleep(1)
 
         # leaving the shop
         if player_input == 6:
@@ -1019,6 +1077,7 @@ while True:
 # -----------------------------------------------------
 # -----------------------------------------------------
 # -----------------------------------------------------
+player_drop_inventory.append({"Name": "Wolf skin", "Cost": 5})
 player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
 player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
 enter_shop("Shop 1")
