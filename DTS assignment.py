@@ -644,17 +644,21 @@ def enter_shop(shop_area):
                     break
 
                 if one_time_input <= len(player_spare_equipment["Weapons"]):
+                    # index the variable
+                    one_time_input -= 1
+
                     print("You are equiping", player_spare_equipment["Weapons"][one_time_input]["Name"])
                     time.sleep(2)
                     print("You put", player_equipment["Weapon"]["Name"], "into your spare equipment")
                     time.sleep(2)
 
                     player_spare_equipment["Weapons"].append(player_equipment["Weapon"])
-                    player_spare_equipment["Weapons"].pop(one_time_input - 1)
+                    player_spare_equipment["Weapons"].pop(one_time_input)
                     player_equipment["Weapon"] = player_spare_equipment["Weapons"][one_time_input]
                     break
 
                 elif one_time_input > len(player_spare_equipment["Weapons"]):
+                    # index the variable
                     one_time_input = one_time_input - len(player_spare_equipment["Weapons"]) - 1
 
                     print("You are equiping", player_spare_equipment["Armour"][one_time_input]["Name"])
@@ -906,6 +910,7 @@ while True:
 # -----------------------------------------------------
 # -----------------------------------------------------
 player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
+player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
 enter_shop("Shop 1")
 # delete to here
 # -----------------------------------------------------
