@@ -600,16 +600,75 @@ def enter_shop(shop_area):
 
             if len(player_spare_equipment["Weapons"]) > 0:
                 for i in range(0,len(player_spare_equipment["Weapons"])):
-                    print(player_spare_equipment["Weapons"][i]["Name"])
-                    print_weapon_stats(player_spare_equipment["Weapons"][i])
+                    print(player_spare_equipment["Weapons"][i]["Name"], "(Weapon)")
+                    #print_weapon_stats(player_spare_equipment["Weapons"][i])
             if len(player_spare_equipment["Armour"]) > 0:
                 for i in range(0,len(player_spare_equipment["Armour"])):
-                    print(player_spare_equipment["Armour"][i]["Name"])
-                    print_armour_stats(player_spare_equipment["Armour"][i])
-
+                    print(player_spare_equipment["Armour"][i]["Name"], "(Armour)")
+                    #print_armour_stats(player_spare_equipment["Armour"][i])
             print("----------------------------------------")
 
             # need to do equipment code here
+
+
+            while True:
+                possible_equips = []
+
+                for i in range(0, len(player_spare_equipment["Weapons"])):
+                    print("Type", i + 1, "to equip", player_spare_equipment["Weapons"][i]["Name"])
+                    possible_equips.append((i + 1))
+
+                print(possible_equips)
+                try:
+                    last_number = possible_equips[-1]
+                except IndexError:
+                    last_number = 0
+
+                for i in range(0, len(player_spare_equipment["Armour"])):
+                    print("Type", last_number + i + 1, "to equip", player_spare_equipment["Armour"][i]["Name"])
+                    possible_equips.append((last_number + i + 1))
+
+                print("Type", possible_equips[-1]+1, "to not equip anything and leave this menu")
+                possible_equips.append((possible_equips[-1] + 1))
+
+                last_number = possible_equips[-1]
+
+
+                one_time_input = int_error_detection(": ", possible_equips)
+
+                print(one_time_input)
+
+                if one_time_input == last_number:
+                    print("You did not equip anything")
+                    time.sleep(2)
+                    break
+
+                if one_time_input <= len(player_spare_equipment["Weapons"]):
+                    print("You are equiping", player_spare_equipment["Weapons"][one_time_input]["Name"])
+                    time.sleep(2)
+                    print("You put", player_equipment["Weapon"]["Name"], "into your spare equipment")
+                    time.sleep(2)
+
+                    player_spare_equipment["Weapons"].append(player_equipment["Weapon"])
+                    player_spare_equipment["Weapons"].pop(one_time_input - 1)
+                    player_equipment["Weapon"] = player_spare_equipment["Weapons"][one_time_input]
+                    break
+
+                elif one_time_input > len(player_spare_equipment["Weapons"]):
+                    one_time_input = one_time_input - len(player_spare_equipment["Weapons"]) - 1
+
+                    print("You are equiping", player_spare_equipment["Armour"][one_time_input]["Name"])
+                    time.sleep(2)
+                    print("You put", player_equipment["Armour"]["Name"], "into your spare equipment")
+                    time.sleep(2)
+
+                    player_spare_equipment["Armour"].append(player_equipment["Armour"])
+                    player_spare_equipment["Armour"].pop(one_time_input)
+                    player_equipment["Armour"] = player_spare_equipment["Armour"][one_time_input]
+                    break
+
+
+
 
         # buying armour / weapons
         if player_input == 2:
@@ -639,7 +698,10 @@ def enter_shop(shop_area):
                     print("Type", i + 1, "to purchase", POSSIBLE_WEAPONS[shop_area][i]["Name"])
                     possible_purchases.append((i + 1))
 
-                last_number = possible_purchases[-1]
+                try:
+                    last_number = possible_purchases[-1]
+                except IndexError:
+                    last_number = 0
 
                 for i in range(0, len(POSSIBLE_ARMOUR[shop_area])):
                     print("Type", last_number + i + 1, "to purchase", POSSIBLE_ARMOUR[shop_area][i]["Name"])
@@ -652,13 +714,16 @@ def enter_shop(shop_area):
 
                 one_time_input = int_error_detection(": ", possible_purchases)
 
-
+                # one_time_input is NOT IN INDEX FORM
+                print(one_time_input)
 
                 if one_time_input == last_number:
                     print("You did not buy anything")
                     time.sleep(2)
                     break
                 elif one_time_input <= len(POSSIBLE_WEAPONS[shop_area]):
+                    # Turns the variable into an index form so lists can use it
+                    one_time_input -= 1
                     if POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"] <= player_money:
                         print("You spent", POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"], "dollars")
                         player_money -= POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"]
@@ -677,6 +742,7 @@ def enter_shop(shop_area):
                         print("You have", player_money, "dollars")
                         print("You need", POSSIBLE_WEAPONS[shop_area][one_time_input]["Cost"], "dollars to purchase", POSSIBLE_WEAPONS[shop_area][one_time_input]["Name"])
                 elif one_time_input > len(POSSIBLE_WEAPONS[shop_area]):
+                    # this gets the number to index form
                     one_time_input = one_time_input - len(POSSIBLE_WEAPONS[shop_area]) - 1
                     if POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"] <= player_money:
                         print("You spent", POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"], "dollars")
@@ -695,10 +761,6 @@ def enter_shop(shop_area):
                         time.sleep(1)
                         print("You have", player_money, "dollars")
                         print("You need", POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"], "dollars to purchase", POSSIBLE_ARMOUR[shop_area][one_time_input]["Name"])
-
-
-
-
 
 
         # continue shopping or leave shop
@@ -843,6 +905,7 @@ while True:
 # -----------------------------------------------------
 # -----------------------------------------------------
 # -----------------------------------------------------
+player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
 enter_shop("Shop 1")
 # delete to here
 # -----------------------------------------------------
