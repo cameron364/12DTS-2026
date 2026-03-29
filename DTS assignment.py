@@ -14,9 +14,11 @@ player_equipment = {
     "Weapon": {},
 
     "Armour": {
-        "Name": "Wooden Armour",
+        "Name": "Basic Armour",
         "Weakness": ["None"],
-        "Strong against": ["None"]}
+        "Strong against": ["None"],
+        "Cost": 5
+    }
 }
 
 player_spare_equipment = {
@@ -583,7 +585,8 @@ def enter_shop(shop_area):
         print("Type 3 to sell armour and weapons")
         print("Type 4 to purchase items")
         print("Type 5 to sell items")
-        player_input = int_error_detection(": ", [1,2,3,4,5])
+        print("Type 6 to leave the shop")
+        player_input = int_error_detection(": ", [1,2,3,4,5,6])
 
         # equiping armour/weapons
         if player_input == 1 and (len(player_spare_equipment["Armour"]) > 0 or len(player_spare_equipment["Weapons"]) > 0):
@@ -601,11 +604,9 @@ def enter_shop(shop_area):
             if len(player_spare_equipment["Weapons"]) > 0:
                 for i in range(0,len(player_spare_equipment["Weapons"])):
                     print(player_spare_equipment["Weapons"][i]["Name"], "(Weapon)")
-                    #print_weapon_stats(player_spare_equipment["Weapons"][i])
             if len(player_spare_equipment["Armour"]) > 0:
                 for i in range(0,len(player_spare_equipment["Armour"])):
                     print(player_spare_equipment["Armour"][i]["Name"], "(Armour)")
-                    #print_armour_stats(player_spare_equipment["Armour"][i])
             print("----------------------------------------")
 
             # need to do equipment code here
@@ -618,7 +619,6 @@ def enter_shop(shop_area):
                     print("Type", i + 1, "to equip", player_spare_equipment["Weapons"][i]["Name"])
                     possible_equips.append((i + 1))
 
-                print(possible_equips)
                 try:
                     last_number = possible_equips[-1]
                 except IndexError:
@@ -636,21 +636,19 @@ def enter_shop(shop_area):
 
                 one_time_input = int_error_detection(": ", possible_equips)
 
-                print(one_time_input)
-
                 if one_time_input == last_number:
                     print("You did not equip anything")
-                    time.sleep(2)
+                    time.sleep(1)
                     break
 
-                if one_time_input <= len(player_spare_equipment["Weapons"]):
+                elif one_time_input <= len(player_spare_equipment["Weapons"]):
                     # index the variable
                     one_time_input -= 1
 
                     print("You are equiping", player_spare_equipment["Weapons"][one_time_input]["Name"])
-                    time.sleep(2)
+                    time.sleep(1)
                     print("You put", player_equipment["Weapon"]["Name"], "into your spare equipment")
-                    time.sleep(2)
+                    time.sleep(1)
 
                     player_spare_equipment["Weapons"].append(player_equipment["Weapon"])
                     player_spare_equipment["Weapons"].pop(one_time_input)
@@ -662,17 +660,14 @@ def enter_shop(shop_area):
                     one_time_input = one_time_input - len(player_spare_equipment["Weapons"]) - 1
 
                     print("You are equiping", player_spare_equipment["Armour"][one_time_input]["Name"])
-                    time.sleep(2)
+                    time.sleep(1)
                     print("You put", player_equipment["Armour"]["Name"], "into your spare equipment")
-                    time.sleep(2)
+                    time.sleep(1)
 
                     player_spare_equipment["Armour"].append(player_equipment["Armour"])
                     player_spare_equipment["Armour"].pop(one_time_input)
                     player_equipment["Armour"] = player_spare_equipment["Armour"][one_time_input]
                     break
-
-
-
 
         # buying armour / weapons
         if player_input == 2:
@@ -766,17 +761,94 @@ def enter_shop(shop_area):
                         print("You have", player_money, "dollars")
                         print("You need", POSSIBLE_ARMOUR[shop_area][one_time_input]["Cost"], "dollars to purchase", POSSIBLE_ARMOUR[shop_area][one_time_input]["Name"])
 
+        # selling armour / weapons
+        if player_input == 3:
 
-        # continue shopping or leave shop
-        print("Type 1 to continue shopping")
-        print("Type 2 to leave the shope")
-        player_input = int_error_detection(": ", [1,2])
+            print("You can sell your spare equipments")
+            time.sleep(2)
 
-        if player_input == 2:
-            break
-        else:
-            print("You continued shopping")
+            while True:
+
+                if len(player_spare_equipment["Weapons"]) > 0:
+                    for i in range(0, len(player_spare_equipment["Weapons"])):
+                        print(player_spare_equipment["Weapons"][i]["Name"], "(Weapon)", "| sells for -", player_spare_equipment["Weapons"][i]["Cost"], "dollars")
+                if len(player_spare_equipment["Armour"]) > 0:
+                    for i in range(0, len(player_spare_equipment["Armour"])):
+                        print(player_spare_equipment["Armour"][i]["Name"], "(Armour)", "| sells for -", player_spare_equipment["Armour"][i]["Cost"], "dollars")
+
+                possible_sells = []
+
+                for i in range(0, len(player_spare_equipment["Weapons"])):
+                    print("Type", i + 1, "to sell", player_spare_equipment["Weapons"][i]["Name"])
+                    possible_sells.append((i + 1))
+
+                try:
+                    last_number = possible_sells[-1]
+                except IndexError:
+                    last_number = 0
+
+                for i in range(0, len(player_spare_equipment["Armour"])):
+                    print("Type", last_number + i + 1, "to sell", player_spare_equipment["Armour"][i]["Name"])
+                    possible_sells.append((last_number + i + 1))
+
+                print("Type", possible_sells[-1] + 1, "to not sell anything and leave this menu")
+                possible_sells.append((possible_sells[-1] + 1))
+
+                last_number = possible_sells[-1]
+
+                one_time_input = int_error_detection(": ", possible_sells)
+
+                if one_time_input == last_number:
+                    print("You did not sell anything")
+                    time.sleep(2)
+                    break
+
+                elif one_time_input <= len(player_spare_equipment["Weapons"]):
+                    # index the variable
+                    one_time_input -= 1
+
+                    print("You are selling", player_spare_equipment["Weapons"][one_time_input]["Name"])
+                    time.sleep(1)
+                    print("You sold", player_spare_equipment["Weapons"][one_time_input]["Name"], "you got", player_spare_equipment["Weapons"][one_time_input]["Cost"], "dollars")
+                    time.sleep(1)
+
+                    player_money += player_spare_equipment["Weapons"][one_time_input]["Cost"]
+                    player_spare_equipment["Weapons"].pop(one_time_input)
+
+                    print("You now have", player_money, "dollars")
+                    time.sleep(1)
+                    break
+
+                elif one_time_input > len(player_spare_equipment["Weapons"]):
+                    # index the variable
+                    one_time_input = one_time_input - len(player_spare_equipment["Weapons"]) - 1
+
+                    print("You are selling", player_spare_equipment["Armour"][one_time_input]["Name"])
+                    time.sleep(1)
+                    print("You sold", player_spare_equipment["Armour"][one_time_input]["Name"], "you got", player_spare_equipment["Armour"][one_time_input]["Cost"], "dollars")
+                    time.sleep(1)
+
+                    player_money += player_spare_equipment["Armour"][one_time_input]["Cost"]
+                    player_spare_equipment["Armour"].pop(one_time_input)
+
+                    print("You now have", player_money, "dollars")
+                    time.sleep(1)
+                    break
+
+
+
+
+
+                        # continue shopping or leave shop
+
+
+
+        # leaving the shop
+        if player_input == 6:
+            print("You are leaving the shop")
             time.sleep(1)
+            break
+        print()
 
 def print_weapon_stats(weapon):
     for y in range(0, len(weapon["Info"])):
