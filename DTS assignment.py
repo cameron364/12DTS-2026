@@ -841,6 +841,43 @@ def enter_shop(shop_area):
 
                         # continue shopping or leave shop
 
+        if player_input == 4:
+            while True:
+                possible_items = []
+
+                print("Items")
+                for i in range(0, len(POSSIBLE_ITEMS[shop_area])):
+                    print("Type", i+1, "to buy", POSSIBLE_ITEMS[shop_area][i]["Name"], "it costs", POSSIBLE_ITEMS[shop_area][i]["Cost"], "dollars")
+                    possible_items.append(i+1)
+
+                last_number = possible_items[-1]
+                print("Type", last_number+1, "to leave this menu")
+                possible_items.append(last_number+1)
+
+                one_time_input = int_error_detection(": ", possible_items)
+
+                one_time_input -= 1
+                if one_time_input == last_number:
+                    print("You did not buy anything")
+                    break
+
+                if POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"] <= player_money:
+                    print("You bought", POSSIBLE_ITEMS[shop_area][one_time_input]["Name"])
+                    print("It cost", POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"], "dollars")
+
+                    item_inventory.append(POSSIBLE_ITEMS[shop_area][one_time_input])
+
+                    player_money -= POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"]
+
+                    print("You now have", player_money, "dollars")
+
+                else:
+                    print("You do not have enough money to purchase", POSSIBLE_ITEMS[shop_area][one_time_input]["Name"])
+                    time.sleep(1)
+                    print("You have", player_money, "dollars")
+                    time.sleep(1)
+                    print("You need", POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"], "dollars to purchase this")
+                    time.sleep(1)
 
 
         # leaving the shop
