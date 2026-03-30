@@ -208,7 +208,9 @@ POSSIBLE_ENEMIES_DROPS = {
 # variables
 player_area = "tutorial"
 
-player_money = 99999
+player_section = ""
+
+player_money = 0
 
 # ----------------------- Functions -----------------------
 def quit_game():
@@ -294,6 +296,11 @@ def show_moves(weapon_info):
 def battle(area):
     print()
     print("You are in a battle")
+
+    global player_section
+
+
+    player_dead = False
 
     # tutorial counter - it is for tutorial text just showing up once
     tutorial_counter = 0
@@ -517,6 +524,13 @@ def battle(area):
                     if target[i][0]["Stats"]["Health"] <= 0:
                         enemies.remove(target[i][0])
 
+        # check if player is dead and if so breaks the loop
+        elif player["Stats"]["Health"] <= 0:
+            print("You lose")
+            player_dead = True
+            enter_to_continue()
+            break
+
         # checks if you have killed all the enemies
         if len(enemies) == 0:
             print("You won the battle")
@@ -534,6 +548,7 @@ def battle(area):
 
         # enemy ai
         for i in range(0, len(enemies)):
+            enter_to_continue()
 
             # enemy ai for 1 enemy
             # check if enemy is alive
@@ -555,14 +570,19 @@ def battle(area):
 
                 damage_calculate(player, enemy_move, "Enemy")
 
-        # check if player is dead and if so breaks the function
-        if player["Stats"]["Health"] <= 0:
-            print("You lose")
-            enter_to_continue()
-            break
-
         # changes the tutorial counter so the tutorial doesn't spam in your face
         tutorial_counter += 1
+
+    if player_dead == True and player_section == "part one":
+        part_one()
+    elif player_dead == True and player_section == "part two":
+        part_two()
+    elif player_dead == True and player_section == "part three":
+        pass
+    else:
+        print("Error")
+        enter_to_continue()
+
 
 # answers is a list
 # basic error detection for small inputs
@@ -975,6 +995,182 @@ def print_armour_stats(armour):
     for i in range(0,len(armour["Strong against"])):
         print(armour["Strong against"][i], "", end='')
     print()
+
+def part_one():
+    global player_section
+    global player_area
+
+    player_section = "part one"
+
+    print("You are currently at Hobbitown")
+    print("To reach Mount Dooom you must follow the main road")
+
+    time.sleep(2)
+
+    print("As you travel down the main road you notice something")
+    time.sleep(1.5)
+    print("A stubborn rogue sheep blocks the way")
+
+    time.sleep(1.5)
+
+    print("Type 1 to fight the sheep")
+    print("Type 2 to run around the sheep")
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    if one_use_answer == 1:
+        print("You chose to fight the sheep")
+    elif one_use_answer == 2:
+        print("You tried to run around but the sheep attacked you")
+
+    time.sleep(1.5)
+    battle(player_area)
+
+    player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
+    item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
+    print("You got", POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"]["Name"])
+    time.sleep(1.5)
+    print("You also got", POSSIBLE_ITEMS["Shop 1"][0]["Name"], "from the stubborn rogue sheep's mouth")
+    time.sleep(1.5)
+    print("When you defeat enemies you can gain items")
+    print("Some items, like the sheep skin can only be sold")
+    print("Items like an apple can be used in battle to heal")
+    time.sleep(2.5)
+    print("All items can be sold to a shopkeeper for money")
+
+    enter_to_continue()
+
+    print("You continue following the road")
+    time.sleep(1.5)
+    print("There seem to be a group of goblins blocking the way")
+    time.sleep(1.5)
+
+    print("What should you do")
+    print("Type 1 - follow the main road and face the group of goblins")
+    print("type 2 - go around them through the forest")
+
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    print()
+
+    if one_use_answer == 1:
+        print("You chose to follow the main road")
+        time.sleep(1.5)
+        print("The goblins were threaten by your presences and decided to attack you")
+        player_area = "main road 1"
+    elif one_use_answer == 2:
+        print("You decided to go through the forest")
+        time.sleep(1.5)
+        print("A pack of wolves surround you")
+        player_area = "forest 1"
+
+    time.sleep(1.5)
+    battle(player_area)
+
+    if player_area == "forest 1":
+        player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
+        print("You got wolf skin from defeating the pack of wolves")
+        time.sleep(1.5)
+        print("You decided to go back on the road")
+        player_area = "main road"
+
+        enter_to_continue()
+        print("You continue travelling down the road")
+        time.sleep(1.5)
+        print("You see a goblin gang coming towards you")
+
+    elif player_area == "main road 1":
+        player_money += 5
+        print("You got 5 dollars from defeating the goblins")
+        time.sleep(1.5)
+        print("You decided to continue following the main road")
+        player_area = "main road"
+        enter_to_continue()
+        print("The previous group of goblins have come back with reinforcements")
+
+    time.sleep(1.5)
+    print("You are attacked by a goblin gang")
+    time.sleep(1.5)
+
+    battle(player_area)
+    player_money += 7
+    print("You got 7 dollars from defeating the goblin gang")
+
+    player_area = "main road final"
+
+    print("You are coming up to the first town in your journey")
+    time.sleep(1.5)
+    print("However, there seems to be a goblin giant blocking the entrance")
+    time.sleep(1.5)
+    print("There is no way around")
+
+    while True:
+        one_time_input = input("Are you prepared to fight it (yes/no): ")
+        one_time_input = one_time_input.lower()
+        if one_time_input == "yes":
+            break
+        elif one_time_input == "no":
+            print("You waited around, expecting the goblin giant to move")
+            time.sleep(2)
+            print("The goblin giant didn't move")
+            time.sleep(2)
+        elif one_time_input == "quit":
+            quit_game()
+        else:
+            print("Not an option")
+
+    battle(player_area)
+    print("You defeated the goblin giant")
+    player_money += 10
+    print("The goblin giant dropped 10 dollars")
+
+    enter_to_continue()
+
+    print("You arrived at Brie Town")
+    print("There seems to be a shop that you can stock up on equipment")
+    enter_to_continue()
+
+    print("Type 1 - go the shop")
+    print("Type 2 - continue the quest")
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    if one_use_answer == 1:
+        enter_shop("Shop 1")
+
+def part_two():
+    global player_section
+    global player_area
+
+    player_section = "part two"
+
+    print("You follow the main road which takes you up a side of a mountain")
+    time.sleep(1.5)
+
+    print("You stop at a junction")
+    time.sleep(1.5)
+
+    print("There are two signs the one going left says the caves. The other says mountains")
+    time.sleep(1.5)
+
+    print("Type 1 - go left to the caves")
+    print("Type 2 - go right to the mountains")
+
+    one_use_answer = int_error_detection(": ", [1, 2])
+    if one_use_answer == 1:
+        # caves path
+        pass
+    elif one_use_answer == 2:
+        # mountain path
+        pass
+
+    time.sleep(1.5)
+    print("You continue following the path")
+    time.sleep(1.5)
+    print("However there seems to be a pack of orcs hunting you down")
+    time.sleep(1.5)
+
+    player_area = "orc infested road"
+    battle(player_area)
+
 # ----------------------- Main code -----------------------
 
 print("Start game")
@@ -1020,6 +1216,8 @@ one_time_input = int_error_detection(":", [1,2])
 
 if one_time_input == 1:
     print("The games combat is turn based")
+    enter_to_continue()
+    print("If you die you will be sent back to the last place you slept/rested in")
     enter_to_continue()
     print("You will choose a character and for character stats there will be 5 stats")
     time.sleep(3)
@@ -1120,141 +1318,7 @@ while True:
 
 enter_to_continue()
 
-print("You are currently at Hobbitown")
-print("To reach Mount Dooom you must follow the main road")
-
-time.sleep(2)
-
-print("As you travel down the main road you notice something")
-time.sleep(1.5)
-print("A stubborn rogue sheep blocks the way")
-
-time.sleep(1.5)
-
-print("Type 1 to fight the sheep")
-print("Type 2 to run around the sheep")
-one_use_answer = int_error_detection(": ", [1,2])
-
-if one_use_answer == 1:
-    print("You chose to fight the sheep")
-elif one_use_answer == 2:
-    print("You tried to run around but the sheep attacked you")
-
-time.sleep(1.5)
-battle(player_area)
-
-player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
-item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-print("You got", POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"]["Name"])
-time.sleep(1.5)
-print("You also got", POSSIBLE_ITEMS["Shop 1"][0]["Name"], "from the stubborn rogue sheep's mouth")
-time.sleep(1.5)
-print("When you defeat enemies you can gain items")
-print("Some items, like the sheep skin can only be sold")
-print("Items like an apple can be used in battle to heal")
-time.sleep(2.5)
-print("All items can be sold to a shopkeeper for money")
-
-enter_to_continue()
-
-print("You continue following the road")
-time.sleep(1.5)
-print("There seem to be a group of goblins blocking the way")
-time.sleep(1.5)
-
-print("What should you do")
-print("Type 1 - follow the main road and face the group of goblins")
-print("type 2 - go around them through the forest")
-
-one_use_answer = int_error_detection(": ", [1,2])
-
-print()
-
-if one_use_answer == 1:
-    print("You chose to follow the main road")
-    time.sleep(1.5)
-    print("The goblins were threaten by your presences and decided to attack you")
-    player_area = "main road 1"
-elif one_use_answer == 2:
-    print("You decided to go through the forest")
-    time.sleep(1.5)
-    print("A pack of wolves surround you")
-    player_area = "forest 1"
-
-time.sleep(1.5)
-battle(player_area)
-
-if player_area == "forest 1":
-    player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
-    print("You got wolf skin from defeating the pack of wolves")
-    time.sleep(1.5)
-    print("You decided to go back on the road")
-    player_area = "main road"
-
-    enter_to_continue()
-    print("You continue travelling down the road")
-    time.sleep(1.5)
-    print("You see a goblin gang coming towards you")
-
-elif player_area == "main road 1":
-    player_money += 5
-    print("You got 5 dollars from defeating the goblins")
-    time.sleep(1.5)
-    print("You decided to continue following the main road")
-    player_area = "main road"
-    enter_to_continue()
-    print("The previous group of goblins have come back with reinforcements")
-
-time.sleep(1.5)
-print("You are attacked by a goblin gang")
-time.sleep(1.5)
-
-battle(player_area)
-player_money += 7
-print("You got 7 dollars from defeating the goblin gang")
-
-
-player_area = "main road final"
-
-print("You are coming up to the first town in your journey")
-time.sleep(1.5)
-print("However, there seems to be a goblin giant blocking the entrance")
-time.sleep(1.5)
-print("There is no way around")
-
-while True:
-    one_time_input = input("Are you prepared to fight it (yes/no): ")
-    one_time_input = one_time_input.lower()
-    if one_time_input == "yes":
-        break
-    elif one_time_input == "no":
-        print("You waited around, expecting the goblin giant to move")
-        time.sleep(2)
-        print("The goblin giant didn't move")
-        time.sleep(2)
-    elif one_time_input == "quit":
-        quit_game()
-    else:
-        print("Not an option")
-
-battle(player_area)
-print("You defeated the goblin giant")
-player_money += 10
-print("The goblin giant dropped 10 dollars")
-
-enter_to_continue()
-
-print("You arrived at Brie Town")
-print("There seems to be a shop that you can stock up on equipment")
-enter_to_continue()
-
-print("Type 1 - go the shop")
-print("Type 2 - continue the quest")
-one_use_answer = int_error_detection(": ", [1,2])
-
-if one_use_answer == 1:
-    enter_shop("Shop 1")
-
+part_one()
 
 print("It is getting late you decided to go the Galloping Horse Inn to rest")
 time.sleep(2)
@@ -1262,34 +1326,8 @@ time.sleep(2)
 print("In the morning you left the town and continued on the main road")
 time.sleep(1.5)
 
-print("You follow the main road which takes you up a side of a mountain")
-time.sleep(1.5)
-
-print("You stop at a junction")
-time.sleep(1.5)
-
-print("There are two signs the one going left says the caves. The other says mountains")
-time.sleep(1.5)
-
-print("Type 1 - go left to the caves")
-print("Type 2 - go right to the mountains")
-
-one_use_answer = int_error_detection(": ", [1,2])
-if one_use_answer == 1:
-    # caves path
-    pass
-elif one_use_answer == 2:
-    # mountain path
-    pass
+part_two()
 
 
-time.sleep(1.5)
-print("You continue following the path")
-time.sleep(1.5)
-print("However there seems to be a pack of orcs hunting you down")
-time.sleep(1.5)
-
-player_area = "orc infested road"
-battle(player_area)
 
 
