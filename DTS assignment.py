@@ -99,9 +99,9 @@ POSSIBLE_ARMOUR = {
 POSSIBLE_ENEMIES = {
     "tutorial": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
         {"Name": "stubborn rogue sheep",
-         "Stats": {"Health": 10, "Stamina": 5, "Weakness": ["Melee","Ranged","Magic"], "Strong against": ["None"]},
+         "Stats": {"Health": 30, "Stamina": 5, "Weakness": ["Melee","Ranged","Magic"], "Strong against": ["None"]},
          "Moves": [
-             {"Move name": "Bash", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Bash", "Base damage": 1, "Type": "Melee", "Stamina use": 0},
          ]
          }
     ]},
@@ -295,6 +295,9 @@ def battle(area):
     print()
     print("You are in a battle")
 
+    # tutorial counter - it is for tutorial text just showing up once
+    tutorial_counter = 0
+
     # isolates the player stats list
     player = copy.deepcopy(player_stats)
 
@@ -334,15 +337,17 @@ def battle(area):
 
             enter_to_continue()
 
+            print("==========")
             print("Your turn")
-            print("----------")
+            print("==========")
+            print()
 
             time.sleep(1)
 
             print("Your moves: ")
             print("---------------")
 
-            if player_area == "tutorial":
+            if player_area == "tutorial" and tutorial_counter == 0:
                 print("You will have a choice of options to attack the enemy")
                 print("Each move has a type. Depending on the enemy, it may be weak or strong against the type")
                 print("If you hit a enemies weakness it will do more damage")
@@ -465,6 +470,7 @@ def battle(area):
 
                 player["Stats"]["Health"] += item_use["Healing amount"]
                 print("You are now at", player["Stats"]["Health"], "health")
+                enter_to_continue()
 
             else:
                 target = []
@@ -517,8 +523,14 @@ def battle(area):
             time.sleep(1)
             break
 
+        if player_area == "tutorial" and tutorial_counter == 0:
+            print("It is now time for the enemy to attack")
+            time.sleep(1.5)
+
+        print("~~~~~~~~~~~~")
         print("Enemies turn")
-        enter_to_continue()
+        print("~~~~~~~~~~~~")
+        time.sleep(1.5)
 
         # enemy ai
         for i in range(0, len(enemies)):
@@ -527,6 +539,10 @@ def battle(area):
             # check if enemy is alive
             enemy = enemies[i]
             if enemy["Stats"]["Health"] > 0:
+
+                # chooses a random move
+                # if the random move stamina cost to high than it defaults to the basic 0 stamina cost move
+                # this makes it easier to play against i.e less damaging attacks more weaker attacks
                 random_move_num = random.randint(0, len(enemy["Moves"]) - 1)
 
                 # check stamina and choose a move
@@ -544,6 +560,9 @@ def battle(area):
             print("You lose")
             enter_to_continue()
             break
+
+        # changes the tutorial counter so the tutorial doesn't spam in your face
+        tutorial_counter += 1
 
 # answers is a list
 # basic error detection for small inputs
@@ -709,11 +728,10 @@ def enter_shop(shop_area):
                 one_time_input = int_error_detection(": ", possible_purchases)
 
                 # one_time_input is NOT IN INDEX FORM
-                print(one_time_input)
 
                 if one_time_input == last_number:
                     print("You did not buy anything")
-                    time.sleep(2)
+                    time.sleep(1)
                     break
                 elif one_time_input <= len(POSSIBLE_WEAPONS[shop_area]):
                     # Turns the variable into an index form so lists can use it
@@ -761,7 +779,7 @@ def enter_shop(shop_area):
                 time.sleep(1)
             else:
                 print("You can sell your spare equipments")
-                time.sleep(2)
+                time.sleep(1)
 
                 while True:
 
@@ -801,7 +819,7 @@ def enter_shop(shop_area):
 
                     if one_time_input == last_number:
                         print("You did not sell anything")
-                        time.sleep(2)
+                        time.sleep(1)
                         break
 
                     elif one_time_input <= len(player_spare_equipment["Weapons"]):
@@ -853,6 +871,7 @@ def enter_shop(shop_area):
                 one_time_input -= 1
                 if one_time_input == last_number:
                     print("You did not buy anything")
+                    time.sleep(1)
                     break
 
                 if POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"] <= player_money:
@@ -981,10 +1000,43 @@ if start_choice == "no":
     quit_game()
 
 print("Welcome")
+
+time.sleep(1)
+
+print()
 print("Infomation")
 print("-------------------------------")
 print("You can type quit at any of the inputs to quit the program")
 print("-------------------------------")
+print()
+
+time.sleep(1)
+
+print("There will be tutorials on how to play throughout the game but do you want a more detailed guide on the mechanics that are not covered by the tutorial")
+print("Type 1 - yes")
+print("Type 2 - no")
+
+one_time_input = int_error_detection(":", [1,2])
+
+if one_time_input == 1:
+    print("The games combat is turn based")
+    enter_to_continue()
+    print("You will choose a character and for character stats there will be 5 stats")
+    time.sleep(3)
+    print("Health is how much health you have. If you are at 0 or below you will die and lose the game")
+    print("When healing you can go over your max health")
+    print()
+    print("Base damage is how much damage will be dealt")
+    print()
+    print("Defense is a stat that reduces the incoming damage")
+    print()
+    print("Strength is a stat that will increase the damage outgoing")
+    print()
+    print("Stamina is a 'currency' for moves")
+    print("Depending on the move it will cost stamina")
+    print("If you are out on stamina it will not let you pick that move")
+
+
 enter_to_continue()
 
 print("Ganbalf has sent you on a quest to destroy a ring and save middle earth from Zauron")
@@ -996,7 +1048,7 @@ print("-------------------------------")
 print("Choose your character")
 print("-------------------------------")
 
-time.sleep(2)
+time.sleep(1)
 
 # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
@@ -1039,7 +1091,7 @@ print("Ganbalf has also supplied you a choice of weapons")
 print("Choose one")
 print("-------------------------------")
 
-time.sleep(3)
+time.sleep(1)
 
 for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
     print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
@@ -1066,23 +1118,6 @@ while True:
         else:
             print("Not an number")
 
-# this is debugging stuff
-# remember to change player money to 0 instead of 99999
-# -----------------------------------------------------
-# -----------------------------------------------------
-# -----------------------------------------------------
-# -----------------------------------------------------
-player_drop_inventory.append({"Name": "Wolf skin", "Cost": 5})
-player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
-player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
-enter_shop("Shop 1")
-# delete to here
-# -----------------------------------------------------
-# -----------------------------------------------------
-# -----------------------------------------------------
-# -----------------------------------------------------
-# -----------------------------------------------------
-
 enter_to_continue()
 
 print("You are currently at Hobbitown")
@@ -1092,7 +1127,7 @@ time.sleep(2)
 
 print("As you travel down the main road you notice something")
 time.sleep(1.5)
-print("A stubborn rogue sheep is blocks the way")
+print("A stubborn rogue sheep blocks the way")
 
 time.sleep(1.5)
 
@@ -1109,18 +1144,23 @@ time.sleep(1.5)
 battle(player_area)
 
 player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
+item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
 print("You got", POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"]["Name"])
 time.sleep(1.5)
-print("When you defeat enemies you can gain items")
+print("You also got", POSSIBLE_ITEMS["Shop 1"][0]["Name"], "from the stubborn rogue sheep's mouth")
 time.sleep(1.5)
-print("These items can be sold to a shopkeeper for money")
+print("When you defeat enemies you can gain items")
+print("Some items, like the sheep skin can only be sold")
+print("Items like an apple can be used in battle to heal")
+time.sleep(2.5)
+print("All items can be sold to a shopkeeper for money")
 
 enter_to_continue()
 
 print("You continue following the road")
-time.sleep(1)
+time.sleep(1.5)
 print("There seem to be a group of goblins blocking the way")
-time.sleep(1)
+time.sleep(1.5)
 
 print("What should you do")
 print("Type 1 - follow the main road and face the group of goblins")
@@ -1132,11 +1172,13 @@ print()
 
 if one_use_answer == 1:
     print("You chose to follow the main road")
-    time.sleep(1)
+    time.sleep(1.5)
     print("The goblins were threaten by your presences and decided to attack you")
     player_area = "main road 1"
 elif one_use_answer == 2:
     print("You decided to go through the forest")
+    time.sleep(1.5)
+    print("A pack of wolves surround you")
     player_area = "forest 1"
 
 time.sleep(1.5)
@@ -1177,7 +1219,7 @@ player_area = "main road final"
 print("You are coming up to the first town in your journey")
 time.sleep(1.5)
 print("However, there seems to be a goblin giant blocking the entrance")
-time.sleep(1)
+time.sleep(1.5)
 print("There is no way around")
 
 while True:
@@ -1186,7 +1228,7 @@ while True:
     if one_time_input == "yes":
         break
     elif one_time_input == "no":
-        print("You waited around, excepting the goblin giant to move")
+        print("You waited around, expecting the goblin giant to move")
         time.sleep(2)
         print("The goblin giant didn't move")
         time.sleep(2)
@@ -1215,6 +1257,5 @@ if one_use_answer == 1:
 elif one_use_answer == 2:
     print('You continue on with the quest')
 
-print("Hello github make this change")
-print("test 2")
+
 
