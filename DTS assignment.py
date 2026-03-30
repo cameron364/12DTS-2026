@@ -1244,7 +1244,7 @@ print("The goblin giant dropped 10 dollars")
 
 enter_to_continue()
 
-print("You arrived at _________ town")
+print("You arrived at Brie Town")
 print("There seems to be a shop that you can stock up on equipment")
 enter_to_continue()
 
@@ -1254,8 +1254,42 @@ one_use_answer = int_error_detection(": ", [1,2])
 
 if one_use_answer == 1:
     enter_shop("Shop 1")
-elif one_use_answer == 2:
-    print('You continue on with the quest')
 
+
+print("It is getting late you decided to go the Galloping Horse Inn to rest")
+time.sleep(2)
+
+print("In the morning you left the town and continued on the main road")
+time.sleep(1.5)
+
+print("You follow the main road which takes you up a side of a mountain")
+time.sleep(1.5)
+
+print("You stop at a junction")
+time.sleep(1.5)
+
+print("There are two signs the one going left says the caves. The other says mountains")
+time.sleep(1.5)
+
+print("Type 1 - go left to the caves")
+print("Type 2 - go right to the mountains")
+
+one_use_answer = int_error_detection(": ", [1,2])
+if one_use_answer == 1:
+    # caves path
+    pass
+elif one_use_answer == 2:
+    # mountain path
+    pass
+
+
+time.sleep(1.5)
+print("You continue following the path")
+time.sleep(1.5)
+print("However there seems to be a pack of orcs hunting you down")
+time.sleep(1.5)
+
+player_area = "orc infested road"
+battle(player_area)
 
 
