@@ -997,13 +997,13 @@ enter_to_continue()
 print("Gandolf has sent you on a quest to destroy a ring and save middle earth from Saron")
 print("You must venture to Mount Dooom where you can destroy the ring")
 
-enter_to_continue()
+time.sleep(5)
 
 print("-------------------------------")
 print("Choose your character")
 print("-------------------------------")
 
-enter_to_continue()
+time.sleep(2)
 
 # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
@@ -1044,7 +1044,7 @@ print("-------------------------------")
 print("Gandolf has given you a choice of weapons")
 print("-------------------------------")
 
-enter_to_continue()
+time.sleep(2)
 
 for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
     print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
@@ -1093,11 +1093,11 @@ enter_to_continue()
 print("You are currently at Hobbitown")
 print("To reach Mount Doom you travel down the road")
 
-enter_to_continue()
+time.sleep(2)
 
 print("A stubborn rogue sheep is blocking the way")
 
-enter_to_continue()
+time.sleep(1)
 
 print("Type 1 to fight the sheep")
 print("Type 2 to run around the sheep")
@@ -1134,17 +1134,17 @@ battle(player_area)
 if player_area == "forest 1":
     player_drop_inventory.append({"Name": "Wolf skin", "Cost": 5})
     print("You got wolf skin from defeating the pack of wolves")
-    enter_to_continue()
+    time.sleep(2)
     print("You decided to go back on the road")
     player_area = "main road"
 if player_area == "main road 1":
     player_money += 2
     print("You got 2 dollars from defeating the goblins")
-    enter_to_continue()
+    time.sleep(2)
     print("You decided to continue following the main road")
     player_area = "main road"
 
-enter_to_continue()
+time.sleep(2)
 print("You are attacked by a goblin gang")
 enter_to_continue()
 
@@ -1178,11 +1178,11 @@ print("You defeated the goblin giant")
 player_money += 10
 print("The goblin giant dropped 10 dollars")
 
-enter_to_continue()
+time.sleep(2)
 
 print("You arrived at a _________ town")
 print("There seems to be a shop that you can sell items and purchase equipment")
-enter_to_continue()
+time.sleep(3)
 
 print("Type 1 to go the shop, Type 2 to continue the quest")
 one_use_answer = int_error_detection(": ", [1,2])
