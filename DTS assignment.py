@@ -45,7 +45,7 @@ POSSIBLE_CLASSES = [
     {"Name": "Wizard",
      "Stats": {"Health": 15, "Bonus damage": 10, "Defense": 1, "Strength": 0.5, "Stamina": 20}},
     {"Name": "Warrior",
-     "Stats": {"Health": 30, "Bonus damage": 0, "Defense": 1, "Strength": 3, "Stamina": 10}}
+     "Stats": {"Health": 30, "Bonus damage": 1, "Defense": 1, "Strength": 2, "Stamina": 10}}
 ]
 
 POSSIBLE_WEAPONS = {
@@ -155,7 +155,7 @@ POSSIBLE_ENEMIES = {
         {"Name": "Goblin Giant",
          "Stats": {"Health": 50, "Stamina": 8, "Weakness": ["Magic"], "Strong against": ["Melee"]},
          "Moves": [
-             {"Move name": "Punch", "Base damage": 3, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Punch", "Base damage": 4, "Type": "Melee", "Stamina use": 0},
              {"Move name": "Smash", "Base damage": 6, "Type": "Melee", "Stamina use": 2},
              {"Move name": "Kick", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
          ]
@@ -199,6 +199,12 @@ POSSIBLE_ENEMIES = {
     ]}
 }
 
+# enemy name(same as the possible enemy list) : {"Name" gives the name of drop, cost gives cost}
+POSSIBLE_ENEMIES_DROPS = {
+    "stubborn rogue sheep": {"Name": "Sheep skin", "Cost": 2},
+    "wolf": {"Name": "Wolf skin", "Cost": 5}
+                          }
+
 # variables
 player_area = "tutorial"
 
@@ -209,20 +215,6 @@ def quit_game():
     print("Quitting game")
     time.sleep(1)
     quit()
-
-def slow_print(text, speed):
-    if speed == "slow":
-        speed = 0.2
-    elif speed == "fast":
-        speed = 0.05
-    elif speed == "medium":
-        speed = 0.1
-    else:
-        print("error")
-    for i in text:
-        print(i, sep='', end='', flush=True)
-        time.sleep(speed)
-    print()
 
 def enter_to_continue():
     print()
@@ -300,6 +292,7 @@ def show_moves(weapon_info):
         print()
 
 def battle(area):
+    print()
     print("You are in a battle")
 
     # isolates the player stats list
@@ -344,7 +337,7 @@ def battle(area):
             print("Your turn")
             print("----------")
 
-            enter_to_continue()
+            time.sleep(1)
 
             print("Your moves: ")
             print("---------------")
@@ -356,7 +349,7 @@ def battle(area):
                 print("If you hit a enemies strength it will do less damage")
                 enter_to_continue()
                 print("Some moves will be able to hit multiple enemies")
-                print("These moves will have hit multiple enemies - true")
+                print("These moves will have [hit multiple enemies - true]")
                 enter_to_continue()
                 print("When you use a move it will deplete your stamina")
                 print("Different moves require different amounts stamina to use")
@@ -520,8 +513,8 @@ def battle(area):
 
         # checks if you have killed all the enemies
         if len(enemies) == 0:
-            print("Battle win")
-            enter_to_continue()
+            print("You won the battle")
+            time.sleep(1)
             break
 
         print("Enemies turn")
@@ -994,7 +987,7 @@ print("You can type quit at any of the inputs to quit the program")
 print("-------------------------------")
 enter_to_continue()
 
-print("Gandolf has sent you on a quest to destroy a ring and save middle earth from Saron")
+print("Ganbalf has sent you on a quest to destroy a ring and save middle earth from Zauron")
 print("You must venture to Mount Dooom where you can destroy the ring")
 
 enter_to_continue()
@@ -1003,7 +996,7 @@ print("-------------------------------")
 print("Choose your character")
 print("-------------------------------")
 
-enter_to_continue()
+time.sleep(2)
 
 # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
 for i in range(len(POSSIBLE_CLASSES)):
@@ -1021,13 +1014,14 @@ for i in range(len(POSSIBLE_CLASSES)):
 
 # another while loop with try and except. Asks for a which class using 1,2,3 etc.
 # If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
+print()
 while True:
     player_class_choice = input("Choose a character: ")
     try:
         player_class_choice = int(player_class_choice)
         if player_class_choice >= 1 and player_class_choice <= len(POSSIBLE_CLASSES):
             player_class_choice = player_class_choice - 1
-            print("You choose: ", POSSIBLE_CLASSES[player_class_choice]["Name"])
+            print("You chose: ", POSSIBLE_CLASSES[player_class_choice]["Name"])
             player_stats = POSSIBLE_CLASSES[player_class_choice]
             break
         else:
@@ -1041,10 +1035,11 @@ while True:
 enter_to_continue()
 
 print("-------------------------------")
-print("Gandolf has given you a choice of weapons")
+print("Ganbalf has also supplied you a choice of weapons")
+print("Choose one")
 print("-------------------------------")
 
-enter_to_continue()
+time.sleep(3)
 
 for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
     print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
@@ -1091,13 +1086,15 @@ enter_shop("Shop 1")
 enter_to_continue()
 
 print("You are currently at Hobbitown")
-print("To reach Mount Doom you travel down the road")
+print("To reach Mount Dooom you must follow the main road")
 
-enter_to_continue()
+time.sleep(2)
 
-print("A stubborn rogue sheep is blocking the way")
+print("As you travel down the main road you notice something")
+time.sleep(1.5)
+print("A stubborn rogue sheep is blocks the way")
 
-enter_to_continue()
+time.sleep(1.5)
 
 print("Type 1 to fight the sheep")
 print("Type 2 to run around the sheep")
@@ -1106,47 +1103,69 @@ one_use_answer = int_error_detection(": ", [1,2])
 if one_use_answer == 1:
     print("You chose to fight the sheep")
 elif one_use_answer == 2:
-    print("You tried to run around the sheep attacked you")
-else:
-    print("error")
+    print("You tried to run around but the sheep attacked you")
 
-enter_to_continue()
+time.sleep(1.5)
 battle(player_area)
 
-print("Which way do you want to go")
-print("Type 1 to follow the main road and fight the group of goblins")
-print("type 2 to go around them through the forest")
+player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
+print("You got", POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"]["Name"])
+time.sleep(1.5)
+print("When you defeat enemies you can gain items")
+time.sleep(1.5)
+print("These items can be sold to a shopkeeper for money")
+
+enter_to_continue()
+
+print("You continue following the road")
+time.sleep(1)
+print("There seem to be a group of goblins blocking the way")
+time.sleep(1)
+
+print("What should you do")
+print("Type 1 - follow the main road and face the group of goblins")
+print("type 2 - go around them through the forest")
 
 one_use_answer = int_error_detection(": ", [1,2])
 
+print()
+
 if one_use_answer == 1:
     print("You chose to follow the main road")
+    time.sleep(1)
+    print("The goblins were threaten by your presences and decided to attack you")
     player_area = "main road 1"
 elif one_use_answer == 2:
     print("You decided to go through the forest")
     player_area = "forest 1"
-else:
-    print("error")
 
-enter_to_continue()
+time.sleep(1.5)
 battle(player_area)
 
 if player_area == "forest 1":
-    player_drop_inventory.append({"Name": "Wolf skin", "Cost": 5})
+    player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
     print("You got wolf skin from defeating the pack of wolves")
-    enter_to_continue()
+    time.sleep(1.5)
     print("You decided to go back on the road")
     player_area = "main road"
-if player_area == "main road 1":
-    player_money += 2
-    print("You got 2 dollars from defeating the goblins")
+
     enter_to_continue()
+    print("You continue travelling down the road")
+    time.sleep(1.5)
+    print("You see a goblin gang coming towards you")
+
+elif player_area == "main road 1":
+    player_money += 5
+    print("You got 5 dollars from defeating the goblins")
+    time.sleep(1.5)
     print("You decided to continue following the main road")
     player_area = "main road"
+    enter_to_continue()
+    print("The previous group of goblins have come back with reinforcements")
 
-enter_to_continue()
+time.sleep(1.5)
 print("You are attacked by a goblin gang")
-enter_to_continue()
+time.sleep(1.5)
 
 battle(player_area)
 player_money += 7
@@ -1155,16 +1174,19 @@ print("You got 7 dollars from defeating the goblin gang")
 
 player_area = "main road final"
 
-print("There seems to be a goblin giant blocking the way")
+print("You are coming up to the first town in your journey")
+time.sleep(1.5)
+print("However, there seems to be a goblin giant blocking the entrance")
+time.sleep(1)
 print("There is no way around")
 
 while True:
-    one_time_input = input("Are you ready to fight it (yes/no): ")
+    one_time_input = input("Are you prepared to fight it (yes/no): ")
     one_time_input = one_time_input.lower()
     if one_time_input == "yes":
         break
     elif one_time_input == "no":
-        print("You waited around")
+        print("You waited around, excepting the goblin giant to move")
         time.sleep(2)
         print("The goblin giant didn't move")
         time.sleep(2)
@@ -1180,16 +1202,17 @@ print("The goblin giant dropped 10 dollars")
 
 enter_to_continue()
 
-print("You arrived at a _________ town")
-print("There seems to be a shop that you can sell items and purchase equipment")
+print("You arrived at _________ town")
+print("There seems to be a shop that you can stock up on equipment")
 enter_to_continue()
 
-print("Type 1 to go the shop, Type 2 to continue the quest")
+print("Type 1 - go the shop")
+print("Type 2 - continue the quest")
 one_use_answer = int_error_detection(": ", [1,2])
 
 if one_use_answer == 1:
     enter_shop("Shop 1")
 elif one_use_answer == 2:
     print('You continue on with the quest')
-else:
-    print("Error herererere")
+
+
