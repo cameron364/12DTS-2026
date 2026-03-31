@@ -242,7 +242,13 @@ part_one_complete = False
 
 part_two_complete = False
 
+part_three_complete = False
+
+part_four_complete = False
+
 player_money = 0
+
+complete_game = False
 
 # ----------------------- Functions -----------------------
 def quit_game():
@@ -256,6 +262,9 @@ def enter_to_continue():
     choice.lower()
     if choice == "quit":
         quit()
+    elif choice == "restart":
+        restart_game()
+        return "restart"
     print()
 
 def damage_calculate(thing, move, turn):
@@ -304,7 +313,8 @@ def damage_calculate(thing, move, turn):
         print("You are at", thing["Stats"]["Health"], "health")
         print("~~~~~~~~~~~~~~~~~~~~~")
 
-    enter_to_continue()
+    if enter_to_continue() == "restart":
+        return "restart"
 
 def show_moves(weapon_info):
     for i in range(0, len(weapon_info)):
@@ -344,11 +354,13 @@ def battle(area):
         enemies.append(copy.deepcopy(POSSIBLE_ENEMIES[area]["Enemies"][random.randint(0, len(POSSIBLE_ENEMIES[area]["Enemies"]) - 1)]))
         print("A", enemies[i]["Name"], "appeared")
 
-    enter_to_continue()
+    if enter_to_continue() == "restart":
+        return "restart"
 
     if player_area == "tutorial":
         print("You take turns attacking each other")
-        enter_to_continue()
+        if enter_to_continue() == "restart":
+            return "restart"
 
     while True:
 
@@ -369,7 +381,8 @@ def battle(area):
             print("Stamina: ", player["Stats"]["Stamina"])
             print("---------------")
 
-            enter_to_continue()
+            if enter_to_continue() == "restart":
+                return "restart"
 
             print("==========")
             print("Your turn")
@@ -386,14 +399,17 @@ def battle(area):
                 print("Each move has a type. Depending on the enemy, it may be weak or strong against the type")
                 print("If you hit a enemies weakness it will do more damage")
                 print("If you hit a enemies strength it will do less damage")
-                enter_to_continue()
+                if enter_to_continue() == "restart":
+                    return "restart"
                 print("Some moves will be able to hit multiple enemies")
                 print("These moves will have [hit multiple enemies - true]")
-                enter_to_continue()
+                if enter_to_continue() == "restart":
+                    return "restart"
                 print("When you use a move it will deplete your stamina")
                 print("Different moves require different amounts stamina to use")
                 print("You can rest to gain some stamina back")
-                enter_to_continue()
+                if enter_to_continue() == "restart":
+                    return "restart"
 
             weapon_info = player_equipment["Weapon"]["Info"]
 
@@ -444,7 +460,8 @@ def battle(area):
                                         item_use = item_inventory[player_item_input]
                                         item_inventory.pop(player_item_input)
                                         print("You are using", item_use["Name"])
-                                        enter_to_continue()
+                                        if enter_to_continue() == "restart":
+                                            return "restart"
                                         break
                                     else:
                                         print("Not an option")
@@ -456,6 +473,9 @@ def battle(area):
                                         break
                                     elif player_item_input.lower() == "quit":
                                         quit_game()
+                                    elif player_item_input.lower() == "restart":
+                                        restart_game()
+                                        return "restart"
                                     else:
                                         print("Not an option")
 
@@ -485,6 +505,9 @@ def battle(area):
                 except ValueError:
                     if choose_move.lower() == "quit":
                         quit_game()
+                    elif player_item_input.lower() == "restart":
+                        restart_game()
+                        return "restart"
                     else:
                         print("Not a number")
 
@@ -504,7 +527,8 @@ def battle(area):
 
                 player["Stats"]["Health"] += item_use["Healing amount"]
                 print("You are now at", player["Stats"]["Health"], "health")
-                enter_to_continue()
+                if enter_to_continue() == "restart":
+                    return "restart"
 
             else:
                 target = []
@@ -526,6 +550,9 @@ def battle(area):
                         except ValueError:
                             if choose_target.lower() == "quit":
                                 quit_game()
+                            elif player_item_input.lower() == "restart":
+                                restart_game()
+                                return "restart"
                             else:
                                 print("Not a valid input")
 
@@ -541,7 +568,8 @@ def battle(area):
                 player["Stats"]["Stamina"] = player["Stats"]["Stamina"] - choose_move["Stamina use"]
                 print("You are at", player["Stats"]["Stamina"], "stamina")
 
-                enter_to_continue()
+                if enter_to_continue() == "restart":
+                    return "restart"
 
                 # damage calc
                 # also removes enemies from list if dead
@@ -555,7 +583,8 @@ def battle(area):
         elif player["Stats"]["Health"] <= 0:
             print("You lose")
             print("Ganbalf will now time travel you back to the day before")
-            enter_to_continue()
+            if enter_to_continue() == "restart":
+                return "restart"
             return "Lost"
 
         # checks if you have killed all the enemies
@@ -575,7 +604,8 @@ def battle(area):
 
         # enemy ai
         for i in range(0, len(enemies)):
-            enter_to_continue()
+            if enter_to_continue() == "restart":
+                return "restart"
 
             # enemy ai for 1 enemy
             # check if enemy is alive
@@ -617,6 +647,9 @@ def int_error_detection(question, answers):
         except ValueError:
             if player_input.lower() == "quit":
                 quit_game()
+            elif player_input.lower() == "restart":
+                restart_game()
+                return "restart"
             else:
                 print("Not an integer")
 
@@ -637,8 +670,11 @@ def enter_shop(shop_area):
         print("Type 6 to leave the shop")
         player_input = int_error_detection(": ", [1,2,3,4,5,6])
 
+        if player_input == "restart":
+            return "restart"
+
         # equiping armour/weapons
-        if player_input == 1:
+        elif player_input == 1:
             if len(player_spare_equipment["Armour"]) > 0 or len(player_spare_equipment["Weapons"]) > 0:
                 print("----------------------------------------")
                 print("Current equipment")
@@ -686,7 +722,10 @@ def enter_shop(shop_area):
 
                     one_time_input = int_error_detection(": ", possible_equips)
 
-                    if one_time_input == last_number:
+                    if one_time_input == "restart":
+                        return "restart"
+
+                    elif one_time_input == last_number:
                         print("You did not equip anything")
                         time.sleep(1)
                         break
@@ -764,9 +803,12 @@ def enter_shop(shop_area):
 
                 one_time_input = int_error_detection(": ", possible_purchases)
 
+                if one_time_input == "restart":
+                    return "restart"
+
                 # one_time_input is NOT IN INDEX FORM
 
-                if one_time_input == last_number:
+                elif one_time_input == last_number:
                     print("You did not buy anything")
                     time.sleep(1)
                     break
@@ -854,7 +896,10 @@ def enter_shop(shop_area):
 
                     one_time_input = int_error_detection(": ", possible_sells)
 
-                    if one_time_input == last_number:
+                    if one_time_input == "restart":
+                        return "restart"
+
+                    elif one_time_input == last_number:
                         print("You did not sell anything")
                         time.sleep(1)
                         break
@@ -905,13 +950,16 @@ def enter_shop(shop_area):
 
                 one_time_input = int_error_detection(": ", possible_items)
 
+                if one_time_input == "restart":
+                    return "restart"
+
                 one_time_input -= 1
                 if one_time_input == last_number:
                     print("You did not buy anything")
                     time.sleep(1)
                     break
 
-                if POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"] <= player_money:
+                elif POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"] <= player_money:
                     print("You bought", POSSIBLE_ITEMS[shop_area][one_time_input]["Name"])
                     print("It cost", POSSIBLE_ITEMS[shop_area][one_time_input]["Cost"], "dollars")
 
@@ -960,7 +1008,10 @@ def enter_shop(shop_area):
 
                     one_time_input = int_error_detection(": ", possible_item_sell)
 
-                    if one_time_input == last_number:
+                    if one_time_input == "restart":
+                        return "restart"
+
+                    elif one_time_input == last_number:
                         print("You did not sell anything")
                         time.sleep(1)
                         break
@@ -1033,7 +1084,9 @@ def part_one():
     print("Type 2 to run around the sheep")
     one_use_answer = int_error_detection(": ", [1, 2])
 
-    if one_use_answer == 1:
+    if one_use_answer == "restart":
+        return "restart"
+    elif one_use_answer == 1:
         print("You chose to fight the sheep")
     elif one_use_answer == 2:
         print("You tried to run around but the sheep attacked you")
@@ -1055,7 +1108,8 @@ def part_one():
     time.sleep(2.5)
     print("All items can be sold to a shopkeeper for money")
 
-    enter_to_continue()
+    if enter_to_continue() == "restart":
+        return "restart"
 
     print("You continue following the road")
     time.sleep(1.5)
@@ -1070,7 +1124,9 @@ def part_one():
 
     print()
 
-    if one_use_answer == 1:
+    if one_use_answer == "restart":
+        return "restart"
+    elif one_use_answer == 1:
         print("You chose to follow the main road")
         time.sleep(1.5)
         print("The goblins were threaten by your presences and decided to attack you")
@@ -1092,7 +1148,8 @@ def part_one():
         print("You decided to go back on the road")
         player_area = "main road"
 
-        enter_to_continue()
+        if enter_to_continue() == "restart":
+            return "restart"
         print("You continue travelling down the road")
         time.sleep(1.5)
         print("You see a goblin gang coming towards you")
@@ -1103,7 +1160,8 @@ def part_one():
         time.sleep(1.5)
         print("You decided to continue following the main road")
         player_area = "main road"
-        enter_to_continue()
+        if enter_to_continue() == "restart":
+            return "restart"
         print("The previous group of goblins have come back with reinforcements")
 
     time.sleep(1.5)
@@ -1130,7 +1188,10 @@ def part_one():
         print("Type 2 - no")
         one_time_input = int_error_detection(": ", [1, 2])
 
-        if one_time_input == 2:
+        if one_time_input == "restart":
+            return "restart"
+
+        elif one_time_input == 2:
             print("You waited around, expecting the goblin giant to move")
             time.sleep(2)
             print("The goblin giant didn't move")
@@ -1145,17 +1206,21 @@ def part_one():
     player_money += 10
     print("The goblin giant dropped 10 dollars")
 
-    enter_to_continue()
+    if enter_to_continue() == "restart":
+        return "restart"
 
     print("You arrived at Brie Town")
     print("There seems to be a shop that you can stock up on equipment")
-    enter_to_continue()
+    if enter_to_continue() == "restart":
+        return "restart"
 
     print("Type 1 - go the shop")
     print("Type 2 - continue the quest")
     one_use_answer = int_error_detection(": ", [1, 2])
 
-    if one_use_answer == 1:
+    if one_use_answer == "restart":
+        return "restart"
+    elif one_use_answer == 1:
         enter_shop("Shop 1")
 
     # end of part one
@@ -1179,7 +1244,10 @@ def part_two():
     print("Type 2 - go right to the mountains")
 
     one_use_answer = int_error_detection(": ", [1, 2])
-    if one_use_answer == 1:
+    if one_use_answer == "restart":
+        return "restart"
+
+    elif one_use_answer == 1:
         # caves path
         pass
     elif one_use_answer == 2:
@@ -1199,150 +1267,219 @@ def part_two():
 
     part_two_complete = True
 
+def main_code():
+
+    print("Start game")
+
+    # while loop that checks if you want to play the game. Possible answers are yes or no, if input something else the loop will ask you to try again
+    while True:
+        try:
+            start_choice = str(input("yes/no: "))
+            start_choice = start_choice.lower()
+            if start_choice == "yes" or start_choice == "y":
+                start_choice = "yes"
+                break
+            elif start_choice == "no" or start_choice == "n":
+                start_choice = "no"
+                break
+            elif start_choice == "restart":
+                restart_game()
+                return "restart"
+            else:
+                print("Not a valid string")
+        except ValueError:
+            print("Not a valid input")
+
+    # Code for quiting the game. Checks if the answer is no then runs the quit function
+    if start_choice == "no":
+        quit_game()
+
+    print("Welcome")
+
+    time.sleep(1)
+
+    print()
+    print("Infomation")
+    print("-------------------------------")
+    print("You can type quit to quit or restart to restart at any of the inputs to quit the program")
+    print("-------------------------------")
+    print()
+
+    time.sleep(1)
+
+    print(
+        "There will be tutorials on how to play throughout the game but do you want a more detailed guide on the mechanics that are not covered by the tutorial")
+    print("Type 1 - yes")
+    print("Type 2 - no")
+
+    one_time_input = int_error_detection(":", [1, 2])
+    if one_time_input == "restart":
+        return "restart"
+
+    elif one_time_input == 1:
+        print("The games combat is turn based")
+        if enter_to_continue() == "restart":
+            return "restart"
+        print("If you die you will be sent back to the last place you slept/rested in")
+        if enter_to_continue() == "restart":
+            return "restart"
+        print("You will choose a character and for character stats there will be 5 stats")
+        time.sleep(3)
+        print("Health is how much health you have. If you are at 0 or below you will die and lose the game")
+        print("When healing you can go over your max health")
+        print()
+        print("Base damage is how much damage will be dealt")
+        print()
+        print("Defense is a stat that reduces the incoming damage")
+        print()
+        print("Strength is a stat that will increase the damage outgoing")
+        print()
+        print("Stamina is a 'currency' for moves")
+        print("Depending on the move it will cost stamina")
+        print("If you are out on stamina it will not let you pick that move")
+
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    print("Ganbalf has sent you on a quest to destroy a ring and save middle earth from Zauron")
+    print("You must venture to Mount Dooom where you can destroy the ring")
+
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    print("-------------------------------")
+    print("Choose your character")
+    print("-------------------------------")
+
+    time.sleep(1)
+
+    # for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
+    for i in range(len(POSSIBLE_CLASSES)):
+        print("Character", i + 1, ":", POSSIBLE_CLASSES[i]["Name"])
+        print("Stats: ")
+        print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Base damage:",
+              POSSIBLE_CLASSES[i]["Stats"]["Bonus damage"],
+              "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:",
+              POSSIBLE_CLASSES[i]["Stats"]["Strength"],
+              "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"])
+        print()
+
+    print()
+
+    one_time_possible_list = []
+
+    for i in range(len(POSSIBLE_CLASSES)):
+        print("Type", i + 1, "for", POSSIBLE_CLASSES[i]["Name"])
+        one_time_possible_list.append(i + 1)
+
+    # another while loop with try and except. Asks for a which class using 1,2,3 etc.
+    # If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
+    print()
+
+    print("Choose a character", end=' ')
+    one_time_input = int_error_detection(":", one_time_possible_list)
+
+    if one_time_input == "restart":
+        return "restart"
+
+    one_time_input -= 1
+    print("You chose: ", POSSIBLE_CLASSES[one_time_input]["Name"])
+    player_stats = POSSIBLE_CLASSES[one_time_input]
+
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    print("-------------------------------")
+    print("Ganbalf has also supplied you a choice of weapons")
+    print("Choose one")
+    print("-------------------------------")
+
+    time.sleep(1)
+
+    one_time_possible_list = []
+
+    for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
+        print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
+        print("Info: ")
+        print_weapon_stats(POSSIBLE_WEAPONS["tutorial"][x])
+
+    for i in range(0, len(POSSIBLE_WEAPONS[player_area])):
+        print("Type", i + 1, "for", POSSIBLE_WEAPONS[player_area][i]["Name"])
+        one_time_possible_list.append(i + 1)
+
+    print("Choose a weapon", end=' ')
+    one_time_input = int_error_detection(":", one_time_possible_list)
+
+    if one_time_input == "restart":
+        return "restart"
+
+    one_time_input -= 1
+    print("You chose: ", POSSIBLE_WEAPONS[player_area][one_time_input]["Name"])
+    player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][one_time_input]
+
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    while part_one_complete == False:
+        if part_one() == "restart":
+            return "restart"
+
+    print("It is getting late you decided to go the Galloping Horse Inn to rest")
+    time.sleep(2)
+
+    print("In the morning you left the town and continued on the main road")
+    time.sleep(1.5)
+
+    while part_two_complete == False:
+        if part_two() == "restart":
+            return "restart"
+
+
+    while part_four_complete == False:
+        pass
+        # do the same with the part two etc here
+
+    # after all parts complete it will return main code to "complete game"
+
+def restart_game():
+    global player_stats
+    global player_equipment
+    global player_spare_equipment
+    global player_drop_inventory
+    global player_equipment
+    global item_inventory
+    global player_area
+    global part_one_complete
+    global part_two_complete
+    global complete_game
+    global player_money
+    global part_three_complete
+    global part_four_complete
+
+    player_stats = {}
+    player_equipment = {"Weapon": {},"Armour": {"Name": "Basic Armour","Weakness": ["None"],"Strong against": ["None"],"Cost": 5}}
+    player_spare_equipment = {"Weapons": [],"Armour": []}
+    player_drop_inventory = []
+    item_inventory = []
+    player_area = "tutorial"
+    part_one_complete = False
+    part_two_complete = False
+    part_three_complete = False
+    part_four_complete = False
+    player_money = 0
+    complete_game = False
+
 # ----------------------- Main code -----------------------
 
-print("Start game")
 
-# while loop that checks if you want to play the game. Possible answers are yes or no, if input something else the loop will ask you to try again
 while True:
-    try:
-        start_choice = str(input("yes/no: "))
-        start_choice = start_choice.lower()
-        if start_choice == "yes" or start_choice == "y":
-            start_choice = "yes"
-            break
-        elif start_choice == "no" or start_choice == "n":
-            start_choice = "no"
-            break
-        else:
-            print("Not a valid string")
-    except ValueError:
-        print("Not a valid input")
+    check_if_complete = main_code()
 
-# Code for quiting the game. Checks if the answer is no then runs the quit function
-if start_choice == "no":
-    quit_game()
+    if check_if_complete == "restart":
+        print("restarting")
+        time.sleep(2)
+    elif check_if_complete == "complete game":
+        break
 
-print("Welcome")
-
-time.sleep(1)
-
-print()
-print("Infomation")
-print("-------------------------------")
-print("You can type quit at any of the inputs to quit the program")
-print("-------------------------------")
-print()
-
-time.sleep(1)
-
-print("There will be tutorials on how to play throughout the game but do you want a more detailed guide on the mechanics that are not covered by the tutorial")
-print("Type 1 - yes")
-print("Type 2 - no")
-
-one_time_input = int_error_detection(":", [1,2])
-
-if one_time_input == 1:
-    print("The games combat is turn based")
-    enter_to_continue()
-    print("If you die you will be sent back to the last place you slept/rested in")
-    enter_to_continue()
-    print("You will choose a character and for character stats there will be 5 stats")
-    time.sleep(3)
-    print("Health is how much health you have. If you are at 0 or below you will die and lose the game")
-    print("When healing you can go over your max health")
-    print()
-    print("Base damage is how much damage will be dealt")
-    print()
-    print("Defense is a stat that reduces the incoming damage")
-    print()
-    print("Strength is a stat that will increase the damage outgoing")
-    print()
-    print("Stamina is a 'currency' for moves")
-    print("Depending on the move it will cost stamina")
-    print("If you are out on stamina it will not let you pick that move")
-
-
-enter_to_continue()
-
-print("Ganbalf has sent you on a quest to destroy a ring and save middle earth from Zauron")
-print("You must venture to Mount Dooom where you can destroy the ring")
-
-enter_to_continue()
-
-print("-------------------------------")
-print("Choose your character")
-print("-------------------------------")
-
-time.sleep(1)
-
-# for loop that prints out the possible classes and another for loop for lists out want input for which class to choose
-for i in range(len(POSSIBLE_CLASSES)):
-    print("Character", i + 1, ":", POSSIBLE_CLASSES[i]["Name"])
-    print("Stats: ")
-    print("| Health:", POSSIBLE_CLASSES[i]["Stats"]["Health"], "| Base damage:", POSSIBLE_CLASSES[i]["Stats"]["Bonus damage"],
-          "| Defense:", POSSIBLE_CLASSES[i]["Stats"]["Defense"], "| Strength:", POSSIBLE_CLASSES[i]["Stats"]["Strength"],
-          "| Stamina:", POSSIBLE_CLASSES[i]["Stats"]["Stamina"])
-    print()
-
-print()
-
-one_time_possible_list = []
-
-for i in range(len(POSSIBLE_CLASSES)):
-    print("Type", i + 1, "for", POSSIBLE_CLASSES[i]["Name"])
-    one_time_possible_list.append(i+1)
-
-# another while loop with try and except. Asks for a which class using 1,2,3 etc.
-# If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
-print()
-
-print("Choose a character", end=' ')
-one_time_input = int_error_detection(":", one_time_possible_list)
-one_time_input -= 1
-print("You chose: ", POSSIBLE_CLASSES[one_time_input]["Name"])
-player_stats = POSSIBLE_CLASSES[one_time_input]
-
-enter_to_continue()
-
-print("-------------------------------")
-print("Ganbalf has also supplied you a choice of weapons")
-print("Choose one")
-print("-------------------------------")
-
-time.sleep(1)
-
-one_time_possible_list = []
-
-for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
-    print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
-    print("Info: ")
-    print_weapon_stats(POSSIBLE_WEAPONS["tutorial"][x])
-
-for i in range(0,len(POSSIBLE_WEAPONS[player_area])):
-    print("Type", i+1, "for", POSSIBLE_WEAPONS[player_area][i]["Name"])
-    one_time_possible_list.append(i+1)
-
-print("Choose a weapon", end=' ')
-one_time_input = int_error_detection(":", one_time_possible_list)
-one_time_input -= 1
-print("You chose: ", POSSIBLE_WEAPONS[player_area][one_time_input]["Name"])
-player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][one_time_input]
-
-enter_to_continue()
-
-while part_one_complete == False:
-    part_one()
-
-print("It is getting late you decided to go the Galloping Horse Inn to rest")
-time.sleep(2)
-
-print("In the morning you left the town and continued on the main road")
-time.sleep(1.5)
-
-while part_two_complete == False:
-    part_two()
-
-
-
+print("You completed the game")
 
