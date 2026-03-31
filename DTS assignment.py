@@ -393,7 +393,7 @@ def battle(area):
             print("Your moves: ")
             print("---------------")
 
-            if player_area == "tutorial" and tutorial_counter == 0:
+            if area == "tutorial" and tutorial_counter == 0:
                 print("You will have a choice of options to attack the enemy")
                 print("Each move has a type. Depending on the enemy, it may be weak or strong against the type")
                 print("If you hit a enemies weakness it will do more damage")
@@ -469,7 +469,7 @@ def battle(area):
 
                 # resting part
                 elif choose_move == possible_move_list[-2]:
-                    if player_area == "tutorial":
+                    if area == "tutorial":
                         print("You should attack the enemy")
                         time.sleep(1)
                     else:
@@ -554,7 +554,7 @@ def battle(area):
             time.sleep(1)
             break
 
-        if player_area == "tutorial" and tutorial_counter == 0:
+        if area == "tutorial" and tutorial_counter == 0:
             print("It is now time for the enemy to attack")
             time.sleep(1.5)
 
