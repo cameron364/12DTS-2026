@@ -1,10 +1,9 @@
-# DTS assignment ----- 24/3/26 ----- Cameron Christie
+# DTS assignment ----- 1/4/26 ----- Cameron Christie
 
 # ----------------------- Library -----------------------
 import time
 import random
 import copy
-
 # ----------------------- Variables -----------------------
 
 # Dictionaries and lists
@@ -413,8 +412,7 @@ def battle(area):
 
             weapon_info = player_equipment["Weapon"]["Info"]
 
-            # prints moves
-            show_moves(weapon_info)
+
 
             item_use = 0
             move_selection_max_length = 0
@@ -425,94 +423,66 @@ def battle(area):
 
             # choosing what to do
             while True:
-                choose_move = input("Choose move to attack the enemy: ")
-                try:
-                    choose_move = int(choose_move)
-                    if choose_move >= 1 and choose_move <= len(weapon_info) + move_selection_max_length:
+                # prints moves
+                show_moves(weapon_info)
 
-                        if choose_move == len(weapon_info) + 1:
+                possible_move_list = []
 
-                            # this is for the tutorial
-                            if player_area == "tutorial":
-                                print("You should attack the enemy")
-                            else:
-                                choose_move = "Rest"
-                                break
+                for i in range(0,len(weapon_info)+move_selection_max_length):
+                    possible_move_list.append(i+1)
+                choose_move = int_error_detection("Choose move to attack the enemy: ", possible_move_list)
 
-                        elif choose_move == len(weapon_info) + 2:
+                # item inventory menu
+                if choose_move == possible_move_list[-1]:
 
-                            # inventory use or not or use item check
-                            # so that it can go back to move selection
-                            for i in range(0, len(item_inventory)):
-                                print("Type", i + 1, "to use", item_inventory[i]["Name"], "| Healing -", item_inventory[i]["Healing amount"], "health |")
-                                print()
-                            print("Type [back] to go back to move selection")
-                            print()
+                    possible_item_list = []
+                    for i in range(0, len(item_inventory)):
+                        print("Type", i + 1, "to use", item_inventory[i]["Name"], "| Healing -",
+                              item_inventory[i]["Healing amount"], "health |")
+                        print()
+                        possible_item_list.append(i+1)
 
-                            while True:
-                                player_item_input = input("Choose item:")
+                    last_number = possible_item_list[-1]
+                    print("Type", last_number+1, "to go back to move selection")
+                    print()
 
-                                try:
-                                    player_item_input = int(player_item_input)
-                                    if player_item_input >= 1 and player_item_input <= len(item_inventory):
-                                        choose_move = "Inventory"
-                                        player_item_input = player_item_input - 1
-                                        item_use = item_inventory[player_item_input]
-                                        item_inventory.pop(player_item_input)
-                                        print("You are using", item_use["Name"])
-                                        if enter_to_continue() == "restart":
-                                            return "restart"
-                                        break
-                                    else:
-                                        print("Not an option")
-                                except ValueError:
-                                    if player_item_input.lower() == "back":
-                                        print("Going back to move selection")
-                                        time.sleep(1.5)
-                                        show_moves(weapon_info)
-                                        break
-                                    elif player_item_input.lower() == "quit":
-                                        quit_game()
-                                    elif player_item_input.lower() == "restart":
-                                        restart_game()
-                                        return "restart"
-                                    else:
-                                        print("Not an option")
+                    possible_item_list.append(last_number+1)
 
-                            # this checks if you used an item
-                            # it will break out of the move selection loop
-                            # this is here to stop going back to move selection breaking the game
-                            if item_use != 0:
-                                break
+                    player_item_input = int_error_detection("Type here: ", possible_item_list)
 
-
-                        # if you choose a move
-                        # it will check if you have enough stamina to use it
-                        # if so it will break out of the loop
-                        # if not it will ask you to input again
-                        else:
-                            choose_move = choose_move - 1
-                            choose_move = player_equipment["Weapon"]["Info"][choose_move]
-                            if (player["Stats"]["Stamina"] - choose_move["Stamina use"]) >= 0:
-                                break
-                            else:
-                                print("Not enough stamina to use this move")
-                    else:
-                        print("Not a valid move")
-
-
-                # error detection and checking if player wants to quit
-                except ValueError:
-                    if choose_move.lower() == "quit":
-                        quit_game()
-                    elif player_item_input.lower() == "restart":
-                        restart_game()
+                    if player_item_input == "restart":
                         return "restart"
+
+                    last_number = possible_item_list[-1]
+
+                    if player_item_input == last_number:
+                        print("Going back to move selection")
+                        time.sleep(1.5)
+                        show_moves(weapon_info)
                     else:
-                        print("Not a number")
+                        choose_move = "Inventory"
+                        player_item_input = player_item_input - 1
+                        item_use = item_inventory[player_item_input]
+                        item_inventory.pop(player_item_input)
+                        print("You are using", item_use["Name"])
+                        break
 
-            # gain stamina or enemy selection
+                # resting part
+                elif choose_move == possible_move_list[-2]:
+                    if player_area == "tutorial":
+                        print("You should attack the enemy")
+                        time.sleep(1)
+                    else:
+                        choose_move = "Rest"
+                        break
+                elif choose_move == "restart":
+                    return "restart"
 
+                # move selected
+                else:
+                    choose_move -= 1
+                    choose_move = player_equipment["Weapon"]["Info"][choose_move]
+                    break
 
             # checks what you are doing and does calculation
             if choose_move == "Rest":
@@ -524,37 +494,28 @@ def battle(area):
             elif choose_move == "Inventory":
                 print("You ate", item_use["Name"])
                 print("It healed", item_use["Healing amount"], "health")
-
                 player["Stats"]["Health"] += item_use["Healing amount"]
                 print("You are now at", player["Stats"]["Health"], "health")
                 if enter_to_continue() == "restart":
                     return "restart"
-
             else:
                 target = []
 
                 # enemy selection
                 if choose_move["Hit multi enemy"] == False and len(enemies) > 1:
+
+                    possible_enemy_select = []
+
                     for i in range(0, len(enemies)):
                         print("Type", i + 1, "to attack", enemies[i]["Name"])
+                    possible_enemy_select.append(i+1)
 
-                    while True:
-                        choose_target = input("Choose enemy: ")
-                        try:
-                            choose_target = int(choose_target)
-                            if choose_target >= 1 and choose_target <= len(enemies):
-                                target.append([enemies[choose_target - 1]])
-                                break
-                            else:
-                                print("Not a valid enemy")
-                        except ValueError:
-                            if choose_target.lower() == "quit":
-                                quit_game()
-                            elif player_item_input.lower() == "restart":
-                                restart_game()
-                                return "restart"
-                            else:
-                                print("Not a valid input")
+                    choose_target = int_error_detection("Choose enemy: ", possible_enemy_select)
+
+                    if choose_target == "restart":
+                        return "restart"
+                    else:
+                        target.append([enemies[choose_target - 1]])
 
                 elif len(enemies) == 1:
                     target.append([enemies[0]])
@@ -1471,6 +1432,10 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
+player_stats = POSSIBLE_CLASSES[2]
+player_equipment["Weapon"] = POSSIBLE_WEAPONS["tutorial"][1]
+item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
+battle("tutorial")
 
 while True:
     check_if_complete = main_code()
