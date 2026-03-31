@@ -161,6 +161,36 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
+    "orc infested road": {"Max num of enemies": 5, "Min num of enemies": 4, "Enemies": [
+        {"Name": "Big orc",
+         "Stats": {"Health": 30, "Stamina": 14, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
+         "Moves": [
+             {"Move name": "Punch", "Base damage": 4, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 8, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Powerful kick", "Base damage": 8, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+        {"Name": "Small orc",
+         "Stats": {"Health": 15, "Stamina": 20, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
+         "Moves": [
+             {"Move name": "Punch", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 8, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Kick", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
+         ]
+         },
+        {"Name": "Orc with a bow",
+         "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
+         "Moves": [
+             {"Move name": "Shoot an arrow", "Base damage": 4, "Type": "Ranged", "Stamina use": 0}
+         ]
+         },
+        {"Name": "Orc with a sword",
+         "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
+         "Moves": [
+             {"Move name": "Slash", "Base damage": 4, "Type": "Melee", "Stamina use": 0}
+         ]
+         },
+    ]},
     "Area test 1": {"Max num of enemies": 3, "Enemies": [
         {"Name": "test1",
          "Stats": {"Health": 10, "Stamina": 5, "Weakness": ["Melee"], "Strong against": ["Ranged"]},
@@ -208,7 +238,9 @@ POSSIBLE_ENEMIES_DROPS = {
 # variables
 player_area = "tutorial"
 
-player_section = ""
+part_one_complete = False
+
+part_two_complete = False
 
 player_money = 0
 
@@ -296,11 +328,6 @@ def show_moves(weapon_info):
 def battle(area):
     print()
     print("You are in a battle")
-
-    global player_section
-
-
-    player_dead = False
 
     # tutorial counter - it is for tutorial text just showing up once
     tutorial_counter = 0
@@ -527,9 +554,9 @@ def battle(area):
         # check if player is dead and if so breaks the loop
         elif player["Stats"]["Health"] <= 0:
             print("You lose")
-            player_dead = True
+            print("Ganbalf will now time travel you back to the day before")
             enter_to_continue()
-            break
+            return "Lost"
 
         # checks if you have killed all the enemies
         if len(enemies) == 0:
@@ -572,16 +599,6 @@ def battle(area):
 
         # changes the tutorial counter so the tutorial doesn't spam in your face
         tutorial_counter += 1
-
-    if player_dead == True and player_section == "part one":
-        part_one()
-    elif player_dead == True and player_section == "part two":
-        part_two()
-    elif player_dead == True and player_section == "part three":
-        pass
-    else:
-        print("Error")
-        enter_to_continue()
 
 
 # answers is a list
@@ -997,10 +1014,9 @@ def print_armour_stats(armour):
     print()
 
 def part_one():
-    global player_section
     global player_area
-
-    player_section = "part one"
+    global part_one_complete
+    global player_money
 
     print("You are currently at Hobbitown")
     print("To reach Mount Dooom you must follow the main road")
@@ -1023,7 +1039,9 @@ def part_one():
         print("You tried to run around but the sheep attacked you")
 
     time.sleep(1.5)
-    battle(player_area)
+
+    if battle(player_area) == "Lost":
+        return
 
     player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
     item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
@@ -1064,7 +1082,8 @@ def part_one():
         player_area = "forest 1"
 
     time.sleep(1.5)
-    battle(player_area)
+    if battle(player_area) == "Lost":
+        return
 
     if player_area == "forest 1":
         player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
@@ -1091,7 +1110,8 @@ def part_one():
     print("You are attacked by a goblin gang")
     time.sleep(1.5)
 
-    battle(player_area)
+    if battle(player_area) == "Lost":
+        return
     player_money += 7
     print("You got 7 dollars from defeating the goblin gang")
 
@@ -1103,22 +1123,24 @@ def part_one():
     time.sleep(1.5)
     print("There is no way around")
 
+
     while True:
-        one_time_input = input("Are you prepared to fight it (yes/no): ")
-        one_time_input = one_time_input.lower()
-        if one_time_input == "yes":
-            break
-        elif one_time_input == "no":
+        print("Are you prepared to fight it")
+        print("Type 1 - yes")
+        print("Type 2 - no")
+        one_time_input = int_error_detection(": ", [1, 2])
+
+        if one_time_input == 2:
             print("You waited around, expecting the goblin giant to move")
             time.sleep(2)
             print("The goblin giant didn't move")
             time.sleep(2)
-        elif one_time_input == "quit":
-            quit_game()
-        else:
-            print("Not an option")
+        elif one_time_input == 1:
+            break
 
-    battle(player_area)
+    if battle(player_area) == "Lost":
+        return
+
     print("You defeated the goblin giant")
     player_money += 10
     print("The goblin giant dropped 10 dollars")
@@ -1136,11 +1158,13 @@ def part_one():
     if one_use_answer == 1:
         enter_shop("Shop 1")
 
-def part_two():
-    global player_section
-    global player_area
+    # end of part one
+    part_one_complete = True
 
-    player_section = "part two"
+def part_two():
+    global player_area
+    global player_money
+    global part_two_complete
 
     print("You follow the main road which takes you up a side of a mountain")
     time.sleep(1.5)
@@ -1169,7 +1193,11 @@ def part_two():
     time.sleep(1.5)
 
     player_area = "orc infested road"
-    battle(player_area)
+
+    if battle(player_area) == "Lost":
+        return
+
+    part_two_complete = True
 
 # ----------------------- Main code -----------------------
 
@@ -1259,28 +1287,21 @@ for i in range(len(POSSIBLE_CLASSES)):
 
 print()
 
+one_time_possible_list = []
+
 for i in range(len(POSSIBLE_CLASSES)):
     print("Type", i + 1, "for", POSSIBLE_CLASSES[i]["Name"])
+    one_time_possible_list.append(i+1)
 
 # another while loop with try and except. Asks for a which class using 1,2,3 etc.
 # If input str or bool will run try and except and ask again. If number is too big or too small will ask fo input again.
 print()
-while True:
-    player_class_choice = input("Choose a character: ")
-    try:
-        player_class_choice = int(player_class_choice)
-        if player_class_choice >= 1 and player_class_choice <= len(POSSIBLE_CLASSES):
-            player_class_choice = player_class_choice - 1
-            print("You chose: ", POSSIBLE_CLASSES[player_class_choice]["Name"])
-            player_stats = POSSIBLE_CLASSES[player_class_choice]
-            break
-        else:
-            print("Not a valid input")
-    except ValueError:
-        if player_class_choice.lower() == "quit":
-            quit_game()
-        else:
-            print("Not an number")
+
+print("Choose a character", end=' ')
+one_time_input = int_error_detection(":", one_time_possible_list)
+one_time_input -= 1
+print("You chose: ", POSSIBLE_CLASSES[one_time_input]["Name"])
+player_stats = POSSIBLE_CLASSES[one_time_input]
 
 enter_to_continue()
 
@@ -1291,6 +1312,8 @@ print("-------------------------------")
 
 time.sleep(1)
 
+one_time_possible_list = []
+
 for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
     print("Armour", x + 1, ":", POSSIBLE_WEAPONS["tutorial"][x]["Name"])
     print("Info: ")
@@ -1298,27 +1321,18 @@ for x in range(0, len(POSSIBLE_WEAPONS["tutorial"])):
 
 for i in range(0,len(POSSIBLE_WEAPONS[player_area])):
     print("Type", i+1, "for", POSSIBLE_WEAPONS[player_area][i]["Name"])
+    one_time_possible_list.append(i+1)
 
-while True:
-    player_weapon_choice = input("Choose a weapon: ")
-    try:
-        player_weapon_choice = int(player_weapon_choice)
-        if player_weapon_choice >= 1 and player_weapon_choice <= 3:
-            player_weapon_choice = player_weapon_choice - 1
-            print("You choose: ", POSSIBLE_WEAPONS[player_area][player_weapon_choice]["Name"])
-            player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][player_weapon_choice]
-            break
-        else:
-            print("Not a valid input")
-    except ValueError:
-        if player_weapon_choice.lower() == "quit":
-            quit_game()
-        else:
-            print("Not an number")
+print("Choose a weapon", end=' ')
+one_time_input = int_error_detection(":", one_time_possible_list)
+one_time_input -= 1
+print("You chose: ", POSSIBLE_WEAPONS[player_area][one_time_input]["Name"])
+player_equipment["Weapon"] = POSSIBLE_WEAPONS[player_area][one_time_input]
 
 enter_to_continue()
 
-part_one()
+while part_one_complete == False:
+    part_one()
 
 print("It is getting late you decided to go the Galloping Horse Inn to rest")
 time.sleep(2)
@@ -1326,7 +1340,8 @@ time.sleep(2)
 print("In the morning you left the town and continued on the main road")
 time.sleep(1.5)
 
-part_two()
+while part_two_complete == False:
+    part_two()
 
 
 
