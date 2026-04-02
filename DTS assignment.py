@@ -1432,10 +1432,7 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
-player_stats = POSSIBLE_CLASSES[2]
-player_equipment["Weapon"] = POSSIBLE_WEAPONS["tutorial"][1]
-item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-battle("tutorial")
+
 
 while True:
     check_if_complete = main_code()
@@ -1444,7 +1441,6 @@ while True:
         print("restarting")
         time.sleep(2)
     elif check_if_complete == "complete game":
+        print("You completed the game")
         break
-
-print("You completed the game")
 
