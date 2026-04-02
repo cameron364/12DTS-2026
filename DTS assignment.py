@@ -1140,14 +1140,14 @@ def part_one():
     global part_one_complete
     global player_money
 
-    print("You are currently at Hobbitown")
-    print("To reach Mount Dooom you must follow the main road")
+    print("You are currently at Hobbitown.")
+    print("To reach Mount Dooom you must follow the main road.")
 
     time.sleep(2)
 
-    print("As you travel down the main road you notice something")
+    print("As you travel down the main road you notice something.")
     time.sleep(1.5)
-    print("A stubborn rogue sheep blocks the way")
+    print("A stubborn rogue sheep blocks the way.")
 
     time.sleep(1.5)
 
@@ -1158,9 +1158,9 @@ def part_one():
     if one_use_answer == "restart":
         return "restart"
     elif one_use_answer == 1:
-        print("You chose to fight the sheep")
+        print("You chose to fight the sheep.")
     elif one_use_answer == 2:
-        print("You tried to run around but the sheep attacked you")
+        print("You tried to run around but the sheep attacked you.")
 
     time.sleep(1.5)
 
@@ -1176,23 +1176,23 @@ def part_one():
     time.sleep(1.5)
     print("You also got", POSSIBLE_ITEMS["Shop 1"][0]["Name"], "from the stubborn rogue sheep's mouth")
     time.sleep(1.5)
-    print("When you defeat enemies you can gain items")
-    print("Some items, like the sheep skin can only be sold")
-    print("Items like an apple can be used in battle to heal")
+    print("When you defeat enemies you can gain items.")
+    print("Some items, like the sheep skin, can only be sold.")
+    print("Items, like an apple, can be used in battle to heal.")
     time.sleep(2.5)
-    print("All items can be sold to a shopkeeper for money")
+    print("All items can be sold to a shopkeeper for money.")
 
     if enter_to_continue() == "restart":
         return "restart"
 
-    print("You continue following the road")
+    print("You continue along the road.")
     time.sleep(1.5)
-    print("There seem to be a group of goblins blocking the way")
+    print("There seem to be a group of goblins blocking the way.")
     time.sleep(1.5)
 
-    print("What should you do")
-    print("Type 1 - follow the main road and face the group of goblins")
-    print("type 2 - go around them through the forest")
+    print("What do you do?")
+    print("Type 1 - follow the main road and face the group of goblins.")
+    print("type 2 - go around them through the forest.")
 
     one_use_answer = int_error_detection(": ", [1, 2])
 
@@ -1201,14 +1201,14 @@ def part_one():
     if one_use_answer == "restart":
         return "restart"
     elif one_use_answer == 1:
-        print("You chose to follow the main road")
+        print("You chose to follow the main road.")
         time.sleep(1.5)
-        print("The goblins were threaten by your presences and decided to attack you")
+        print("The goblins are threatened by your presence and decid to attack you.")
         player_area = "main road 1"
     elif one_use_answer == 2:
-        print("You decided to go through the forest")
+        print("You decide to go through the forest.")
         time.sleep(1.5)
-        print("A pack of wolves surround you")
+        print("A pack of wolves surround you.")
         player_area = "forest 1"
 
     time.sleep(1.5)
@@ -1220,29 +1220,29 @@ def part_one():
 
     if player_area == "forest 1":
         player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
-        print("You got wolf skin from defeating the pack of wolves")
+        print("You got wolf skin from defeating the pack of wolves.")
         time.sleep(1.5)
-        print("You decided to go back on the road")
+        print("You decide to go back on the road.")
         player_area = "main road"
 
         if enter_to_continue() == "restart":
             return "restart"
-        print("You continue travelling down the road")
+        print("You continue to travel down the road.")
         time.sleep(1.5)
-        print("You see a goblin gang coming towards you")
+        print("You see a goblin gang coming towards you.")
 
     elif player_area == "main road 1":
         player_money += 5
-        print("You got 5 dollars from defeating the goblins")
+        print("You got 5 dollars from defeating the goblins.")
         time.sleep(1.5)
-        print("You decided to continue following the main road")
+        print("You decide to continue down the main road.")
         player_area = "main road"
         if enter_to_continue() == "restart":
             return "restart"
-        print("The previous group of goblins have come back with reinforcements")
+        print("The previous group of goblins have come back with reinforcements.")
 
     time.sleep(1.5)
-    print("You are attacked by a goblin gang")
+    print("You are attacked by a goblin gang.")
     time.sleep(1.5)
 
     result = battle(player_area)
@@ -1251,19 +1251,19 @@ def part_one():
     if result == "restart":
         return "restart"
     player_money += 7
-    print("You got 7 dollars from defeating the goblin gang")
+    print("You got 7 dollars from defeating the goblin gang.")
 
     player_area = "main road final"
 
-    print("You are coming up to the first town in your journey")
+    print("You are coming up to the first town in your journey.")
     time.sleep(1.5)
-    print("However, there seems to be a goblin giant blocking the entrance")
+    print("However, there seems to be a goblin giant blocking the entrance.")
     time.sleep(1.5)
-    print("There is no way around")
+    print("There is no way around.")
 
 
     while True:
-        print("Are you prepared to fight it")
+        print("Are you prepared to fight it?")
         print("Type 1 - yes")
         print("Type 2 - no")
         one_time_input = int_error_detection(": ", [1, 2])
@@ -1272,9 +1272,9 @@ def part_one():
             return "restart"
 
         elif one_time_input == 2:
-            print("You waited around, expecting the goblin giant to move")
+            print("You wait around, expecting the goblin giant to move.")
             time.sleep(2)
-            print("The goblin giant didn't move")
+            print("The goblin giant doesn't move.")
             time.sleep(2)
         elif one_time_input == 1:
             break
@@ -1285,15 +1285,15 @@ def part_one():
     if result == "restart":
         return "restart"
 
-    print("You defeated the goblin giant")
+    print("You defeat the goblin giant.")
     player_money += 10
-    print("The goblin giant dropped 10 dollars")
+    print("The goblin giant drop 10 dollars.")
 
     if enter_to_continue() == "restart":
         return "restart"
 
-    print("You arrived at Brie Town")
-    print("There seems to be a shop that you can stock up on equipment")
+    print("You arrive at Brie Town.")
+    print("There seems to be a shop that you can stock up on equipment.")
     if enter_to_continue() == "restart":
         return "restart"
 
@@ -1314,13 +1314,13 @@ def part_two():
     global player_money
     global part_two_complete
 
-    print("You follow the main road which takes you up a side of a mountain")
+    print("You follow the main road which takes you up a mountainside.")
     time.sleep(1.5)
 
     print("You stop at a junction")
     time.sleep(1.5)
 
-    print("There are two signs the one going left says the caves. The other says mountains")
+    print("There are two signs. The left sign says caves. The other says mountains.")
     time.sleep(1.5)
 
     print("Type 1 - go left to the caves")
@@ -1332,9 +1332,9 @@ def part_two():
 
     # caves path
     elif one_use_answer == 1:
-        print("You go down the steep path way leading to the caves")
+        print("You go down the steep path way leading to the caves.")
         time.sleep(1.5)
-        print("As you enter the cave entrance you are attack by a little golemite")
+        print("As you enter the cave entrance, you are attacked by a little golemite.")
         time.sleep(1.5)
         player_area = "caves 1"
         result = battle(player_area)
@@ -1353,12 +1353,12 @@ def part_two():
             if result == "restart":
                 return "restart"
             player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["golemite"])
-            print("You got a diamond from the golemite")
+            print("You got a diamond from the golemite.")
             time.sleep(1.5)
 
-        print("You continue following the path")
+        print("You continue to follow the path.")
         time.sleep(1.5)
-        print("As you reach the end of the path a golem attacks you")
+        print("As you reach the end of the path, a golem attacks you.")
         time.sleep(1.5)
         player_area = "caves final"
         result = battle(player_area)
@@ -1366,16 +1366,16 @@ def part_two():
             return
         if result == "restart":
             return "restart"
-        print("You got the legendary rock sword")
+        print("You got the legendary rock sword.")
         time.sleep(1)
-        print("You put it into your spare equipment")
+        print("You put it into your spare equipment.")
         player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][0])
 
     # mountain path
     elif one_use_answer == 2:
-        print("You go up the steep path way leading to the mountain top")
+        print("You go up a steep path way leading to the mountain top.")
         time.sleep(1.5)
-        print("As you walk the treacherous path you are attacked by a cougar")
+        print("As you walk the treacherous path, you are attacked by a cougar.")
         time.sleep(1.5)
         player_area = "mountain 1"
 
@@ -1387,7 +1387,7 @@ def part_two():
 
         player_area = "mountain"
         for i in range(0, 2):
-            print("You continue following the path")
+            print("You continue to follow the path.")
             time.sleep(1.5)
             result = battle(player_area)
             if result == "Lost":
@@ -1395,11 +1395,11 @@ def part_two():
             if result == "restart":
                 return "restart"
             player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["cougar and wolf skin"])
-            print("You got a cougar and wolf skin from the golemite")
+            print("You got a cougar and wolf skin from the golemite.")
 
-        print("You continue following the path")
+        print("You continue along the path.")
         time.sleep(1.5)
-        print("As you reach the end of the path a yeti attacks you")
+        print("As you reach the end of the path, a yeti attacks you.")
         time.sleep(1.5)
         player_area = "mountain final"
         result = battle(player_area)
@@ -1407,15 +1407,15 @@ def part_two():
             return
         if result == "restart":
             return "restart"
-        print("You got the legendary snow sword")
+        print("You got the legendary snow sword.")
         time.sleep(1)
-        print("You put it into your spare equipment")
+        print("You put it into your spare equipment.")
         player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][1])
 
     time.sleep(1.5)
-    print("You continue following the path")
+    print("You continue along the path")
     time.sleep(1.5)
-    print("However there seems to be a pack of orcs hunting you down")
+    print("However, there seems to be a pack of orcs hunting you down!")
     time.sleep(1.5)
 
     player_area = "orc infested road"
@@ -1465,14 +1465,14 @@ def main_code():
     print()
     print("Infomation")
     print("-------------------------------")
-    print("You can type quit to quit or restart to restart at any of the inputs to quit the program")
+    print("You can type quit to quit or restart to restart at any of the inputs.")
     print("-------------------------------")
     print()
 
     time.sleep(1)
 
     print(
-        "There will be tutorials on how to play throughout the game but do you want a more detailed guide on the mechanics that are not covered by the tutorial")
+        "There will be tutorials on how to play throughout the game but do you want a more detailed guide on the mechanics that are not covered by the tutorial?")
     print("Type 1 - yes")
     print("Type 2 - no")
 
@@ -1481,32 +1481,32 @@ def main_code():
         return "restart"
 
     elif one_time_input == 1:
-        print("The games combat is turn based")
+        print("The games combat is turn based.")
         if enter_to_continue() == "restart":
             return "restart"
-        print("If you die you will be sent back to the last place you slept/rested in")
+        print("If you die you, will be sent back to the last place you slept/rested in.")
         if enter_to_continue() == "restart":
             return "restart"
-        print("You will choose a character and for character stats there will be 5 stats")
+        print("You will choose a character and each character will have 5 stats.")
         time.sleep(3)
-        print("Health is how much health you have. If you are at 0 or below you will die and lose the game")
-        print("When healing you can go over your max health")
+        print("Health shows your health status. If you are at 0 or below, you will die and lose the game.")
+        print("When you heal, can go over your max health.")
         print()
-        print("Base damage is how much damage will be dealt")
+        print("Base damage is how much damage will be dealt.")
         print()
-        print("Defense is a stat that reduces the incoming damage")
+        print("Defense is a stat that reduces the incoming damage.")
         print()
-        print("Strength is a stat that will increase the damage outgoing")
+        print("Strength is a stat that will increase the damage outgoing.")
         print()
-        print("Stamina is a 'currency' for moves")
-        print("Depending on the move it will cost stamina")
-        print("If you are out on stamina it will not let you pick that move")
+        print("Stamina is a 'currency' for moves.")
+        print("Depending on the move it will cost your character stamina.")
+        print("If you are out on stamina, you will not be able to pick that move.")
 
     if enter_to_continue() == "restart":
         return "restart"
 
-    print("Ganbalf has sent you on a quest to destroy a ring and save middle earth from Zauron")
-    print("You must venture to Mount Dooom where you can destroy the ring")
+    print("Ganbalf has sent you on a quest to destroy a ring and save Centre Earth from Zauron.")
+    print("You must venture to Mount Dooom where you will destroy the ring.")
 
     if enter_to_continue() == "restart":
         return "restart"
@@ -1554,7 +1554,7 @@ def main_code():
         return "restart"
 
     print("-------------------------------")
-    print("Ganbalf has also supplied you a choice of weapons")
+    print("Ganbalf has also supplied you a choice of weapons.")
     print("Choose one")
     print("-------------------------------")
 
@@ -1588,10 +1588,10 @@ def main_code():
         if part_one() == "restart":
             return "restart"
 
-    print("It is getting late you decided to go the Galloping Horse Inn to rest")
+    print("It is getting late. You decide to go the Galloping Horse Inn to rest.")
     time.sleep(2)
 
-    print("In the morning you left the town and continued on the main road")
+    print("In the morning you leave the town and continue on the main road.")
     time.sleep(1.5)
 
     while part_two_complete == False:
