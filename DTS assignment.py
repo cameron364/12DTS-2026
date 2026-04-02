@@ -52,7 +52,7 @@ POSSIBLE_WEAPONS = {
         {"Name": "Starter Sword", "Cost": 5,
             "Info": [
                 {"Move name": "Stab", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-                {"Move name": "Slash", "Base damage": 3, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+                {"Move name": "Slash", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
                 {"Move name": "Jab", "Base damage": 4, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]},
         {"Name": "Starter Wand", "Cost": 5,
             "Info": [
@@ -65,17 +65,20 @@ POSSIBLE_WEAPONS = {
                 {"Move name": "Throw axe", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]}
     ],
     "Shop 1": [
-        {"Name": "Sword", "Cost": 10,
+        {"Name": "Fire sword", "Cost": 10,
             "Info": [
-                {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
-                {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
-                {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+                {"Move name": "Powerful stab", "Base damage": 10, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Powerful slash", "Base damage": 6, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
+                {"Move name": "Powerful jab", "Base damage": 8, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
+                {"Move name": "Fire stab", "Base damage": 6, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 3}
             ]},
-        {"Name": "Bow", "Cost": 10,
+        {"Name": "Wand", "Cost": 10,
             "Info": [
-                {"Move name": "Move 1", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
-                {"Move name": "Move 2", "Base damage": 2, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 2},
-                {"Move name": "Move 3", "Base damage": 7, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}]}
+                {"Move name": "Strong zap", "Base damage": 12, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Strong fireball", "Base damage": 10, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3},
+                {"Move name": "Powerful poke", "Base damage": 4, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
+                {"Move name": "Stab", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2}
+            ]}
     ]
 }
 
@@ -85,13 +88,19 @@ POSSIBLE_ARMOUR = {
         "Name": "Chainmail",
         "Cost": 5,
         "Weakness": ["None"],
-        "Strong against": ["Melee","Ranged"]
+        "Strong against": ["Ranged"]
     },
     {
-        "Name": "Knights Armour",
+        "Name": "Magic cloak",
         "Cost": 5,
-        "Weakness": ["Magic"],
-        "Strong against": ["Melee","Ranged"]
+        "Weakness": [],
+        "Strong against": ["Magic"]
+    },
+    {
+        "Name": "Metal armour",
+        "Cost": 5,
+        "Weakness": [],
+        "Strong against": ["Melee"]
     }
 ]}
 
@@ -334,6 +343,8 @@ def show_moves(weapon_info):
             print("---------------")
         print()
 
+# battle function for the game
+# takes the player area and gets the corrosponding enemies
 def battle(area):
     print()
     print("You are in a battle")
@@ -361,8 +372,11 @@ def battle(area):
         if enter_to_continue() == "restart":
             return "restart"
 
+    # battle loop
+    # starts with players turn and gets input for what to do
+    # then checks if player wins or lose
+    # then moves onto enemy moves and repeats untill something breaks the loop
     while True:
-
         # players turn
         if player["Stats"]["Health"] > 0:
             print("Enemy info")
@@ -412,8 +426,6 @@ def battle(area):
 
             weapon_info = player_equipment["Weapon"]["Info"]
 
-
-
             item_use = 0
             move_selection_max_length = 0
             if len(item_inventory) > 0:
@@ -433,7 +445,7 @@ def battle(area):
                 choose_move = int_error_detection("Choose move to attack the enemy: ", possible_move_list)
 
                 # item inventory menu
-                if choose_move == possible_move_list[-1]:
+                if choose_move == possible_move_list[-1] and move_selection_max_length == 2:
 
                     possible_item_list = []
                     for i in range(0, len(item_inventory)):
@@ -468,7 +480,7 @@ def battle(area):
                         break
 
                 # resting part
-                elif choose_move == possible_move_list[-2]:
+                elif choose_move == (len(possible_move_list)-move_selection_max_length+1):
                     if area == "tutorial":
                         print("You should attack the enemy")
                         time.sleep(1)
@@ -508,7 +520,7 @@ def battle(area):
 
                     for i in range(0, len(enemies)):
                         print("Type", i + 1, "to attack", enemies[i]["Name"])
-                    possible_enemy_select.append(i+1)
+                        possible_enemy_select.append(i+1)
 
                     choose_target = int_error_detection("Choose enemy: ", possible_enemy_select)
 
@@ -591,7 +603,6 @@ def battle(area):
         # changes the tutorial counter so the tutorial doesn't spam in your face
         tutorial_counter += 1
 
-
 # answers is a list
 # basic error detection for small inputs
 def int_error_detection(question, answers):
@@ -616,6 +627,7 @@ def int_error_detection(question, answers):
 
 def enter_shop(shop_area):
     global player_money
+
     print("You entered", shop_area)
 
     time.sleep(1)
@@ -701,8 +713,8 @@ def enter_shop(shop_area):
                         time.sleep(1)
 
                         player_spare_equipment["Weapons"].append(player_equipment["Weapon"])
-                        player_spare_equipment["Weapons"].pop(one_time_input)
                         player_equipment["Weapon"] = player_spare_equipment["Weapons"][one_time_input]
+                        player_spare_equipment["Weapons"].pop(one_time_input)
 
                     elif one_time_input > len(player_spare_equipment["Weapons"]):
                         # index the variable
@@ -714,8 +726,8 @@ def enter_shop(shop_area):
                         time.sleep(1)
 
                         player_spare_equipment["Armour"].append(player_equipment["Armour"])
-                        player_spare_equipment["Armour"].pop(one_time_input)
                         player_equipment["Armour"] = player_spare_equipment["Armour"][one_time_input]
+                        player_spare_equipment["Armour"].pop(one_time_input)
             else:
                 print("You do not have any spare equipment")
                 time.sleep(1)
@@ -744,6 +756,8 @@ def enter_shop(shop_area):
             while True:
                 print()
                 possible_purchases = []
+                print("Scroll up to view all weapons and armour")
+
                 for i in range(0, len(POSSIBLE_WEAPONS[shop_area])):
                     print("Type", i + 1, "to purchase", POSSIBLE_WEAPONS[shop_area][i]["Name"])
                     possible_purchases.append((i + 1))
@@ -1054,8 +1068,11 @@ def part_one():
 
     time.sleep(1.5)
 
-    if battle(player_area) == "Lost":
+    result = battle(player_area)
+    if result == "Lost":
         return
+    if result == "restart":
+        return "restart"
 
     player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["stubborn rogue sheep"])
     item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
@@ -1099,8 +1116,11 @@ def part_one():
         player_area = "forest 1"
 
     time.sleep(1.5)
-    if battle(player_area) == "Lost":
+    result = battle(player_area)
+    if result == "Lost":
         return
+    if result == "restart":
+        return "restart"
 
     if player_area == "forest 1":
         player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["wolf"])
@@ -1129,8 +1149,11 @@ def part_one():
     print("You are attacked by a goblin gang")
     time.sleep(1.5)
 
-    if battle(player_area) == "Lost":
+    result = battle(player_area)
+    if result == "Lost":
         return
+    if result == "restart":
+        return "restart"
     player_money += 7
     print("You got 7 dollars from defeating the goblin gang")
 
@@ -1160,8 +1183,11 @@ def part_one():
         elif one_time_input == 1:
             break
 
-    if battle(player_area) == "Lost":
+    result = battle(player_area)
+    if result == "Lost":
         return
+    if result == "restart":
+        return "restart"
 
     print("You defeated the goblin giant")
     player_money += 10
@@ -1223,12 +1249,16 @@ def part_two():
 
     player_area = "orc infested road"
 
-    if battle(player_area) == "Lost":
+    iresult = battle(player_area)
+    if result == "Lost":
         return
+    if result == "restart":
+        return "restart"
 
     part_two_complete = True
 
 def main_code():
+    global player_stats
 
     print("Start game")
 
@@ -1432,7 +1462,14 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
-
+#player_money = 99999
+#player_stats = POSSIBLE_CLASSES[0]
+#player_equipment["Weapon"] = POSSIBLE_WEAPONS["tutorial"][0]
+#player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
+#player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
+#item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
+#enter_shop("Shop 1")
+#battle("forest 1")
 
 while True:
     check_if_complete = main_code()
