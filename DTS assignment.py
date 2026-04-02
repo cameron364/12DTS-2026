@@ -79,7 +79,25 @@ POSSIBLE_WEAPONS = {
                 {"Move name": "Powerful poke", "Base damage": 4, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
                 {"Move name": "Stab", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2}
             ]}
-    ]
+    ],
+    "part 2 encounter": [
+        {"Name": "Legendary rock sword", "Cost": 50,
+            "Info": [
+                {"Move name": "Super powerful stab", "Base damage": 20, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Super powerful slash", "Base damage": 12, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Super powerful jab", "Base damage": 16, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2},
+                {"Move name": "Heavy rock attack", "Base damage": 20, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Heavy rock fall", "Base damage": 20, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3}
+            ]},
+        {"Name": "Legendary snow sword", "Cost": 50,
+            "Info": [
+                {"Move name": "Super powerful stab", "Base damage": 20, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Super powerful slash", "Base damage": 12, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 1},
+                {"Move name": "Super powerful jab", "Base damage": 16, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2},
+                {"Move name": "Magic snowball", "Base damage": 20, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Magic avalanche", "Base damage": 20, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3}
+            ]}
+    ],
 }
 
 POSSIBLE_ARMOUR = {
@@ -169,6 +187,82 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
+    "cave 1": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Golemite",
+         "Stats": {"Health": 30, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee"]},
+         "Moves": [
+             {"Move name": "Rock smack", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Rock fall", "Base damage": 8, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic rock attack", "Base damage": 8, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
+    "mountain 1": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Cougar",
+         "Stats": {"Health": 25, "Stamina": 0, "Weakness": ["Ranged"], "Strong against": ["Melee"]},
+         "Moves": [
+             {"Move name": "Vicious scratch", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Snowball", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic snowball", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
+    "cave": {"Max num of enemies": 4, "Min num of enemies": 2, "Enemies": [
+        {"Name": "Golemite",
+         "Stats": {"Health": 30, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee"]},
+         "Moves": [
+             {"Move name": "Rock smack", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Rock fall", "Base damage": 8, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic rock attack", "Base damage": 8, "Type": "Magic", "Stamina use": 0}
+         ]
+         },
+        {"Name": "Diamond golemite",
+         "Stats": {"Health": 40, "Stamina": 0, "Weakness": ["Melee"], "Strong against": ["Magic"]},
+         "Moves": [
+             {"Move name": "Diamond smack", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Diamond fall", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic diamond attack", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
+    "mountain": {"Max num of enemies": 4, "Min num of enemies": 2, "Enemies": [
+        {"Name": "Cougar",
+         "Stats": {"Health": 25, "Stamina": 0, "Weakness": ["Ranged"], "Strong against": ["Melee"]},
+         "Moves": [
+             {"Move name": "Vicious scratch", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Snowball", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic snowball", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+         ]
+         },
+        {"Name": "Snow leapord",
+         "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Melee"], "Strong against": ["Magic"]},
+         "Moves": [
+             {"Move name": "Vicious scratch", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Snowball", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic snowball", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
+    "cave final": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Golem",
+         "Stats": {"Health": 70, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
+         "Moves": [
+             {"Move name": "Heavy rock smack", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Heavy rock fall", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Strong magic rock attack", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
+    "mountain final": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Yeti",
+         "Stats": {"Health": 60, "Stamina": 0, "Weakness": ["Ranged"], "Strong against": ["Melee","Magic"]},
+         "Moves": [
+             {"Move name": "Powerful punch", "Base damage": 12, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Big snowball", "Base damage": 12, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Ice ball", "Base damage": 12, "Type": "Magic", "Stamina use": 0}
+         ]
+         }
+    ]},
     "orc infested road": {"Max num of enemies": 5, "Min num of enemies": 4, "Enemies": [
         {"Name": "Big orc",
          "Stats": {"Health": 30, "Stamina": 14, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
@@ -240,7 +334,9 @@ POSSIBLE_ENEMIES = {
 # enemy name(same as the possible enemy list) : {"Name" gives the name of drop, cost gives cost}
 POSSIBLE_ENEMIES_DROPS = {
     "stubborn rogue sheep": {"Name": "Sheep skin", "Cost": 2},
-    "wolf": {"Name": "Wolf skin", "Cost": 5}
+    "wolf": {"Name": "Wolf skin", "Cost": 5},
+    "golemite": {"Name": "Diamond", "Cost": 30},
+    "cougar and wolf skin": {"Name": "Cougar and wolf skin skin", "Cost": 30}
                           }
 
 # variables
@@ -1234,12 +1330,87 @@ def part_two():
     if one_use_answer == "restart":
         return "restart"
 
+    # caves path
     elif one_use_answer == 1:
-        # caves path
-        pass
+        print("You go down the steep path way leading to the caves")
+        time.sleep(1.5)
+        print("As you enter the cave entrance you are attack by a little golemite")
+        time.sleep(1.5)
+        player_area = "caves 1"
+        result = battle(player_area)
+        if result == "Lost":
+            return
+        if result == "restart":
+            return "restart"
+
+        player_area = "caves"
+        for i in range(0,2):
+            print("You continue following the path")
+            time.sleep(1.5)
+            result = battle(player_area)
+            if result == "Lost":
+                return
+            if result == "restart":
+                return "restart"
+            player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["golemite"])
+            print("You got a diamond from the golemite")
+            time.sleep(1.5)
+
+        print("You continue following the path")
+        time.sleep(1.5)
+        print("As you reach the end of the path a golem attacks you")
+        time.sleep(1.5)
+        player_area = "caves final"
+        result = battle(player_area)
+        if result == "Lost":
+            return
+        if result == "restart":
+            return "restart"
+        print("You got the legendary rock sword")
+        time.sleep(1)
+        print("You put it into your spare equipment")
+        player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][0])
+
+    # mountain path
     elif one_use_answer == 2:
-        # mountain path
-        pass
+        print("You go up the steep path way leading to the mountain top")
+        time.sleep(1.5)
+        print("As you walk the treacherous path you are attacked by a cougar")
+        time.sleep(1.5)
+        player_area = "mountain 1"
+
+        result = battle(player_area)
+        if result == "Lost":
+            return
+        if result == "restart":
+            return "restart"
+
+        player_area = "mountain"
+        for i in range(0, 2):
+            print("You continue following the path")
+            time.sleep(1.5)
+            result = battle(player_area)
+            if result == "Lost":
+                return
+            if result == "restart":
+                return "restart"
+            player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["cougar and wolf skin"])
+            print("You got a cougar and wolf skin from the golemite")
+
+        print("You continue following the path")
+        time.sleep(1.5)
+        print("As you reach the end of the path a yeti attacks you")
+        time.sleep(1.5)
+        player_area = "mountain final"
+        result = battle(player_area)
+        if result == "Lost":
+            return
+        if result == "restart":
+            return "restart"
+        print("You got the legendary snow sword")
+        time.sleep(1)
+        print("You put it into your spare equipment")
+        player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][1])
 
     time.sleep(1.5)
     print("You continue following the path")
@@ -1254,6 +1425,8 @@ def part_two():
         return
     if result == "restart":
         return "restart"
+
+    print("somethhthitiotoih")
 
     part_two_complete = True
 
