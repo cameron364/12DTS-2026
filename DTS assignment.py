@@ -29,7 +29,7 @@ player_drop_inventory = []
 
 item_inventory = []
 
-DAMAGE_VALUES = {"Normal": 1, "Strong": 1.5, "Weak": 0.5}
+DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
 
 POSSIBLE_ITEMS = {
     "Shop 1": [
