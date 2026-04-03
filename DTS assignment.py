@@ -390,7 +390,6 @@ POSSIBLE_ENEMIES = {
     ]}
 }
 
-# enemy name(same as the possible enemy list) : {"Name" gives the name of drop, cost gives cost}
 POSSIBLE_ENEMIES_DROPS = {
     "stubborn rogue sheep": {"Name": "Sheep skin", "Cost": 2},
     "wolf": {"Name": "Wolf skin", "Cost": 5},
@@ -1170,8 +1169,8 @@ def enter_shop(shop_area):
                         last_number = 0
 
                     for i in range(0, len(player_drop_inventory)):
-                        print("Type", i+1, player_drop_inventory[i]["Name"], "sells for", player_drop_inventory[i]["Cost"], "dollars")
-                        possible_item_sell.append(i+1)
+                        print("Type", last_number+i+1, player_drop_inventory[i]["Name"], "sells for", player_drop_inventory[i]["Cost"], "dollars")
+                        possible_item_sell.append(last_number+i+1)
 
                     print("Type", possible_item_sell[-1] + 1, "to not sell anything and leave this menu")
                     possible_item_sell.append((possible_item_sell[-1] + 1))
@@ -1885,6 +1884,10 @@ def restart_game():
     complete_game = False
 
 # ----------------------- Main code -----------------------
+
+item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
+player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["bbq ribs"])
+enter_shop("Shop 1")
 
 # the loop so it can reset and when players die can replay
 while True:
