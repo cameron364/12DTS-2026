@@ -35,6 +35,11 @@ POSSIBLE_ITEMS = {
     "Shop 1": [
         {"Name": "Apple", "Healing amount": 5, "Cost": 5},
         {"Name": "Banana", "Healing amount": 7, "Cost": 7},
+    ],
+    "Shop 2": [
+        {"Name": "Big apple", "Healing amount": 15, "Cost": 10},
+        {"Name": "Big banana", "Healing amount": 20, "Cost": 15},
+        {"Name": "Big apple and big banana", "Healing amount": 35, "Cost": 20}
     ]
 }
 
@@ -62,7 +67,9 @@ POSSIBLE_WEAPONS = {
         {"Name": "Starter Axe", "Cost": 5,
             "Info": [
                 {"Move name": "Cut", "Base damage": 5, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2},
-                {"Move name": "Throw axe", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}]}
+                {"Move name": "Axe spin", "Base damage": 5, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 3},
+                {"Move name": "Throw axe", "Base damage": 5, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 2}
+            ]}
     ],
     "Shop 1": [
         {"Name": "Fire sword", "Cost": 10,
@@ -98,6 +105,28 @@ POSSIBLE_WEAPONS = {
                 {"Move name": "Magic avalanche", "Base damage": 20, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3}
             ]}
     ],
+    "Shop 2": [
+        {"Name": "Big bow", "Cost": 50,
+            "Info": [
+                {"Move name": "Powerful arrow shot", "Base damage": 18, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 1},
+                {"Move name": "Arrow rain", "Base damage": 10, "Hit multi enemy": True, "Type": "Ranged", "Stamina use": 1},
+                {"Move name": "Magic arrow", "Base damage": 18, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Arrow stab", "Base damage": 12, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 2}
+            ]},
+        {"Name": "Big sword", "Cost": 50,
+            "Info": [
+                {"Move name": "Super duper powerful stab", "Base damage": 26, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3},
+                {"Move name": "Super duper powerful slash", "Base damage": 20, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 3},
+                {"Move name": "Super duper powerful jab", "Base damage": 22, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3}
+            ]},
+        {"Name": "Big wand", "Cost": 50,
+            "Info": [
+                {"Move name": "Big zap", "Base damage": 22, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 2},
+                {"Move name": "Big fireball", "Base damage": 20, "Hit multi enemy": True, "Type": "Magic", "Stamina use": 3},
+                {"Move name": "Powerful jab", "Base damage": 16, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
+                {"Move name": "Powerful stab", "Base damage": 18, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
+            ]}
+    ]
 }
 
 POSSIBLE_ARMOUR = {
@@ -119,8 +148,28 @@ POSSIBLE_ARMOUR = {
         "Cost": 5,
         "Weakness": [],
         "Strong against": ["Melee"]
-    }
-]}
+    }],
+    "Shop 2": [
+        {
+        "Name": "Strong armour",
+        "Cost": 50,
+        "Weakness": ["Magic"],
+        "Strong against": ["Melee","Ranged"]
+        },
+        {
+        "Name": "Strong cloak",
+        "Cost": 50,
+        "Weakness": ["Melee"],
+        "Strong against": ["Magic","Ranged"]
+        },
+        {
+        "Name": "Heavy armour",
+        "Cost": 50,
+        "Weakness": ["Ranged"],
+        "Strong against": ["Melee","Magic"]
+        }
+    ]
+}
 
 POSSIBLE_ENEMIES = {
     "tutorial": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
@@ -263,7 +312,7 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "orc infested road": {"Max num of enemies": 5, "Min num of enemies": 4, "Enemies": [
+    "orc road": {"Max num of enemies": 5, "Min num of enemies": 4, "Enemies": [
         {"Name": "Big orc",
          "Stats": {"Health": 30, "Stamina": 14, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
@@ -1415,18 +1464,21 @@ def part_two():
     time.sleep(1.5)
     print("You continue along the path")
     time.sleep(1.5)
-    print("However, there seems to be a pack of orcs hunting you down!")
+    print("You reach the next _______ town")
     time.sleep(1.5)
+    print("There also seems to be a shop here too")
 
-    player_area = "orc infested road"
-
-    iresult = battle(player_area)
-    if result == "Lost":
-        return
-    if result == "restart":
+    if enter_to_continue() == "restart":
         return "restart"
 
-    print("somethhthitiotoih")
+    print("Type 1 - go the shop")
+    print("Type 2 - continue the quest")
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    if one_use_answer == "restart":
+        return "restart"
+    elif one_use_answer == 1:
+        enter_shop("Shop 2")
 
     part_two_complete = True
 
@@ -1598,6 +1650,14 @@ def main_code():
         if part_two() == "restart":
             return "restart"
 
+    print("It is getting late. You decide to go the _____ to rest.")
+    time.sleep(2)
+
+    print("In the morning you leave the town and continue on the main road.")
+    time.sleep(1.5)
+
+    print("end so far")
+
 
     while part_four_complete == False:
         pass
@@ -1641,7 +1701,7 @@ def restart_game():
 #player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
 #player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
 #item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-#enter_shop("Shop 1")
+#enter_shop("Shop 2")
 #battle("forest 1")
 
 while True:
