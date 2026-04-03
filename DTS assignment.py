@@ -33,16 +33,16 @@ DAMAGE_VALUES = {"Normal": 1, "Strong": 1.5, "Weak": 0.5}
 
 POSSIBLE_ITEMS = {
     "Shop 1": [
-        {"Name": "Apple", "Healing amount": 5, "Cost": 5},
-        {"Name": "Banana", "Healing amount": 7, "Cost": 7},
+        {"Name": "Apple", "Healing amount": 15, "Cost": 2},
+        {"Name": "Banana", "Healing amount": 20, "Cost": 5},
     ],
     "Shop 2": [
-        {"Name": "Big apple", "Healing amount": 15, "Cost": 10},
-        {"Name": "Big banana", "Healing amount": 20, "Cost": 15},
-        {"Name": "Big apple and big banana", "Healing amount": 35, "Cost": 20}
+        {"Name": "Big apple", "Healing amount": 25, "Cost": 10},
+        {"Name": "Big banana", "Healing amount": 30, "Cost": 15},
+        {"Name": "Big apple and big banana", "Healing amount": 55, "Cost": 20}
     ],
     "Goalum": [
-        {"Name": "Big apple and big banana and big orange", "Healing amount": 70, "Cost": 40},
+        {"Name": "Big apple and big banana and big orange", "Healing amount": 100, "Cost": 40},
         {"Name": "Rotten apple", "Healing amount": 1, "Cost": 100}
     ]
 }
@@ -81,7 +81,7 @@ POSSIBLE_WEAPONS = {
                 {"Move name": "Powerful stab", "Base damage": 10, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 1},
                 {"Move name": "Powerful slash", "Base damage": 6, "Hit multi enemy": True, "Type": "Melee", "Stamina use": 2},
                 {"Move name": "Powerful jab", "Base damage": 8, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
-                {"Move name": "Fire stab", "Base damage": 6, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 3}
+                {"Move name": "Fire stab", "Base damage": 10, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 3}
             ]},
         {"Name": "Wand", "Cost": 10,
             "Info": [
@@ -284,7 +284,7 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "cave": {"Max num of enemies": 4, "Min num of enemies": 2, "Enemies": [
+    "cave": {"Max num of enemies": 3, "Min num of enemies": 2, "Enemies": [
         {"Name": "Golemite",
          "Stats": {"Health": 30, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee"]},
          "Moves": [
@@ -302,7 +302,7 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "mountain": {"Max num of enemies": 4, "Min num of enemies": 2, "Enemies": [
+    "mountain": {"Max num of enemies": 3, "Min num of enemies": 2, "Enemies": [
         {"Name": "Cougar",
          "Stats": {"Health": 25, "Stamina": 0, "Weakness": ["Ranged"], "Strong against": ["Melee"]},
          "Moves": [
@@ -656,10 +656,14 @@ def battle(area):
                     return "restart"
 
                 # move selected
-                else:
+                elif player_equipment["Weapon"]["Info"][choose_move-1]["Stamina use"] <= player["Stats"]["Stamina"]:
                     choose_move -= 1
                     choose_move = player_equipment["Weapon"]["Info"][choose_move]
                     break
+                else:
+                    print("Not enough stamina to use this move")
+                    if enter_to_continue() == "restart":
+                        return "restart"
 
             # checks what you are doing and does calculation
             if choose_move == "Rest":
@@ -744,12 +748,12 @@ def battle(area):
         print("~~~~~~~~~~~~")
         print("Enemies turn")
         print("~~~~~~~~~~~~")
-        time.sleep(1.5)
+
+        if enter_to_continue() == "restart":
+            return "restart"
 
         # enemy ai
         for i in range(0, len(enemies)):
-            if enter_to_continue() == "restart":
-                return "restart"
 
             # enemy ai for 1 enemy
             # check if enemy is alive
@@ -1384,7 +1388,7 @@ def part_two():
     global player_money
     global part_two_complete
 
-    print("In the morning as leave the town you notice a shop.")
+    print("In the morning as you leave the town, you notice a shop.")
     time.sleep(1.5)
 
     print("There seems to be a shop that you can stock up on equipment.")
@@ -1435,6 +1439,9 @@ def part_two():
         for i in range(0,2):
             print("You continue following the path")
             time.sleep(1.5)
+            print("You are attacked")
+            if one_use_answer == "restart":
+                return "restart"
             result = battle(player_area)
             if result == "Lost":
                 return
@@ -1477,6 +1484,9 @@ def part_two():
         for i in range(0, 2):
             print("You continue to follow the path.")
             time.sleep(1.5)
+            print("You are attacked")
+            if one_use_answer == "restart":
+                return "restart"
             result = battle(player_area)
             if result == "Lost":
                 return
@@ -1513,7 +1523,7 @@ def part_three():
     global part_three_complete
 
 
-    print("In the morning as leave the city you notice a shop.")
+    print("In the morning as you leave the city, you notice a shop.")
     time.sleep(1.5)
 
     if enter_to_continue() == "restart":
@@ -1549,6 +1559,10 @@ def part_three():
         print("You continue on through Moredoor.")
         time.sleep(1.5)
         print("You are attacked by a group of orcs")
+
+        if one_use_answer == "restart":
+            return "restart"
+
         player_area = "orc road 1"
         result = battle(player_area)
         if result == "Lost":
@@ -1847,15 +1861,6 @@ def restart_game():
     complete_game = False
 
 # ----------------------- Main code -----------------------
-
-#player_money = 10000
-#player_stats = POSSIBLE_CLASSES[0]
-#player_equipment["Weapon"] = POSSIBLE_WEAPONS["tutorial"][0]
-#player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
-#player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
-#item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-#enter_shop("Goalum")
-#battle("forest 1")
 
 while True:
     check_if_complete = main_code()
