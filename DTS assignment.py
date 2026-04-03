@@ -414,11 +414,16 @@ player_money = 0
 complete_game = False
 
 # ----------------------- Functions -----------------------
+
+# quit game function
+# uses the built in quit function
 def quit_game():
     print("Quitting game")
     time.sleep(1)
     quit()
 
+# gets input. Checks if the input is restart or quit then it will continue
+# if it is quit or restart it will run quit/restart code
 def enter_to_continue():
     print()
     choice = input("Press enter to continue: ")
@@ -430,6 +435,9 @@ def enter_to_continue():
         return "restart"
     print()
 
+# does the calculation from enemies and players
+# gets who is attacked(thing), which move is used and whos turn
+# if it is the players turn it will run a certain calculation and if it is the enemies it will run a different one
 def damage_calculate(thing, move, turn):
     if turn == "Player":
         print("---------------------")
@@ -479,6 +487,9 @@ def damage_calculate(thing, move, turn):
     if enter_to_continue() == "restart":
         return "restart"
 
+# gets the weapon info
+# prints out the move list
+# prints out other possible options
 def show_moves(weapon_info):
     for i in range(0, len(weapon_info)):
         print("Type", i + 1, "for")
@@ -800,6 +811,9 @@ def int_error_detection(question, answers):
             else:
                 print("Not an integer")
 
+# gets the area of the shop
+# uses list and the function above to do all of the input
+# uses pop and append for changing the lists
 def enter_shop(shop_area):
     global player_money
 
@@ -1204,6 +1218,8 @@ def enter_shop(shop_area):
             break
         print()
 
+# prints out the weapons move
+# uses a for loop to print out the moves stats
 def print_weapon_stats(weapon):
     for y in range(0, len(weapon["Info"])):
         weapon_info = weapon["Info"][y]
@@ -1212,6 +1228,8 @@ def print_weapon_stats(weapon):
               weapon_info["Stamina use"], "| Move type -", weapon_info["Type"])
     print()
 
+# same as the weapon print
+# uses 2 for loop and prints out weakness and strengths
 def print_armour_stats(armour):
     print("Weakness: ", end='')
     for i in range(0,len(armour["Weakness"])):
@@ -1222,6 +1240,8 @@ def print_armour_stats(armour):
         print(armour["Strong against"][i], "", end='')
     print()
 
+# section one of the game
+# lots of print statements and calling previously declared functions eg battle, enter to continue
 def part_one():
     global player_area
     global part_one_complete
@@ -1383,6 +1403,7 @@ def part_one():
     # end of part one
     part_one_complete = True
 
+# section two of the game
 def part_two():
     global player_area
     global player_money
@@ -1517,6 +1538,7 @@ def part_two():
 
     part_two_complete = True
 
+# section three of the game
 def part_three():
     global player_area
     global player_money
@@ -1595,6 +1617,7 @@ def part_three():
         return "restart"
     part_three_complete = True
 
+# section four of the game
 def part_four():
     global player_area
     global part_four_complete
@@ -1651,6 +1674,7 @@ def part_four():
 
     part_four_complete = True
 
+# main code that houses all of the other function etc
 def main_code():
     global player_stats
 
@@ -1831,7 +1855,7 @@ def main_code():
 
     return "complete game"
 
-
+# resets all the variables to what they were at the start of the program
 def restart_game():
     global player_stats
     global player_equipment
@@ -1862,6 +1886,7 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
+# the loop so it can reset and when players die can replay
 while True:
     check_if_complete = main_code()
 
