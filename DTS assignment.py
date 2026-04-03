@@ -1885,10 +1885,6 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
-item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["bbq ribs"])
-enter_shop("Shop 1")
-
 # the loop so it can reset and when players die can replay
 while True:
     check_if_complete = main_code()
