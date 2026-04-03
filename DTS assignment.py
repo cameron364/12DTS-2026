@@ -1405,14 +1405,14 @@ def part_two():
         time.sleep(1.5)
         print("As you enter the cave entrance, you are attacked by a little golemite.")
         time.sleep(1.5)
-        player_area = "caves 1"
+        player_area = "cave 1"
         result = battle(player_area)
         if result == "Lost":
             return
         if result == "restart":
             return "restart"
 
-        player_area = "caves"
+        player_area = "cave"
         for i in range(0,2):
             print("You continue following the path")
             time.sleep(1.5)
@@ -1429,7 +1429,7 @@ def part_two():
         time.sleep(1.5)
         print("As you reach the end of the path, a golem attacks you.")
         time.sleep(1.5)
-        player_area = "caves final"
+        player_area = "cave final"
         result = battle(player_area)
         if result == "Lost":
             return
