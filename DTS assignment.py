@@ -40,6 +40,10 @@ POSSIBLE_ITEMS = {
         {"Name": "Big apple", "Healing amount": 15, "Cost": 10},
         {"Name": "Big banana", "Healing amount": 20, "Cost": 15},
         {"Name": "Big apple and big banana", "Healing amount": 35, "Cost": 20}
+    ],
+    "Goalum": [
+        {"Name": "Big apple and big banana and big orange", "Healing amount": 70, "Cost": 40},
+        {"Name": "Rotten apple", "Healing amount": 1, "Cost": 100}
     ]
 }
 
@@ -126,6 +130,14 @@ POSSIBLE_WEAPONS = {
                 {"Move name": "Powerful jab", "Base damage": 16, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 3},
                 {"Move name": "Powerful stab", "Base damage": 18, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 3}
             ]}
+    ],
+    "Goalum": [
+        {"Name": "Goalum's stick", "Cost": 1,
+            "Info": [
+                {"Move name": "Stick slap", "Base damage": 1, "Hit multi enemy": False, "Type": "Melee", "Stamina use": 0},
+                {"Move name": "Throw stick", "Base damage": 1, "Hit multi enemy": False, "Type": "Ranged", "Stamina use": 0},
+                {"Move name": "Magic stick attack", "Base damage": 1, "Hit multi enemy": False, "Type": "Magic", "Stamina use": 0}
+            ]}
     ]
 }
 
@@ -168,7 +180,23 @@ POSSIBLE_ARMOUR = {
         "Weakness": ["Ranged"],
         "Strong against": ["Melee","Magic"]
         }
-    ]
+    ],
+    "part 3 encounter": [
+        {
+        "Name": "Cloak invincibility",
+        "Cost": 1000,
+        "Weakness": [],
+        "Strong against": ["Melee","Ranged","Magic"]
+        }
+    ],
+    "Goalum": [
+        {
+        "Name": "Goalum's musty shirt",
+        "Cost": 1,
+        "Weakness": ["Melee","Ranged","Magic"],
+        "Strong against": []
+        }
+    ],
 }
 
 POSSIBLE_ENEMIES = {
@@ -312,71 +340,53 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "orc road": {"Max num of enemies": 5, "Min num of enemies": 4, "Enemies": [
+    "orc road 1": {"Max num of enemies": 5, "Min num of enemies": 3, "Enemies": [
         {"Name": "Big orc",
          "Stats": {"Health": 30, "Stamina": 14, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Punch", "Base damage": 4, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Club", "Base damage": 8, "Type": "Melee", "Stamina use": 2},
-             {"Move name": "Powerful kick", "Base damage": 8, "Type": "Ranged", "Stamina use": 2}
+             {"Move name": "Punch", "Base damage": 20, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 26, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Powerful kick", "Base damage": 22, "Type": "Ranged", "Stamina use": 2}
          ]
          },
         {"Name": "Small orc",
          "Stats": {"Health": 15, "Stamina": 20, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Punch", "Base damage": 2, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Club", "Base damage": 8, "Type": "Melee", "Stamina use": 2},
-             {"Move name": "Kick", "Base damage": 6, "Type": "Ranged", "Stamina use": 2}
+             {"Move name": "Punch", "Base damage": 16, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 20, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Kick", "Base damage": 18, "Type": "Ranged", "Stamina use": 2}
          ]
          },
         {"Name": "Orc with a bow",
          "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Shoot an arrow", "Base damage": 4, "Type": "Ranged", "Stamina use": 0}
+             {"Move name": "Shoot an arrow", "Base damage": 20, "Type": "Ranged", "Stamina use": 0}
          ]
          },
         {"Name": "Orc with a sword",
          "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Slash", "Base damage": 4, "Type": "Melee", "Stamina use": 0}
+             {"Move name": "Slash", "Base damage": 20, "Type": "Melee", "Stamina use": 0}
+         ]}]},
+    "orc road final": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Sourman",
+         "Stats": {"Health": 100, "Stamina": 0, "Weakness": ["Melee", "Ranged"], "Strong against": ["Magic"]},
+         "Moves": [
+             {"Move name": "Lighting", "Base damage": 30, "Type": "Magic", "Stamina use": 0},
+             {"Move name": "Ice bolt", "Base damage": 30, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Boulder smash", "Base damage": 30, "Type": "Melee", "Stamina use": 0}
          ]
-         },
+         }
     ]},
-    "Area test 1": {"Max num of enemies": 3, "Enemies": [
-        {"Name": "test1",
-         "Stats": {"Health": 10, "Stamina": 5, "Weakness": ["Melee"], "Strong against": ["Ranged"]},
+    "final fight": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
+        {"Name": "Zauron",
+         "Stats": {"Health": 100, "Stamina": 0, "Weakness": [], "Strong against": []},
          "Moves": [
-             {"Move name": "Move 1", "Base damage": 3, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Move 2", "Base damage": 6, "Type": "Melee", "Stamina use": 1},
-             {"Move name": "Move 3", "Base damage": 9, "Type": "Melee", "Stamina use": 2}
+             {"Move name": "Super duper powerful ultimate slash", "Base damage": 100, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Super duper powerful ultimate jab", "Base damage": 100, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Super duper powerful ultimate fireball", "Base damage": 100, "Type": "Magic", "Stamina use": 0}
          ]
-         },
-        {"Name": "test2",
-         "Stats": {"Health": 20, "Stamina": 10, "Weakness": ["Melee"], "Strong against": ["Ranged"]},
-         "Moves": [
-             {"Move name": "Move 1", "Base damage": 3, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Move 2", "Base damage": 6, "Type": "Ranged", "Stamina use": 1},
-             {"Move name": "Move 3", "Base damage": 9, "Type": "Ranged", "Stamina use": 2}
-         ]
-         },
-    ]},
-    "Area test 2": {"Max num of enemies": 3, "Enemies": [
-        {"Name": "test3",
-         "Stats": {"Health": 10, "Stamina": 5, "Weakness": ["Melee"], "Strong against": ["Melee"]},
-         "Moves": [
-             {"Move name": "Move 1", "Base damage": 6, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Move 2", "Base damage": 9, "Type": "Melee", "Stamina use": 1},
-             {"Move name": "Move 3", "Base damage": 12, "Type": "Melee", "Stamina use": 2}
-         ]
-         },
-        {"Name": "test4",
-         "Stats": {"Health": 20, "Stamina": 10, "Weakness": ["Ranged"], "Strong against": ["Melee"]},
-         "Moves": [
-             {"Move name": "Move 1", "Base damage": 6, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Move 2", "Base damage": 9, "Type": "Ranged", "Stamina use": 1},
-             {"Move name": "Move 3", "Base damage": 12, "Type": "Ranged", "Stamina use": 2}
-         ]
-         },
+         }
     ]}
 }
 
@@ -566,6 +576,16 @@ def battle(area):
                 print("When you use a move it will deplete your stamina")
                 print("Different moves require different amounts stamina to use")
                 print("You can rest to gain some stamina back")
+                if enter_to_continue() == "restart":
+                    return "restart"
+            elif area == "orc road final" and tutorial_counter == 0:
+                print("You should probably heal")
+                print("Sourman does a lot of damage")
+                if enter_to_continue() == "restart":
+                    return "restart"
+            elif area == "final fight" and tutorial_counter == 0:
+                print("You should probably heal")
+                print("Zauron does a lot of damage")
                 if enter_to_continue() == "restart":
                     return "restart"
 
@@ -1418,7 +1438,7 @@ def part_two():
         print("You got the legendary rock sword.")
         time.sleep(1)
         print("You put it into your spare equipment.")
-        player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][0])
+        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encouter"][0])
 
     # mountain path
     elif one_use_answer == 2:
@@ -1459,12 +1479,12 @@ def part_two():
         print("You got the legendary snow sword.")
         time.sleep(1)
         print("You put it into your spare equipment.")
-        player_spare_equipment.append(POSSIBLE_WEAPONS["part 2 encouter"][1])
+        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encouter"][1])
 
     time.sleep(1.5)
     print("You continue along the path")
     time.sleep(1.5)
-    print("You reach the next _______ town")
+    print("You reach the next Condor city")
     time.sleep(1.5)
     print("There also seems to be a shop here too")
 
@@ -1481,6 +1501,118 @@ def part_two():
         enter_shop("Shop 2")
 
     part_two_complete = True
+
+def part_three():
+    global player_area
+    global player_money
+    global part_three_complete
+
+    print("You trudge on the main road for hours.")
+    time.sleep(1.5)
+    print("You have reached the Gates of Moredoor.")
+    time.sleep(1.5)
+
+    print("As you step in, you are attacked by some orcs patrolling the area.")
+    time.sleep(1.5)
+
+    player_area = "orc road 1"
+    result = battle(player_area)
+    if result == "Lost":
+        return
+    if result == "restart":
+        return "restart"
+
+    for i in range(0,2):
+        print("You continue on through Moredoor.")
+        time.sleep(1.5)
+        print("You are attacked by a group of orcs")
+        player_area = "orc road 1"
+        result = battle(player_area)
+        if result == "Lost":
+            return
+        if result == "restart":
+            return "restart"
+
+    print("You are nearly at Mount Dooom.")
+    time.sleep(1.5)
+    print("However the evil wizard Sourman is blocking your way")
+    print()
+
+    print("Are you ready to fight")
+    print("Type 1 - to fight")
+    print("Type 2 - to bargain")
+
+    one_use_answer = int_error_detection(": ", [1, 2])
+    print("You are attacked by Sourman anyway.")
+
+    player_area = "orc road final"
+    result = battle(player_area)
+    if result == "Lost":
+        return
+    if result == "restart":
+        return "restart"
+
+    print("You got the Cloak of invinicibility")
+    player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["part 3 encounter"][0])
+    if enter_to_continue() == "restart":
+        return "restart"
+    part_two_complete = True
+
+def part_four():
+    global player_area
+    global part_four_complete
+
+    print("As you awake from you nap a little dude named Goalum is selling some goods")
+
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    print("Type 1 - see what Goalum is selling")
+    print("Type 2 - ingore him")
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    if one_use_answer == "restart":
+        return "restart"
+    elif one_use_answer == 1:
+        enter_shop("Goalum")
+    elif one_use_answer == 2:
+        print("You ignored him and continued on with the quest")
+
+    time.sleep(1.5)
+    print("You climbed up Mount Dooom and reached the entrance to the volcano.")
+    time.sleep(1.5)
+    print("However Zauron is blocking the way")
+    print()
+
+    print("Are you ready to fight him.")
+    print("Type 1 - yes")
+    print("Type 2 - yes")
+    one_use_answer = int_error_detection(": ", [1, 2])
+
+    player_area = "final fight"
+
+    result = battle(player_area)
+    if result == "Lost":
+        return
+    if result == "restart":
+        return "restart"
+
+    print("You defeat Zauron")
+    if enter_to_continue() == "restart":
+        return "restart"
+
+    print("You walk closer to the pit of lava.")
+    time.sleep(1.5)
+    print("Drop the ring.")
+    print("Type 1 - yes")
+    print("Type 2 - no")
+    one_use_answer = int_error_detection(": ", [1, 2])
+    if one_use_answer == 1:
+        print("You dropped the ring and save Centre Earth.")
+    elif one_use_answer == 2:
+        print("You took the ring and conquered Centre Earth")
+
+    part_four_complete = True
 
 def main_code():
     global player_stats
@@ -1650,20 +1782,24 @@ def main_code():
         if part_two() == "restart":
             return "restart"
 
-    print("It is getting late. You decide to go the _____ to rest.")
+    print("It is getting late. You decide to camp on the outskirts of Condor to rest.")
     time.sleep(2)
 
-    print("In the morning you leave the town and continue on the main road.")
+    print("In the morning you leave the city and continue on the main road.")
     time.sleep(1.5)
 
-    print("end so far")
+    while part_three_complete == False:
+        if part_three() == "restart":
+            return "restart"
 
+    print("You have quick nap at the base of Mount Dooom")
 
     while part_four_complete == False:
-        pass
-        # do the same with the part two etc here
+        if part_four() == "restart":
+            return "restart"
 
-    # after all parts complete it will return main code to "complete game"
+    return "complete game"
+
 
 def restart_game():
     global player_stats
@@ -1701,7 +1837,7 @@ def restart_game():
 #player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
 #player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["Shop 1"][0])
 #item_inventory.append(POSSIBLE_ITEMS["Shop 1"][0])
-#enter_shop("Shop 2")
+#enter_shop("Goalum")
 #battle("forest 1")
 
 while True:
@@ -1711,6 +1847,17 @@ while True:
         print("restarting")
         time.sleep(2)
     elif check_if_complete == "complete game":
+        time.sleep(2)
         print("You completed the game")
-        break
+
+        print()
+        time.sleep(2)
+        print("Do you want to restart the game. It will quit if you chose no")
+        print("Type 1 - yes")
+        print("Type 2 - no")
+        one_time_input = int_error_detection(":", [1,2])
+        if one_time_input == 1:
+            restart_game()
+        elif one_time_input == 2:
+            break
 
