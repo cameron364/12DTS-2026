@@ -29,7 +29,7 @@ player_drop_inventory = []
 
 item_inventory = []
 
-DAMAGE_VALUES = {"Normal": 1, "Strong": 2, "Weak": 0.5}
+DAMAGE_VALUES = {"Normal": 1, "Strong": 1.5, "Weak": 0.5}
 
 POSSIBLE_ITEMS = {
     "Shop 1": [
@@ -183,7 +183,7 @@ POSSIBLE_ARMOUR = {
     ],
     "part 3 encounter": [
         {
-        "Name": "Cloak invincibility",
+        "Name": "Cloak of partial invincibility",
         "Cost": 1000,
         "Weakness": [],
         "Strong against": ["Melee","Ranged","Magic"]
@@ -288,17 +288,17 @@ POSSIBLE_ENEMIES = {
         {"Name": "Golemite",
          "Stats": {"Health": 30, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee"]},
          "Moves": [
-             {"Move name": "Rock smack", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Rock fall", "Base damage": 8, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Magic rock attack", "Base damage": 8, "Type": "Magic", "Stamina use": 0}
+             {"Move name": "Rock smack", "Base damage": 6, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Rock fall", "Base damage": 6, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic rock attack", "Base damage": 6, "Type": "Magic", "Stamina use": 0}
          ]
          },
         {"Name": "Diamond golemite",
          "Stats": {"Health": 40, "Stamina": 0, "Weakness": ["Melee"], "Strong against": ["Magic"]},
          "Moves": [
-             {"Move name": "Diamond smack", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Diamond fall", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Magic diamond attack", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+             {"Move name": "Diamond smack", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Diamond fall", "Base damage": 8, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic diamond attack", "Base damage": 8, "Type": "Magic", "Stamina use": 0}
          ]
          }
     ]},
@@ -306,17 +306,17 @@ POSSIBLE_ENEMIES = {
         {"Name": "Cougar",
          "Stats": {"Health": 25, "Stamina": 0, "Weakness": ["Ranged"], "Strong against": ["Melee"]},
          "Moves": [
-             {"Move name": "Vicious scratch", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Snowball", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Magic snowball", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+             {"Move name": "Vicious scratch", "Base damage": 6, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Snowball", "Base damage": 6, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic snowball", "Base damage": 6, "Type": "Magic", "Stamina use": 0}
          ]
          },
         {"Name": "Snow leapord",
          "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Melee"], "Strong against": ["Magic"]},
          "Moves": [
-             {"Move name": "Vicious scratch", "Base damage": 10, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Snowball", "Base damage": 10, "Type": "Ranged", "Stamina use": 0},
-             {"Move name": "Magic snowball", "Base damage": 10, "Type": "Magic", "Stamina use": 0}
+             {"Move name": "Vicious scratch", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Snowball", "Base damage": 8, "Type": "Ranged", "Stamina use": 0},
+             {"Move name": "Magic snowball", "Base damage": 8, "Type": "Magic", "Stamina use": 0}
          ]
          }
     ]},
@@ -340,33 +340,33 @@ POSSIBLE_ENEMIES = {
          ]
          }
     ]},
-    "orc road 1": {"Max num of enemies": 5, "Min num of enemies": 3, "Enemies": [
+    "orc road 1": {"Max num of enemies": 4, "Min num of enemies": 3, "Enemies": [
         {"Name": "Big orc",
          "Stats": {"Health": 30, "Stamina": 14, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Punch", "Base damage": 20, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Club", "Base damage": 26, "Type": "Melee", "Stamina use": 2},
-             {"Move name": "Powerful kick", "Base damage": 22, "Type": "Ranged", "Stamina use": 2}
+             {"Move name": "Punch", "Base damage": 14, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 16, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Powerful kick", "Base damage": 14, "Type": "Ranged", "Stamina use": 2}
          ]
          },
         {"Name": "Small orc",
          "Stats": {"Health": 15, "Stamina": 20, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Punch", "Base damage": 16, "Type": "Melee", "Stamina use": 0},
-             {"Move name": "Club", "Base damage": 20, "Type": "Melee", "Stamina use": 2},
-             {"Move name": "Kick", "Base damage": 18, "Type": "Ranged", "Stamina use": 2}
+             {"Move name": "Punch", "Base damage": 8, "Type": "Melee", "Stamina use": 0},
+             {"Move name": "Club", "Base damage": 10, "Type": "Melee", "Stamina use": 2},
+             {"Move name": "Kick", "Base damage": 8, "Type": "Ranged", "Stamina use": 2}
          ]
          },
         {"Name": "Orc with a bow",
          "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Shoot an arrow", "Base damage": 20, "Type": "Ranged", "Stamina use": 0}
+             {"Move name": "Shoot an arrow", "Base damage": 10, "Type": "Ranged", "Stamina use": 0}
          ]
          },
         {"Name": "Orc with a sword",
          "Stats": {"Health": 20, "Stamina": 0, "Weakness": ["Magic"], "Strong against": ["Melee", "Ranged"]},
          "Moves": [
-             {"Move name": "Slash", "Base damage": 20, "Type": "Melee", "Stamina use": 0}
+             {"Move name": "Slash", "Base damage": 10, "Type": "Melee", "Stamina use": 0}
          ]}]},
     "orc road final": {"Max num of enemies": 1, "Min num of enemies": 1, "Enemies": [
         {"Name": "Sourman",
@@ -395,7 +395,7 @@ POSSIBLE_ENEMIES_DROPS = {
     "stubborn rogue sheep": {"Name": "Sheep skin", "Cost": 2},
     "wolf": {"Name": "Wolf skin", "Cost": 5},
     "golemite": {"Name": "Diamond", "Cost": 30},
-    "cougar and wolf skin": {"Name": "Cougar and wolf skin skin", "Cost": 30}
+    "bbq ribs": {"Name": "BBQ ribs", "Cost": 30}
                           }
 
 # variables
@@ -729,6 +729,12 @@ def battle(area):
         if len(enemies) == 0:
             print("You won the battle")
             time.sleep(1)
+            print("You leveled up")
+            time.sleep(1)
+            player_stats["Stats"]["Health"] += 2
+
+            print("Your base health is now:", player_stats["Stats"]["Health"])
+            time.sleep(1)
             break
 
         if area == "tutorial" and tutorial_counter == 0:
@@ -793,7 +799,10 @@ def int_error_detection(question, answers):
 def enter_shop(shop_area):
     global player_money
 
-    print("You entered", shop_area)
+    if shop_area == "Goalum":
+        print("You checked out Goalum's items")
+    else:
+        print("You entered", shop_area)
 
     time.sleep(1)
 
@@ -938,6 +947,8 @@ def enter_shop(shop_area):
 
                 possible_purchases.append(possible_purchases[-1] + 1)
                 print("Type", possible_purchases[-1], "to not buy anything")
+                print()
+                print("Your money:", player_money)
 
                 last_number = possible_purchases[-1]
 
@@ -1087,6 +1098,9 @@ def enter_shop(shop_area):
                 last_number = possible_items[-1]
                 print("Type", last_number+1, "to leave this menu")
                 possible_items.append(last_number+1)
+
+                print()
+                print("Your money:", player_money)
 
                 one_time_input = int_error_detection(": ", possible_items)
 
@@ -1272,7 +1286,7 @@ def part_one():
     elif one_use_answer == 1:
         print("You chose to follow the main road.")
         time.sleep(1.5)
-        print("The goblins are threatened by your presence and decid to attack you.")
+        print("The goblins are threatened by your presence and decide to attack you.")
         player_area = "main road 1"
     elif one_use_answer == 2:
         print("You decide to go through the forest.")
@@ -1362,6 +1376,17 @@ def part_one():
         return "restart"
 
     print("You arrive at Brie Town.")
+    # end of part one
+    part_one_complete = True
+
+def part_two():
+    global player_area
+    global player_money
+    global part_two_complete
+
+    print("In the morning as leave the town you notice a shop.")
+    time.sleep(1.5)
+
     print("There seems to be a shop that you can stock up on equipment.")
     if enter_to_continue() == "restart":
         return "restart"
@@ -1374,14 +1399,8 @@ def part_one():
         return "restart"
     elif one_use_answer == 1:
         enter_shop("Shop 1")
-
-    # end of part one
-    part_one_complete = True
-
-def part_two():
-    global player_area
-    global player_money
-    global part_two_complete
+        print("You left the shop and went on with the quest")
+        time.sleep(1.5)
 
     print("You follow the main road which takes you up a mountainside.")
     time.sleep(1.5)
@@ -1438,7 +1457,7 @@ def part_two():
         print("You got the legendary rock sword.")
         time.sleep(1)
         print("You put it into your spare equipment.")
-        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encouter"][0])
+        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encounter"][0])
 
     # mountain path
     elif one_use_answer == 2:
@@ -1463,8 +1482,8 @@ def part_two():
                 return
             if result == "restart":
                 return "restart"
-            player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["cougar and wolf skin"])
-            print("You got a cougar and wolf skin from the golemite.")
+            player_drop_inventory.append(POSSIBLE_ENEMIES_DROPS["bbq ribs"])
+            print("You got a bbq ribs from the pack of animals.")
 
         print("You continue along the path.")
         time.sleep(1.5)
@@ -1479,14 +1498,23 @@ def part_two():
         print("You got the legendary snow sword.")
         time.sleep(1)
         print("You put it into your spare equipment.")
-        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encouter"][1])
+        player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["part 2 encounter"][1])
 
     time.sleep(1.5)
     print("You continue along the path")
     time.sleep(1.5)
     print("You reach the next Condor city")
+
+    part_two_complete = True
+
+def part_three():
+    global player_area
+    global player_money
+    global part_three_complete
+
+
+    print("In the morning as leave the city you notice a shop.")
     time.sleep(1.5)
-    print("There also seems to be a shop here too")
 
     if enter_to_continue() == "restart":
         return "restart"
@@ -1499,13 +1527,8 @@ def part_two():
         return "restart"
     elif one_use_answer == 1:
         enter_shop("Shop 2")
-
-    part_two_complete = True
-
-def part_three():
-    global player_area
-    global player_money
-    global part_three_complete
+        print("You left the shop and went on with the quest")
+        time.sleep(1.5)
 
     print("You trudge on the main road for hours.")
     time.sleep(1.5)
@@ -1552,11 +1575,11 @@ def part_three():
     if result == "restart":
         return "restart"
 
-    print("You got the Cloak of invinicibility")
+    print("You got the Cloak of partial invinicibility")
     player_spare_equipment["Armour"].append(POSSIBLE_ARMOUR["part 3 encounter"][0])
     if enter_to_continue() == "restart":
         return "restart"
-    part_two_complete = True
+    part_three_complete = True
 
 def part_four():
     global player_area
@@ -1775,18 +1798,12 @@ def main_code():
     print("It is getting late. You decide to go the Galloping Horse Inn to rest.")
     time.sleep(2)
 
-    print("In the morning you leave the town and continue on the main road.")
-    time.sleep(1.5)
-
     while part_two_complete == False:
         if part_two() == "restart":
             return "restart"
 
     print("It is getting late. You decide to camp on the outskirts of Condor to rest.")
     time.sleep(2)
-
-    print("In the morning you leave the city and continue on the main road.")
-    time.sleep(1.5)
 
     while part_three_complete == False:
         if part_three() == "restart":
@@ -1831,7 +1848,7 @@ def restart_game():
 
 # ----------------------- Main code -----------------------
 
-#player_money = 99999
+#player_money = 10000
 #player_stats = POSSIBLE_CLASSES[0]
 #player_equipment["Weapon"] = POSSIBLE_WEAPONS["tutorial"][0]
 #player_spare_equipment["Weapons"].append(POSSIBLE_WEAPONS["Shop 1"][0])
